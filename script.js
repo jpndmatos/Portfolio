@@ -222,8 +222,10 @@ const fluidBackground = () => {
 // animateonscroll
 
 const observeSkills = () => {
-  const skillsSection = document.querySelector(".skills");
+  const skillsTrigger = document.querySelector(".skills__grid");
   const progressBars = document.querySelectorAll(".skills__progress-fill");
+
+  if (!skillsTrigger || !progressBars.length) return;
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -242,13 +244,11 @@ const observeSkills = () => {
       });
     },
     {
-      threshold: 0.3, // ~trigger
+      threshold: 0.2, // ~trigger
     },
   );
 
-  if (skillsSection) {
-    observer.observe(skillsSection);
-  }
+  observer.observe(skillsTrigger);
 };
 
 // loadedDOMinit
@@ -257,14 +257,12 @@ if (document.readyState === "loading") {
     fluidBackground();
     observeSkills();
     initSideNav();
-    initSmoothScroll();
     initBlobMask();
   });
 } else {
   fluidBackground();
   observeSkills();
   initSideNav();
-  initSmoothScroll();
   initBlobMask();
 }
 
@@ -273,6 +271,49 @@ if (document.readyState === "loading") {
 const initSideNav = () => {
   const navItems = document.querySelectorAll(".side-nav__item");
   const sections = ["hero", "skills", "projects"];
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  let navScrollFrame;
+
+  const stopNavScroll = () => {
+    if (navScrollFrame) {
+      cancelAnimationFrame(navScrollFrame);
+      navScrollFrame = null;
+    }
+  };
+
+  const scrollToSection = (target) => {
+    stopNavScroll();
+    const startY = window.scrollY;
+    const scrollMarginTop =
+      Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+    const targetY =
+      target.getBoundingClientRect().top + startY - scrollMarginTop;
+    const distance = targetY - startY;
+
+    if (prefersReducedMotion || Math.abs(distance) < 2) {
+      window.scrollTo(0, targetY);
+      return;
+    }
+
+    const duration = Math.min(520, Math.max(260, Math.abs(distance) * 0.35));
+    const startTime = performance.now();
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+    const step = (now) => {
+      const progress = Math.min((now - startTime) / duration, 1);
+      window.scrollTo(0, startY + distance * easeOutCubic(progress));
+
+      if (progress < 1) {
+        navScrollFrame = requestAnimationFrame(step);
+      } else {
+        navScrollFrame = null;
+      }
+    };
+
+    navScrollFrame = requestAnimationFrame(step);
+  };
 
   // clickscroll
   navItems.forEach((item) => {
@@ -280,14 +321,16 @@ const initSideNav = () => {
       const sectionId = item.getAttribute("data-section");
       const target = document.getElementById(sectionId);
       if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
+        scrollToSection(target);
       }
     });
   });
 
+  window.addEventListener("wheel", stopNavScroll, { passive: true });
+  window.addEventListener("touchstart", stopNavScroll, { passive: true });
+
   // highlightactive
   const updateActiveNav = () => {
-    const scrollY = window.scrollY;
     const windowHeight = window.innerHeight;
     let currentSection = "hero";
 
@@ -323,71 +366,25 @@ const initSideNav = () => {
     }
   };
 
+  let scrollTicking = false;
+  const updateOnScroll = () => {
+    updateActiveNav();
+    updateHeader();
+    scrollTicking = false;
+  };
+
   window.addEventListener(
     "scroll",
     () => {
-      updateActiveNav();
-      updateHeader();
+      if (!scrollTicking) {
+        scrollTicking = true;
+        requestAnimationFrame(updateOnScroll);
+      }
     },
     { passive: true },
   );
   updateActiveNav();
   updateHeader();
-};
-
-// smoothscroll
-
-const initSmoothScroll = () => {
-  let currentScroll = window.scrollY;
-  let targetScroll = window.scrollY;
-  let isRunning = false;
-  const ease = 0.025;
-  const multiplier = 1.2;
-
-  // interceptwheel
-  window.addEventListener(
-    "wheel",
-    (e) => {
-      e.preventDefault();
-
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
-      targetScroll += e.deltaY * multiplier;
-      targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
-
-      if (!isRunning) {
-        isRunning = true;
-        requestAnimationFrame(smoothStep);
-      }
-    },
-    { passive: false },
-  );
-
-  const smoothStep = () => {
-    currentScroll += (targetScroll - currentScroll) * ease;
-
-    if (Math.abs(targetScroll - currentScroll) < 0.5) {
-      currentScroll = targetScroll;
-      window.scrollTo(0, currentScroll);
-      isRunning = false;
-      return;
-    }
-
-    window.scrollTo(0, currentScroll);
-    requestAnimationFrame(smoothStep);
-  };
-
-  // syncnavs
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (!isRunning) {
-        currentScroll = window.scrollY;
-        targetScroll = window.scrollY;
-      }
-    },
-    { passive: true },
-  );
 };
 
 // blobmask
@@ -396,39 +393,87 @@ const initBlobMask = () => {
   const blobPath = document.getElementById("blob-path");
   if (!blobPath) return;
 
-  const numPoints = 8;
-  const cx = 0.5,
-    cy = 0.5;
-  const baseRadius = 0.4;
-  const maxRadius = 0.495;
+  const numPoints = 12;
+  const baseRadius = 0.48;
+  const maxRadius = 0.5;
+
+  // Track global mouse position for blob deformation
+  let globalMouseX = 0.5;
+  let globalMouseY = 0.5;
+  let smoothMouseX = 0.5;
+  let smoothMouseY = 0.5;
+  let isHovering = false;
+
+  // Detect touch device
+  const isTouchDevice =
+    "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+  window.addEventListener(
+    "mousemove",
+    (e) => {
+      globalMouseX = e.clientX / window.innerWidth;
+      globalMouseY = e.clientY / window.innerHeight;
+      isHovering = true;
+    },
+    { passive: true },
+  );
+
+  window.addEventListener(
+    "mouseleave",
+    () => {
+      isHovering = false;
+    },
+    { passive: true },
+  );
 
   const getPoints = (t) => {
     const pts = [];
     for (let i = 0; i < numPoints; i++) {
       const angle = (i / numPoints) * Math.PI * 2 - Math.PI / 2;
+      // Organic wobble for more liquid feel
       const wobble =
-        Math.sin(t * 0.7 + i * 1.8) * 0.04 +
-        Math.sin(t * 1.1 + i * 0.9 + 2.0) * 0.03 +
-        Math.cos(t * 0.5 + i * 2.5) * 0.02;
+        Math.sin(t * 0.35 + i * 1.0) * 0.03 +
+        Math.sin(t * 0.55 + i * 0.5 + 1.2) * 0.025 +
+        Math.cos(t * 0.2 + i * 1.3) * 0.02;
       const r = Math.min(baseRadius + wobble, maxRadius);
-      pts.push({
-        x: cx + Math.cos(angle) * r,
-        y: cy + Math.sin(angle) * r,
-      });
+
+      // Base position at center
+      let x = 0.5 + Math.cos(angle) * r;
+      let y = 0.5 + Math.sin(angle) * r;
+
+      // Organic bump effect towards mouse
+      if (!isTouchDevice && isHovering) {
+        const dx = smoothMouseX - x;
+        const dy = smoothMouseY - y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        // Create a smooth bump that follows the mouse
+        // The bump is strongest at the edge nearest the mouse
+        const bumpRadius = 0.35;
+        const bumpStrength = 0.12;
+        const bump = Math.max(0, 1 - dist / bumpRadius);
+        const bumpFactor = bump * bump * bumpStrength;
+
+        // Push points away from mouse direction
+        x += dx * bumpFactor;
+        y += dy * bumpFactor;
+      }
+
+      pts.push({ x, y });
     }
     return pts;
   };
 
-  // smoothclosed
+  // smooth closed curve — tension 5 for soft, round blob
   const buildPath = (pts) => {
     const n = pts.length;
     let d = `M ${pts[0].x} ${pts[0].y}`;
+    const tension = 5;
     for (let i = 0; i < n; i++) {
       const p0 = pts[(i - 1 + n) % n];
       const p1 = pts[i];
       const p2 = pts[(i + 1) % n];
       const p3 = pts[(i + 2) % n];
-      const tension = 6;
       const cp1x = p1.x + (p2.x - p0.x) / tension;
       const cp1y = p1.y + (p2.y - p0.y) / tension;
       const cp2x = p2.x - (p3.x - p1.x) / tension;
@@ -438,9 +483,51 @@ const initBlobMask = () => {
     return d;
   };
 
+  const headingDotPaths = [0, 1, 2, 3]
+    .map((i) => document.getElementById(`heading-dot-path-${i}`))
+    .filter(Boolean);
+  const headingDotPhases = [0.35, 2.1, 4.45, 6.2];
+  const headingDotSpeeds = [1.9, 2.25, 1.65, 2.55];
+  const getHeadingDotPoints = (t) => {
+    const pts = [];
+    for (let i = 0; i < numPoints; i++) {
+      const angle = (i / numPoints) * Math.PI * 2 - Math.PI / 2;
+      const wobble =
+        Math.sin(t * 0.7 + i * 1.2) * 0.055 +
+        Math.sin(t * 1.05 + i * 0.7 + 1.2) * 0.04 +
+        Math.cos(t * 0.45 + i * 1.6) * 0.035;
+      const r = Math.min(0.42 + wobble, 0.5);
+
+      pts.push({
+        x: 0.5 + Math.cos(angle) * r,
+        y: 0.5 + Math.sin(angle) * r,
+      });
+    }
+    return pts;
+  };
+
   const animate = () => {
     const t = performance.now() * 0.001;
+
+    // Smooth mouse interpolation
+    if (isHovering && !isTouchDevice) {
+      smoothMouseX += (globalMouseX - smoothMouseX) * 0.05;
+      smoothMouseY += (globalMouseY - smoothMouseY) * 0.05;
+    } else {
+      // Return to center on touch or no hover
+      smoothMouseX += (0.5 - smoothMouseX) * 0.03;
+      smoothMouseY += (0.5 - smoothMouseY) * 0.03;
+    }
+
     blobPath.setAttribute("d", buildPath(getPoints(t)));
+    headingDotPaths.forEach((path, i) => {
+      path.setAttribute(
+        "d",
+        buildPath(
+          getHeadingDotPoints(t * headingDotSpeeds[i] + headingDotPhases[i]),
+        ),
+      );
+    });
     requestAnimationFrame(animate);
   };
 

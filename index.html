@@ -14,7 +14,7 @@
       sizes="32x32"
       href="assets/images/icon.svg" />
     <link rel="stylesheet" href="style/style.css" />
-    <title> jpndmatos.dev</title>
+    <title>jpndmatos.dev</title>
   </head>
   <body>
     <canvas id="fluid-bg" aria-hidden="true"></canvas>
@@ -23,6 +23,18 @@
       <defs>
         <clipPath id="blob-clip" clipPathUnits="objectBoundingBox">
           <path id="blob-path" />
+        </clipPath>
+        <clipPath id="heading-dot-clip-0" clipPathUnits="objectBoundingBox">
+          <path id="heading-dot-path-0" />
+        </clipPath>
+        <clipPath id="heading-dot-clip-1" clipPathUnits="objectBoundingBox">
+          <path id="heading-dot-path-1" />
+        </clipPath>
+        <clipPath id="heading-dot-clip-2" clipPathUnits="objectBoundingBox">
+          <path id="heading-dot-path-2" />
+        </clipPath>
+        <clipPath id="heading-dot-clip-3" clipPathUnits="objectBoundingBox">
+          <path id="heading-dot-path-3" />
         </clipPath>
       </defs>
     </svg>
@@ -51,26 +63,6 @@
             <span class="visually-hidden">(to home page)</span>
           </a>
           <div class="header__socials">
-            <a
-              href="mailto:jpnortem@gmail.com"
-              class="header__social header__social--stroke">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="26"
-                height="26"
-                viewBox="0 0 26 26"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-labelledby="socialMail"
-                role="img">
-                <title id="socialMail">Email</title>
-                <rect width="21" height="18" x="2" y="4" rx="2" />
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-              </svg>
-            </a>
             <a
               href="https://github.com/jpndmatos"
               class="header__social"
@@ -114,7 +106,7 @@
       </div>
     </header>
 
-    </id="main">
+    <main id="main">
       <section id="hero" class="hero">
         <div class="wrapper hero__wrapper">
           <div class="hero__content">
@@ -138,8 +130,9 @@
                 I'm <span>João Matos</span>.
               </h1>
               <p class="hero__description">
-                Based in Portugal,<br />Front-end developer,<br />Bsc in Design
-                and Multimedia,<br />FCTUC - University of Coimbra.
+                Based in Portugal,<br />Full-stack developer,<br />Front-end
+                focused,<br />BSc in Design and Multimedia,<br />FCTUC -
+                University of Coimbra.
               </p>
               <div class="hero__socials">
                 <a href="mailto:jpnortem@gmail.com" class="hero__social-link">
@@ -240,64 +233,82 @@
 
       <section id="skills" class="skills">
         <div class="wrapper skills__wrapper">
-          <h2 class="skills__headline skills__headline--spaced header__title">Skills</h2>
+          <h2 class="skills__headline skills__headline--spaced header__title section-heading section-heading--dot-0">Skills</h2>
           <div class="skills__grid">
-            <div class="skills__item">
-              <h3 class="skills__title">HTML</h3>
-              <div class="skills__progress-bar">
-                <div class="skills__progress-fill" data-progress="98"></div>
-              </div>
-            </div>
-            <div class="skills__item">
-              <h3 class="skills__title">CSS & Tailwind</h3>
-              <div class="skills__progress-bar">
-                <div class="skills__progress-fill" data-progress="94"></div>
-              </div>
-            </div>
             <div class="skills__item">
               <h3 class="skills__title">React</h3>
               <div class="skills__progress-bar">
-                <div class="skills__progress-fill" data-progress="72"></div>
+                <div class="skills__progress-fill" data-progress="82"></div>
               </div>
             </div>
             <div class="skills__item">
-              <h3 class="skills__title">JavaScript</h3>
+              <h3 class="skills__title">Next.js</h3>
               <div class="skills__progress-bar">
-                <div class="skills__progress-fill" data-progress="88"></div>
+                <div class="skills__progress-fill" data-progress="68"></div>
               </div>
             </div>
             <div class="skills__item">
               <h3 class="skills__title">TypeScript</h3>
               <div class="skills__progress-bar">
+                <div class="skills__progress-fill" data-progress="76"></div>
+              </div>
+            </div>
+            <div class="skills__item">
+              <h3 class="skills__title">JavaScript</h3>
+              <div class="skills__progress-bar">
+                <div class="skills__progress-fill" data-progress="86"></div>
+              </div>
+            </div>
+            <div class="skills__item">
+              <h3 class="skills__title">HTML</h3>
+              <div class="skills__progress-bar">
+                <div class="skills__progress-fill" data-progress="90"></div>
+              </div>
+            </div>
+            <div class="skills__item">
+              <h3 class="skills__title">CSS & Tailwind</h3>
+              <div class="skills__progress-bar">
+                <div class="skills__progress-fill" data-progress="88"></div>
+              </div>
+            </div>
+            <div class="skills__item">
+              <h3 class="skills__title">Python</h3>
+              <div class="skills__progress-bar">
+                <div class="skills__progress-fill" data-progress="70"></div>
+              </div>
+            </div>
+            <div class="skills__item">
+              <h3 class="skills__title">Backend APIs</h3>
+              <div class="skills__progress-bar">
                 <div class="skills__progress-fill" data-progress="66"></div>
+              </div>
+            </div>
+            <div class="skills__item">
+              <h3 class="skills__title">PHP & SQL</h3>
+              <div class="skills__progress-bar">
+                <div class="skills__progress-fill" data-progress="60"></div>
               </div>
             </div>
             <div class="skills__item">
               <h3 class="skills__title">Git</h3>
               <div class="skills__progress-bar">
-                <div class="skills__progress-fill" data-progress="71"></div>
-              </div>
-            </div>
-            <div class="skills__item">
-              <h3 class="skills__title">WebGL</h3>
-              <div class="skills__progress-bar">
-                <div class="skills__progress-fill" data-progress="54"></div>
-              </div>
-            </div>
-            <div class="skills__item">
-              <h3 class="skills__title">ThreeJS</h3>
-              <div class="skills__progress-bar">
                 <div class="skills__progress-fill" data-progress="62"></div>
               </div>
             </div>
             <div class="skills__item">
-              <h3 class="skills__title">NextJS</h3>
+              <h3 class="skills__title">Vite</h3>
               <div class="skills__progress-bar">
-                <div class="skills__progress-fill" data-progress="69"></div>
+                <div class="skills__progress-fill" data-progress="72"></div>
+              </div>
+            </div>
+            <div class="skills__item">
+              <h3 class="skills__title">Three.js & WebGL</h3>
+              <div class="skills__progress-bar">
+                <div class="skills__progress-fill" data-progress="58"></div>
               </div>
             </div>
           </div>
-          <h3 class="skills__headline skills__headline--spaced header__title">Languages</h3>
+          <h3 class="skills__headline skills__headline--spaced header__title section-heading section-heading--dot-1">Languages</h3>
           <div class="skills__grid">
             <div class="skills__item">
               <h3 class="skills__title">Portuguese - Native</h3>
@@ -318,17 +329,49 @@
               </div>
             </div>
           </div>
-          <h2 class="skills__headline skills__headline--spaced header__title" style="margin-block-start: 80px;">Experience</h2>
+          <div class="experience__header">
+            <h2 class="skills__headline header__title section-heading section-heading--dot-2">Experience</h2>
+          </div>
           <div class="experience__list">
+            <div class="experience__item">
+              <span class="experience__year">2026</span>
+              <div class="experience__content">
+                <h3 class="experience__title">
+                  SIM Conference App Responsible
+                </h3>
+                <p class="experience__meta">
+                  Internship at Startup Portugal
+                </p>
+                <p class="experience__description">
+                  Responsible for the SIM Conference app operations for an
+                  edition with +4,000
+                  attendees, +450 startups, +270 investors, +130 speakers and
+                  +1,000 meetings scheduled through the app.</br>Creation of SIM
+                  Sync, an internal tool to import event data into the app
+                  through the API, plus participant debugging and sync issue
+                  resolution.
+                </p>
+                <div class="experience__tags">
+                  <span>Python</span>
+                  <span>Tkinter</span>
+                  <span>CSV</span>
+                  <span>API</span>
+                  <span>Event</span>
+                  <span>Data</span>
+                </div>
+              </div>
+            </div>
             <div class="experience__item">
               <span class="experience__year">2023</span>
               <div class="experience__content">
                 <h3 class="experience__title">Full Stack Web Developer</h3>
+                <p class="experience__meta">
+                  Internship at Doppel (IPN Coimbra)
+                </p>
                 <p class="experience__description">
                   Creation of the company website using React + Tailwind and
                   TypeScript, with 3D elements implemented with ThreeJS, and its
-                  subsequent deployment</br>3 month internship at Doppel (IPN
-                  Coimbra)
+                  subsequent deployment.
                 </p>
                 <div class="experience__tags">
                   <span>HTML</span>
@@ -344,10 +387,13 @@
               <span class="experience__year">2017</span>
               <div class="experience__content">
                 <h3 class="experience__title">
-                  EBEC Coimbra — Visual Identity Responsible
+                  Visual Identity Responsible
                 </h3>
+                <p class="experience__meta">
+                  EBEC Coimbra
+                </p>
                 <p class="experience__description">
-                  European BEST Engineering Competition</br>Board of European Students of Technology
+                  European BEST Engineering Competition.</br>Board of European Students of Technology.
                 </p>
                 <div class="experience__tags">
                   <span>Event</span>
@@ -358,164 +404,234 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <section id="projects" class="projects">
         <div class="wrapper projects__wrapper">
-          <h2 class="projects__headline header-xl">Projects</h2>
-          <div class="projects__grid">
-            <div class="projects__item">
-              <picture class="projects__picture">
-                <source
-                  media="(min-width: 62.5em)"
-                  srcset="assets/images/jpndm.jpg" />
-                <img
-                  class="projects__image"
-                  src="assets/images/jpndm.jpg"
-                  alt="screenshot of design portfolio website"
-                  width-="343"
-                  height="253" />
-              </picture>
-              <h3 class="projects__name">Crimes Exemplares</h3>
-              <p class="projects__description">This project is an interactive digital experience inspired by Max Aub's book "Crimes Exemplares".</p>
-              <p class="projects__tags">
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-              </p>
-              <div class="projects__links">
-                <a href="https://jpndmatos.github.io/Crimes-Exemplares/" target="_blank" class="underline">View Project</a>
-                <a href="https://github.com/jpndmatos/Crimes-Exemplares" target="_blank" class="underline">View Code</a>
+          <a
+            id="projects"
+            href="https://github.com/jpndmatos"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="projects__heading header__title section-heading section-heading--dot-3"
+            aria-label="Other projects on GitHub">
+            Projects
+          </a>
+          <div class="projects">
+            <article class="projects__item">
+              <a
+                href="https://github.com/jpndmatos/simsync"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="projects__media"
+                aria-label="SIM Sync project on GitHub">
+                <span>SIM Sync</span>
+              </a>
+              <div class="projects__content">
+                <h3 class="projects__title">
+                  <a
+                    href="https://github.com/jpndmatos/simsync"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    SIM Sync
+                  </a>
+                </h3>
+                <p class="projects__description">
+                  Internal SIM Conference operations tool for importing event
+                  and participant data into the app through API workflows,
+                  validating CSV inputs, and debugging participant sync issues.
+                </p>
+                <div class="experience__tags">
+                  <span>Python</span>
+                  <span>Tkinter</span>
+                  <span>CSV</span>
+                  <span>API</span>
+                </div>
               </div>
-            </div>
-
-            <div class="projects__item">
-              <picture class="projects__picture">
-                <source
-                  media="(min-width: 62.5em)"
-                  srcset="assets/images/jpndm.jpg" />
-                <img
-                  class="projects__image"
-                  src="assets/images/jpndm.jpg"
-                  alt="screenshot of learning platform website with different courses"
-                  width-="343"
-                  height="253" />
-              </picture>
-              <h3 class="projects__name">Company Website</h3>
-              <p class="projects__description">Doppel website dupe.<br/>(Redacted to avoyd copyright infringement).</p>
-              <p class="projects__tags">
-                <span>React</span>
-                <span>Tailwind</span>
-                <span>TypeScript</span>
-                <span>Threejs</span>
-                <span>Nextjs</span>
-              </p>
-              <div class="projects__links">
-                <a href="" class="underline">View Project</a>
-                <a href="" class="underline">View Code</a>
+            </article>
+            <article class="projects__item">
+              <a
+                href="https://github.com/jpndmatos/Company-Website"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="projects__media"
+                aria-label="Company Website project on GitHub">
+                <span>Company Website</span>
+              </a>
+              <div class="projects__content">
+                <h3 class="projects__title">
+                  <a
+                    href="https://github.com/jpndmatos/Company-Website"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    Company Website
+                  </a>
+                </h3>
+                <p class="projects__description">
+                  Doppel website dupe. Redacted to avoid copyright
+                  infringement.
+                </p>
+                <div class="experience__tags">
+                  <span>React</span>
+                  <span>Tailwind</span>
+                  <span>TypeScript</span>
+                  <span>Three.js</span>
+                  <span>Next.js</span>
+                </div>
               </div>
-            </div>
-
-            <div class="projects__item">
-              <picture class="projects__picture">
-                <source
-                  media="(min-width: 62.5em)"
-                  srcset="assets/images/jpndm.jpg" />
-                <img
-                  class="projects__image"
-                  src="assets/images/jpndm.jpg"
-                  alt="screenshot of To Do App showing a list of active and complete tasks"
-                  width-="343"
-                  height="253" />
-              </picture>
-              <h3 class="projects__name">EatEasy</h3>
-              <p class="projects__description">Restaurant reservation platform using mock data with client and admin interfaces.</p>
-              <p class="projects__tags">
-                <span>PHP</span>
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-              </p>
-              <div class="projects__links">
-                <a href="" class="underline">View Project</a>
-                <a href="" class="underline">View Code</a>
+            </article>
+            <article class="projects__item">
+              <a
+                href="https://github.com/jpndmatos/HDF5-Dashboard"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="projects__media"
+                aria-label="HDF5 Dashboard project on GitHub">
+                <span>HDF5 Dashboard</span>
+              </a>
+              <div class="projects__content">
+                <h3 class="projects__title">
+                  <a
+                    href="https://github.com/jpndmatos/HDF5-Dashboard"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    HDF5 Dashboard
+                  </a>
+                </h3>
+                <p class="projects__description">
+                  HDF5 data visualization dashboard using a Python Flask backend
+                  and a JavaScript frontend with Plotly for charting.
+                </p>
+                <div class="experience__tags">
+                  <span>HTML</span>
+                  <span>CSS</span>
+                  <span>JavaScript</span>
+                  <span>Python</span>
+                  <span>Vite</span>
+                </div>
               </div>
-            </div>
-
-            <div class="projects__item">
-              <picture class="projects__picture">
-                <source
-                  media="(min-width: 62.5em)"
-                  srcset="assets/images/jpndm.jpg" />
-                <img
-                  class="projects__image"
-                  src="assets/images/jpndm.jpg"
-                  alt="screenshot of video player app with grid of thumbnails of movies and TV shows"
-                  width-="343"
-                  height="253" />
-              </picture>
-              <h3 class="projects__name">HDF5 Dashboard</h3>
-              <p class="projects__description">HDF5 data visualization dashboard using a Python Flask backend and a JavaScript frontend with Plotly for charting.</p>
-              <p class="projects__tags">
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-                <span>Python</span>
-                <span>Vite</span>
-              </p>
-              <div class="projects__links">
-                <a href="" class="underline">View Project</a>
-                <a href="" class="underline">View Code</a>
+            </article>
+            <article class="projects__item">
+              <a
+                href="https://github.com/the-mind-of-the-cabeco/cabecos-rift"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="projects__media"
+                aria-label="Riftbound deck builder project on GitHub">
+                <span>Riftbound</span>
+              </a>
+              <div class="projects__content">
+                <h3 class="projects__title">
+                  <a
+                    href="https://github.com/the-mind-of-the-cabeco/cabecos-rift"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    Riftbound Deck Builder
+                  </a>
+                </h3>
+                <p class="projects__description">
+                  Deck building and peer-to-peer player tool for Riftbound,
+                  focused on managing card data, building playable decks, and
+                  supporting direct player interaction.
+                </p>
+                <div class="experience__tags">
+                  <span>TypeScript</span>
+                  <span>JavaScript</span>
+                  <span>Supabase</span>
+                </div>
               </div>
-            </div>
-
-            <div class="projects__item">
-              <picture class="projects__picture">
-                <source
-                  media="(min-width: 62.5em)"
-                  srcset="assets/images/jpndm.jpg" />
-                <img
-                  class="projects__image"
-                  src="assets/images/jpndm.jpg"
-                  alt="screenshot of 4-player memory game with circular tiles that have symbols"
-                  width-="343"
-                  height="253" />
-              </picture>
-              <h3 class="projects__name">Project 5</h3>
-              <p class="projects__tags">
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-              </p>
-              <div class="projects__links">
-                <a href="" class="underline">View Project</a>
-                <a href="" class="underline">View Code</a>
+            </article>
+            <article class="projects__item">
+              <a
+                href="https://github.com/GorillazTech/MadCoAI"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="projects__media"
+                aria-label="MadCoAI project on GitHub">
+                <span>MadCoAI</span>
+              </a>
+              <div class="projects__content">
+                <h3 class="projects__title">
+                  <a
+                    href="https://github.com/GorillazTech/MadCoAI"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    MadCoAI — Digital Hedge Fund
+                  </a>
+                </h3>
+                <p class="projects__description">
+                  Autonomous event-driven digital hedge fund with a
+                  high-performance 5-stage LangGraph analysis pipeline,
+                  deterministic financial math, RAG interrogation, and 27
+                  specialist declarative agents.
+                </p>
+                <div class="experience__tags">
+                  <span>Python</span>
+                  <span>LangGraph</span>
+                  <span>React</span>
+                  <span>Vite</span>
+                  <span>Tailwind</span>
+                  <span>Redis</span>
+                  <span>Postgres</span>
+                </div>
               </div>
-            </div>
-
-            <div class="projects__item">
-              <picture class="projects__picture">
-                <source
-                  media="(min-width: 62.5em)"
-                  srcset="assets/images/jpndm.jpg" />
-                <img
-                  class="projects__image"
-                  src="assets/images/jpndm.jpg"
-                  alt="grid of thumbnails of famous works of art"
-                  width-="343"
-                  height="253" />
-              </picture>
-              <h3 class="projects__name">Project 6</h3>
-              <p class="projects__tags">
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-              </p>
-              <div class="projects__links">
-                <a href="" class="underline">View Project</a>
-                <a href="" class="underline">View Code</a>
+            </article>
+            <article class="projects__item">
+              <a
+                href="https://jpndmatos.github.io/Crimes-Exemplares/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="projects__media"
+                aria-label="Crimes Exemplares project">
+                <span>Crimes Exemplares</span>
+              </a>
+              <div class="projects__content">
+                <h3 class="projects__title">
+                  <a
+                    href="https://jpndmatos.github.io/Crimes-Exemplares/"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    Crimes Exemplares
+                  </a>
+                </h3>
+                <p class="projects__description">
+                  Interactive digital experience inspired by Max Aub's book
+                  "Crimes Exemplares".
+                </p>
+                <div class="experience__tags">
+                  <span>HTML</span>
+                  <span>CSS</span>
+                  <span>JavaScript</span>
+                </div>
               </div>
-            </div>
+            </article>
+            <article class="projects__item">
+              <a
+                href="https://github.com/jpndmatos/EatEasy"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="projects__media"
+                aria-label="EatEasy project on GitHub">
+                <span>EatEasy</span>
+              </a>
+              <div class="projects__content">
+                <h3 class="projects__title">
+                  <a
+                    href="https://github.com/jpndmatos/EatEasy"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    EatEasy
+                  </a>
+                </h3>
+                <p class="projects__description">
+                  Restaurant reservation platform using mock data with client
+                  and admin interfaces.
+                </p>
+                <div class="experience__tags">
+                  <span>PHP</span>
+                  <span>HTML</span>
+                  <span>CSS</span>
+                  <span>JavaScript</span>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
