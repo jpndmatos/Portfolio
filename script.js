@@ -3,11 +3,18 @@
 const fluidBackground = () => {
   const canvas = document.getElementById("fluid-bg");
   if (!canvas) return;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const isTouchDevice =
+    "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  const isLowPowerDevice = (navigator.hardwareConcurrency || 4) <= 4;
 
   const gl = canvas.getContext("webgl", {
     alpha: false,
     antialias: false,
     preserveDrawingBuffer: false,
+    powerPreference: "high-performance",
   });
 
   if (!gl) {
@@ -178,11 +185,16 @@ const fluidBackground = () => {
   const uMouse = gl.getUniformLocation(program, "u_mouse");
 
   // resize
-  let dpr = Math.min(window.devicePixelRatio, 2);
+  const renderScale = prefersReducedMotion
+    ? 0.6
+    : isLowPowerDevice || isTouchDevice
+      ? 0.72
+      : 0.9;
+  let dpr = Math.min(window.devicePixelRatio, 1.5);
   const resize = () => {
-    dpr = Math.min(window.devicePixelRatio, 2);
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
+    dpr = Math.min(window.devicePixelRatio, 1.5);
+    canvas.width = Math.round(window.innerWidth * dpr * renderScale);
+    canvas.height = Math.round(window.innerHeight * dpr * renderScale);
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.uniform2f(uResolution, canvas.width, canvas.height);
   };
@@ -194,8 +206,23 @@ const fluidBackground = () => {
   let animationId;
   const startTime = performance.now();
 
-  const animate = () => {
-    const elapsed = (performance.now() - startTime) * 0.001;
+  const targetFrameMs = prefersReducedMotion ? 1000 / 24 : 1000 / 45;
+  let lastFrameTime = 0;
+  let isScrolling = false;
+  let scrollEndTimer;
+
+  const animate = (now) => {
+    if (isScrolling) {
+      animationId = null;
+      return;
+    }
+
+    if (now - lastFrameTime < targetFrameMs) {
+      animationId = requestAnimationFrame(animate);
+      return;
+    }
+    lastFrameTime = now;
+    const elapsed = (now - startTime) * 0.001;
 
     // mousetrack
     smoothMouseX += (mouseX - smoothMouseX) * 0.05;
@@ -206,6 +233,22 @@ const fluidBackground = () => {
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     animationId = requestAnimationFrame(animate);
   };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      isScrolling = true;
+      clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(() => {
+        isScrolling = false;
+        lastFrameTime = 0;
+        if (!animationId) {
+          animationId = requestAnimationFrame(animate);
+        }
+      }, 120);
+    },
+    { passive: true },
+  );
 
   // hiddentabpause
   document.addEventListener("visibilitychange", () => {
@@ -234,7 +277,7 @@ const observeSkills = () => {
           progressBars.forEach((bar, index) => {
             setTimeout(() => {
               const progress = bar.getAttribute("data-progress");
-              bar.style.setProperty("--progress-width", `${progress}%`);
+              bar.style.setProperty("--progress-scale", progress / 100);
               bar.classList.add("animate");
             }, index * 150); // stagger
           });
@@ -251,112 +294,86 @@ const observeSkills = () => {
   observer.observe(skillsTrigger);
 };
 
-// loadedDOMinit
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => {
-    fluidBackground();
-    observeSkills();
-    initSideNav();
-    initBlobMask();
-  });
-} else {
-  fluidBackground();
-  observeSkills();
-  initSideNav();
-  initBlobMask();
-}
-
 // sidenav
 
 const initSideNav = () => {
   const navItems = document.querySelectorAll(".side-nav__item");
-  const sections = ["hero", "skills", "projects"];
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
-  let navScrollFrame;
-
-  const stopNavScroll = () => {
-    if (navScrollFrame) {
-      cancelAnimationFrame(navScrollFrame);
-      navScrollFrame = null;
-    }
-  };
 
   const scrollToSection = (target) => {
-    stopNavScroll();
-    const startY = window.scrollY;
     const scrollMarginTop =
       Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
     const targetY =
-      target.getBoundingClientRect().top + startY - scrollMarginTop;
-    const distance = targetY - startY;
-
-    if (prefersReducedMotion || Math.abs(distance) < 2) {
-      window.scrollTo(0, targetY);
-      return;
-    }
-
-    const duration = Math.min(520, Math.max(260, Math.abs(distance) * 0.35));
-    const startTime = performance.now();
-    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
-
-    const step = (now) => {
-      const progress = Math.min((now - startTime) / duration, 1);
-      window.scrollTo(0, startY + distance * easeOutCubic(progress));
-
-      if (progress < 1) {
-        navScrollFrame = requestAnimationFrame(step);
-      } else {
-        navScrollFrame = null;
-      }
-    };
-
-    navScrollFrame = requestAnimationFrame(step);
+      target.getBoundingClientRect().top + window.scrollY - scrollMarginTop;
+    window.scrollTo({
+      top: targetY,
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
   };
 
   // clickscroll
   navItems.forEach((item) => {
     item.addEventListener("click", () => {
       const sectionId = item.getAttribute("data-section");
-      const target = document.getElementById(sectionId);
+      const target =
+        sectionId === "skills"
+          ? document.querySelector("#skills .skills__headline")
+          : document.getElementById(sectionId);
       if (target) {
         scrollToSection(target);
       }
     });
   });
 
-  window.addEventListener("wheel", stopNavScroll, { passive: true });
-  window.addEventListener("touchstart", stopNavScroll, { passive: true });
-
   // highlightactive
-  const updateActiveNav = () => {
-    const windowHeight = window.innerHeight;
-    let currentSection = "hero";
-
-    sections.forEach((id) => {
-      const section = document.getElementById(id);
-      if (section) {
-        const rect = section.getBoundingClientRect();
-
-        if (rect.top <= windowHeight * 0.4) {
-          currentSection = id;
-        }
-      }
-    });
-
+  const setActiveNav = (sectionId) => {
     navItems.forEach((item) => {
       item.classList.toggle(
         "active",
-        item.getAttribute("data-section") === currentSection,
+        item.getAttribute("data-section") === sectionId,
       );
     });
   };
 
-  // headerscroll
   const header = document.querySelector(".header");
   const scrollIndicator = document.querySelector(".hero__scroll-indicator");
-  const updateHeader = () => {
+  let navOffsets = {
+    hero: 0,
+    skills: 0,
+    projects: Number.POSITIVE_INFINITY,
+  };
+
+  const getPageTop = (element) =>
+    element ? element.getBoundingClientRect().top + window.scrollY : 0;
+
+  const refreshNavOffsets = () => {
+    navOffsets = {
+      hero: getPageTop(document.getElementById("hero")),
+      skills: getPageTop(document.getElementById("skills")),
+      projects:
+        getPageTop(document.getElementById("projects")) ||
+        Number.POSITIVE_INFINITY,
+    };
+  };
+
+  const updateActiveNav = () => {
+    const headerHeight = header?.offsetHeight || 56;
+    const scrollProbe = window.scrollY + headerHeight + 56;
+    let activeSection = "hero";
+
+    if (scrollProbe >= navOffsets.skills) {
+      activeSection = "skills";
+    }
+    if (scrollProbe >= navOffsets.projects) {
+      activeSection = "projects";
+    }
+
+    setActiveNav(activeSection);
+  };
+
+  const toggleHeader = () => {
     const scrolled = window.scrollY > 30;
     if (header) {
       header.classList.toggle("scrolled", scrolled);
@@ -366,25 +383,33 @@ const initSideNav = () => {
     }
   };
 
-  let scrollTicking = false;
-  const updateOnScroll = () => {
-    updateActiveNav();
-    updateHeader();
-    scrollTicking = false;
-  };
-
+  let headerTicking = false;
   window.addEventListener(
     "scroll",
     () => {
-      if (!scrollTicking) {
-        scrollTicking = true;
-        requestAnimationFrame(updateOnScroll);
+      if (!headerTicking) {
+        headerTicking = true;
+        requestAnimationFrame(() => {
+          toggleHeader();
+          updateActiveNav();
+          headerTicking = false;
+        });
       }
     },
     { passive: true },
   );
+
+  refreshNavOffsets();
+  window.addEventListener("resize", () => {
+    refreshNavOffsets();
+    updateActiveNav();
+  });
+  window.addEventListener("load", () => {
+    refreshNavOffsets();
+    updateActiveNav();
+  });
   updateActiveNav();
-  updateHeader();
+  toggleHeader();
 };
 
 // blobmask
@@ -392,6 +417,9 @@ const initSideNav = () => {
 const initBlobMask = () => {
   const blobPath = document.getElementById("blob-path");
   if (!blobPath) return;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
 
   const numPoints = 12;
   const baseRadius = 0.48;
@@ -506,8 +534,18 @@ const initBlobMask = () => {
     return pts;
   };
 
-  const animate = () => {
-    const t = performance.now() * 0.001;
+  let blobAnimationFrame = null;
+  let blobVisible = true;
+  let lastBlobFrameTime = 0;
+  const blobTargetFrameMs = prefersReducedMotion ? 1000 / 20 : 1000 / 30;
+
+  const updateBlob = (now) => {
+    if (now - lastBlobFrameTime < blobTargetFrameMs) {
+      blobAnimationFrame = requestAnimationFrame(updateBlob);
+      return;
+    }
+    lastBlobFrameTime = now;
+    const t = now * 0.001;
 
     // Smooth mouse interpolation
     if (isHovering && !isTouchDevice) {
@@ -519,7 +557,10 @@ const initBlobMask = () => {
       smoothMouseY += (0.5 - smoothMouseY) * 0.03;
     }
 
-    blobPath.setAttribute("d", buildPath(getPoints(t)));
+    if (blobVisible) {
+      blobPath.setAttribute("d", buildPath(getPoints(t)));
+    }
+
     headingDotPaths.forEach((path, i) => {
       path.setAttribute(
         "d",
@@ -528,8 +569,46 @@ const initBlobMask = () => {
         ),
       );
     });
-    requestAnimationFrame(animate);
+    blobAnimationFrame = requestAnimationFrame(updateBlob);
   };
 
-  requestAnimationFrame(animate);
+  const heroSection = document.getElementById("hero");
+  if (heroSection) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          blobVisible = entry.isIntersecting;
+        });
+      },
+      { threshold: 0 },
+    );
+    observer.observe(heroSection);
+  }
+
+  blobAnimationFrame = requestAnimationFrame(updateBlob);
 };
+
+const syncScrollbarWidth = () => {
+  const scrollbarWidth =
+    window.innerWidth - document.documentElement.clientWidth;
+  document.documentElement.style.setProperty(
+    "--scrollbar-width",
+    `${scrollbarWidth}px`,
+  );
+};
+
+// loadedDOMinit
+const initPage = () => {
+  syncScrollbarWidth();
+  fluidBackground();
+  observeSkills();
+  initSideNav();
+  initBlobMask();
+  window.addEventListener("resize", syncScrollbarWidth, { passive: true });
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initPage);
+} else {
+  initPage();
+}
