@@ -1,5 +1,55 @@
 // bg
 
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+let smoothSnapFrame = null;
+let smoothSnapPreviousScrollBehavior = null;
+
+const smoothSnapTo = (targetY, duration = 1250) => {
+  if (reducedMotionQuery.matches) {
+    window.scrollTo({ top: targetY, behavior: "auto" });
+    return;
+  }
+
+  if (smoothSnapFrame) {
+    cancelAnimationFrame(smoothSnapFrame);
+    if (smoothSnapPreviousScrollBehavior !== null) {
+      document.documentElement.style.scrollBehavior =
+        smoothSnapPreviousScrollBehavior;
+    }
+  }
+
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  const startTime = performance.now();
+  const easeInOutCubic = (progress) =>
+    progress < 0.5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+  smoothSnapPreviousScrollBehavior =
+    document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = "auto";
+
+  const step = (now) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeInOutCubic(progress);
+
+    window.scrollTo({ top: startY + distance * eased, behavior: "auto" });
+
+    if (progress < 1) {
+      smoothSnapFrame = requestAnimationFrame(step);
+      return;
+    }
+
+    document.documentElement.style.scrollBehavior =
+      smoothSnapPreviousScrollBehavior;
+    smoothSnapPreviousScrollBehavior = null;
+    smoothSnapFrame = null;
+  };
+
+  smoothSnapFrame = requestAnimationFrame(step);
+};
+
 const fluidBackground = () => {
   const canvas = document.getElementById("fluid-bg");
   if (!canvas) return;
@@ -90,7 +140,7 @@ const fluidBackground = () => {
       float t = u_time;
 
       // Background
-      vec3 bgColor = vec3(0.078, 0.078, 0.078);
+      vec3 bgColor = vec3(0.052, 0.026, 0.078);
 
       // Mouse position (centered coords, Y inverted)
       vec2 mouse = vec2((u_mouse.x - 0.5) * aspect, 0.5 - u_mouse.y);
@@ -119,20 +169,22 @@ const fluidBackground = () => {
       float mouseInfluence = smoothstep(0.6, 0.0, mouseDist) * 0.25;
       field += mouseInfluence;
 
-      // Muted, cohesive color palette
-      vec3 deepPurple = vec3(0.18, 0.10, 0.28);
-      vec3 warmPurple = vec3(0.28, 0.16, 0.38);
-      vec3 subtleTeal = vec3(0.08, 0.08, 0.09);
+      // Muted aubergine palette with a restrained violet lift
+      vec3 aubergine = vec3(0.075, 0.032, 0.12);
+      vec3 plum = vec3(0.16, 0.07, 0.22);
+      vec3 blackberry = vec3(0.24, 0.10, 0.30);
+      vec3 purpleAccent = vec3(0.42, 0.20, 0.62);
 
       // Smooth color transitions across the field
-      vec3 color = mix(deepPurple, warmPurple, smoothstep(0.3, 0.65, field));
-      color = mix(color, subtleTeal, smoothstep(0.55, 0.85, field) * 0.4);
+      vec3 color = mix(aubergine, plum, smoothstep(0.3, 0.65, field));
+      color = mix(color, blackberry, smoothstep(0.52, 0.84, field) * 0.46);
+      color = mix(color, purpleAccent, smoothstep(0.68, 0.94, field) * 0.16);
 
       // Vignette — darken edges smoothly
       float vignette = 1.0 - smoothstep(0.3, 1.1, length(p * 0.9));
 
       // Final composite — subtle, refined blend
-      float opacity = 0.45 * vignette;
+      float opacity = 0.48 * vignette;
       vec3 finalColor = mix(bgColor, color, opacity);
 
       gl_FragColor = vec4(finalColor, 1.0);
@@ -279,7 +331,7 @@ const observeSkills = () => {
               const progress = bar.getAttribute("data-progress");
               bar.style.setProperty("--progress-scale", progress / 100);
               bar.classList.add("animate");
-            }, index * 150); // stagger
+            }, index * 60); // stagger
           });
 
           observer.unobserve(entry.target);
@@ -294,84 +346,338 @@ const observeSkills = () => {
   observer.observe(skillsTrigger);
 };
 
-// sidenav
-
-const initSideNav = () => {
-  const navItems = document.querySelectorAll(".side-nav__item");
-  const prefersReducedMotion = window.matchMedia(
+const initHorizontalSkillsScroll = () => {
+  const section = document.querySelector(".skills");
+  const viewport = document.querySelector(".skills__horizontal-viewport");
+  const track = document.querySelector(".skills__horizontal-track");
+  const desktopQuery = window.matchMedia("(min-width: 75em)");
+  const prefersReducedMotionQuery = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
-  ).matches;
+  );
 
-  const scrollToSection = (target) => {
-    const scrollMarginTop =
-      Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-    const targetY =
-      target.getBoundingClientRect().top + window.scrollY - scrollMarginTop;
-    window.scrollTo({
-      top: targetY,
-      behavior: prefersReducedMotion ? "auto" : "smooth",
-    });
+  if (!section || !viewport || !track) return;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  let targetShift = 0;
+  let renderShift = 0;
+  let animationFrame = null;
+  let snapTimeout = null;
+  let activePanelLockTimeout = null;
+  let lockedActivePanelIndex = null;
+  let snapPoints = [];
+  let scrollPanels = [];
+  const panelSnapDuration = 760;
+  const panelSnapDelay = 220;
+  const panelSnapDeadzone = 44;
+
+  const getPanelTitle = (panel) => {
+    const explicitTitle = panel.querySelector(
+      ".skills__headline, .projects__heading",
+    );
+    const title = explicitTitle?.textContent?.replace(/\s+/g, " ").trim();
+    return title?.replace(/^\/\/\s*/, "") || "section";
   };
 
-  // clickscroll
-  navItems.forEach((item) => {
-    item.addEventListener("click", () => {
-      const sectionId = item.getAttribute("data-section");
-      const target =
-        sectionId === "skills"
-          ? document.querySelector("#skills .skills__headline")
-          : document.getElementById(sectionId);
-      if (target) {
-        scrollToSection(target);
+  const render = () => {
+    if (!desktopQuery.matches) {
+      animationFrame = null;
+      return;
+    }
+
+    const delta = targetShift - renderShift;
+
+    if (Math.abs(delta) < 0.2) {
+      renderShift = targetShift;
+      section.style.setProperty(
+        "--horizontal-render-shift",
+        `${renderShift}px`,
+      );
+      animationFrame = null;
+      return;
+    }
+
+    renderShift += delta * 0.28;
+    section.style.setProperty("--horizontal-render-shift", `${renderShift}px`);
+    animationFrame = requestAnimationFrame(render);
+  };
+
+  const requestRender = () => {
+    if (!animationFrame) {
+      animationFrame = requestAnimationFrame(render);
+    }
+  };
+
+  const getNearestPanelIndexForShift = (currentShift) =>
+    snapPoints.reduce(
+      (nearestIndex, point, index) =>
+        Math.abs(point - currentShift) <
+        Math.abs(snapPoints[nearestIndex] - currentShift)
+          ? index
+          : nearestIndex,
+      0,
+    );
+
+  const updateActivePanel = (currentShift) => {
+    if (!scrollPanels.length || !snapPoints.length) return;
+
+    const activeIndex =
+      lockedActivePanelIndex ?? getNearestPanelIndexForShift(currentShift);
+
+    scrollPanels.forEach((panel, index) => {
+      const isActive = index === activeIndex;
+      const panelTitle = getPanelTitle(panel);
+
+      panel.classList.toggle("is-horizontal-panel-active", isActive);
+      panel.setAttribute("aria-expanded", String(isActive));
+      panel.setAttribute(
+        "aria-label",
+        isActive ? `${panelTitle} panel open` : `Open ${panelTitle} panel`,
+      );
+      panel.toggleAttribute("aria-current", isActive);
+      panel.tabIndex = isActive ? -1 : 0;
+
+      if (isActive) {
+        panel.removeAttribute("role");
+      } else {
+        panel.setAttribute("role", "button");
       }
     });
-  });
-
-  // highlightactive
-  const setActiveNav = (sectionId) => {
-    navItems.forEach((item) => {
-      item.classList.toggle(
-        "active",
-        item.getAttribute("data-section") === sectionId,
-      );
-    });
   };
 
+  const activatePanel = (panelIndex, duration = panelSnapDuration) => {
+    if (panelIndex < 0 || panelIndex >= snapPoints.length) return;
+    snapToPanelIndex(panelIndex, duration);
+  };
+
+  const updateShift = () => {
+    if (!desktopQuery.matches) {
+      section.style.removeProperty("--horizontal-shift");
+      section.style.removeProperty("--horizontal-render-shift");
+      document.body.classList.remove("horizontal-scroll-active");
+      scrollPanels.forEach((panel) =>
+        panel.classList.remove("is-horizontal-panel-active"),
+      );
+      return;
+    }
+
+    const distance = Number(section.dataset.horizontalDistance || 0);
+    targetShift = clamp(window.scrollY - section.offsetTop, 0, distance);
+    section.style.setProperty("--horizontal-shift", `${targetShift}px`);
+    updateActivePanel(targetShift);
+    document.body.classList.toggle(
+      "horizontal-scroll-active",
+      window.scrollY >= section.offsetTop &&
+        window.scrollY <= section.offsetTop + distance,
+    );
+    requestRender();
+  };
+
+  const snapToNearestPanel = () => {
+    if (!desktopQuery.matches || snapPoints.length < 2) return;
+
+    const distance = Number(section.dataset.horizontalDistance || 0);
+    const currentShift = clamp(window.scrollY - section.offsetTop, 0, distance);
+
+    if (
+      window.scrollY < section.offsetTop ||
+      window.scrollY > section.offsetTop + distance
+    ) {
+      return;
+    }
+
+    const nearestPanelIndex = getNearestPanelIndexForShift(currentShift);
+    const nearestShift = snapPoints[nearestPanelIndex];
+
+    if (Math.abs(nearestShift - currentShift) < panelSnapDeadzone) return;
+
+    snapToPanelIndex(nearestPanelIndex, panelSnapDuration);
+  };
+
+  const schedulePanelSnap = () => {
+    window.clearTimeout(snapTimeout);
+
+    if (!desktopQuery.matches || snapPoints.length < 2) return;
+
+    snapTimeout = window.setTimeout(snapToNearestPanel, panelSnapDelay);
+  };
+
+  const getNearestPanelIndex = () => {
+    if (!snapPoints.length) return 0;
+
+    const distance = Number(section.dataset.horizontalDistance || 0);
+    const currentShift = clamp(window.scrollY - section.offsetTop, 0, distance);
+
+    return snapPoints.reduce(
+      (nearestIndex, point, index) =>
+        Math.abs(point - currentShift) <
+        Math.abs(snapPoints[nearestIndex] - currentShift)
+          ? index
+          : nearestIndex,
+      0,
+    );
+  };
+
+  const snapToPanelIndex = (panelIndex, duration = panelSnapDuration) => {
+    if (snapPoints[panelIndex] == null) return;
+
+    window.clearTimeout(snapTimeout);
+    window.clearTimeout(activePanelLockTimeout);
+    lockedActivePanelIndex = panelIndex;
+    track.classList.add("is-horizontal-panel-transitioning");
+    updateActivePanel(snapPoints[panelIndex]);
+    smoothSnapTo(section.offsetTop + snapPoints[panelIndex], duration);
+    activePanelLockTimeout = window.setTimeout(() => {
+      lockedActivePanelIndex = null;
+      track.classList.remove("is-horizontal-panel-transitioning");
+      updateShift();
+    }, duration + 120);
+  };
+
+  const syncDistance = () => {
+    if (!desktopQuery.matches) {
+      section.style.removeProperty("--horizontal-distance");
+      section.style.removeProperty("--horizontal-shift");
+      section.style.removeProperty("--horizontal-render-shift");
+      section.removeAttribute("data-horizontal-distance");
+      document.body.classList.remove("horizontal-scroll-active");
+      targetShift = 0;
+      renderShift = 0;
+      lockedActivePanelIndex = null;
+      snapPoints = [];
+      scrollPanels.forEach((panel) =>
+        panel.classList.remove("is-horizontal-panel-active"),
+      );
+      scrollPanels = [];
+      window.clearTimeout(snapTimeout);
+      window.clearTimeout(activePanelLockTimeout);
+      return;
+    }
+
+    scrollPanels = Array.from(track.children);
+    const segment = viewport.clientHeight;
+    const distance = Math.max(0, segment * Math.max(scrollPanels.length - 1, 0));
+    snapPoints =
+      scrollPanels.length > 1
+        ? scrollPanels.map((_, index) => index * segment)
+        : [0];
+
+    section.dataset.horizontalDistance = String(distance);
+    section.style.setProperty("--horizontal-distance", `${distance}px`);
+    if (!section.style.getPropertyValue("--horizontal-render-shift")) {
+      renderShift = clamp(window.scrollY - section.offsetTop, 0, distance);
+      section.style.setProperty(
+        "--horizontal-render-shift",
+        `${renderShift}px`,
+      );
+    }
+    updateShift();
+  };
+
+  let ticking = false;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateShift();
+          schedulePanelSnap();
+          ticking = false;
+        });
+      }
+    },
+    { passive: true },
+  );
+
+  window.addEventListener(
+    "wheel",
+    (event) => {
+      if (
+        !desktopQuery.matches ||
+        snapPoints.length < 2 ||
+        Math.abs(event.deltaY) < 8
+      ) {
+        return;
+      }
+
+      const distance = Number(section.dataset.horizontalDistance || 0);
+      const inAccordionRange =
+        window.scrollY >= section.offsetTop - 8 &&
+        window.scrollY <= section.offsetTop + distance + 8;
+
+      if (!inAccordionRange) return;
+
+      if (smoothSnapFrame) {
+        event.preventDefault();
+        return;
+      }
+
+      const currentIndex = getNearestPanelIndex();
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const nextIndex = currentIndex + direction;
+
+      if (nextIndex < 0 || nextIndex >= snapPoints.length) return;
+
+      event.preventDefault();
+      snapToPanelIndex(nextIndex, panelSnapDuration);
+    },
+    { passive: false },
+  );
+
+  window.addEventListener("resize", syncDistance);
+  window.addEventListener("load", syncDistance);
+  desktopQuery.addEventListener("change", syncDistance);
+  track.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element) || !desktopQuery.matches) return;
+
+    const panel = target.closest("[data-scroll-panel]");
+    if (!panel || panel.classList.contains("is-horizontal-panel-active")) return;
+
+    const panelIndex = scrollPanels.indexOf(panel);
+    if (panelIndex < 0 || snapPoints[panelIndex] == null) return;
+
+    activatePanel(panelIndex);
+  });
+  track.addEventListener("keydown", (event) => {
+    if (!desktopQuery.matches) return;
+
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const panel = target.closest("[data-scroll-panel]");
+    if (!panel) return;
+
+    const panelIndex = scrollPanels.indexOf(panel);
+    const activeIndex = getNearestPanelIndex();
+    const keyActions = {
+      ArrowLeft: activeIndex - 1,
+      ArrowUp: activeIndex - 1,
+      ArrowRight: activeIndex + 1,
+      ArrowDown: activeIndex + 1,
+      Home: 0,
+      End: scrollPanels.length - 1,
+    };
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      activatePanel(panelIndex);
+      return;
+    }
+
+    if (Object.hasOwn(keyActions, event.key)) {
+      event.preventDefault();
+      activatePanel(keyActions[event.key]);
+    }
+  });
+  syncDistance();
+};
+
+// scroll chrome
+
+const initScrollChrome = () => {
   const header = document.querySelector(".header");
   const scrollIndicator = document.querySelector(".hero__scroll-indicator");
-  let navOffsets = {
-    hero: 0,
-    skills: 0,
-    projects: Number.POSITIVE_INFINITY,
-  };
-
-  const getPageTop = (element) =>
-    element ? element.getBoundingClientRect().top + window.scrollY : 0;
-
-  const refreshNavOffsets = () => {
-    navOffsets = {
-      hero: getPageTop(document.getElementById("hero")),
-      skills: getPageTop(document.getElementById("skills")),
-      projects:
-        getPageTop(document.getElementById("projects")) ||
-        Number.POSITIVE_INFINITY,
-    };
-  };
-
-  const updateActiveNav = () => {
-    const headerHeight = header?.offsetHeight || 56;
-    const scrollProbe = window.scrollY + headerHeight + 56;
-    let activeSection = "hero";
-
-    if (scrollProbe >= navOffsets.skills) {
-      activeSection = "skills";
-    }
-    if (scrollProbe >= navOffsets.projects) {
-      activeSection = "projects";
-    }
-
-    setActiveNav(activeSection);
-  };
 
   const toggleHeader = () => {
     const scrolled = window.scrollY > 30;
@@ -391,7 +697,6 @@ const initSideNav = () => {
         headerTicking = true;
         requestAnimationFrame(() => {
           toggleHeader();
-          updateActiveNav();
           headerTicking = false;
         });
       }
@@ -399,17 +704,49 @@ const initSideNav = () => {
     { passive: true },
   );
 
-  refreshNavOffsets();
-  window.addEventListener("resize", () => {
-    refreshNavOffsets();
-    updateActiveNav();
-  });
-  window.addEventListener("load", () => {
-    refreshNavOffsets();
-    updateActiveNav();
-  });
-  updateActiveNav();
   toggleHeader();
+};
+
+const initHeroWheelSnap = () => {
+  const hero = document.getElementById("hero");
+  const skills = document.getElementById("skills");
+  const desktopQuery = window.matchMedia("(min-width: 75em)");
+  let snappedRecently = false;
+
+  if (!hero || !skills) return;
+
+  window.addEventListener(
+    "wheel",
+    (event) => {
+      const skillsTop = skills.offsetTop;
+      const nearHeroStart = window.scrollY <= 80;
+      const nearSkillsStart =
+        window.scrollY >= skillsTop - 4 && window.scrollY <= skillsTop + 120;
+
+      if (smoothSnapFrame && window.scrollY <= skillsTop + 120) {
+        event.preventDefault();
+        return;
+      }
+
+      if (
+        !desktopQuery.matches ||
+        snappedRecently ||
+        (event.deltaY > 0 && !nearHeroStart) ||
+        (event.deltaY < 0 && !nearSkillsStart) ||
+        event.deltaY === 0
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      snappedRecently = true;
+      smoothSnapTo(event.deltaY > 0 ? skillsTop : hero.offsetTop, 1250);
+      window.setTimeout(() => {
+        snappedRecently = false;
+      }, 1400);
+    },
+    { passive: false },
+  );
 };
 
 // blobmask
@@ -602,7 +939,9 @@ const initPage = () => {
   syncScrollbarWidth();
   fluidBackground();
   observeSkills();
-  initSideNav();
+  initHorizontalSkillsScroll();
+  initScrollChrome();
+  initHeroWheelSnap();
   initBlobMask();
   window.addEventListener("resize", syncScrollbarWidth, { passive: true });
 };

@@ -13,7 +13,7 @@
       type="image/png"
       sizes="32x32"
       href="assets/images/icon.svg" />
-    <link rel="stylesheet" href="style/style.css" />
+    <link rel="stylesheet" href="style/style.css?v=no-item-dividers" />
     <title>jpndmatos.dev</title>
   </head>
   <body>
@@ -38,20 +38,6 @@
         </clipPath>
       </defs>
     </svg>
-
-    <nav class="side-nav" aria-label="Section navigation">
-      <ul class="side-nav__list">
-        <li class="side-nav__item active" data-section="hero">
-          <span>jpndmatos</span>
-        </li>
-        <li class="side-nav__item" data-section="skills">
-          <span>skills & experience</span>
-        </li>
-        <li class="side-nav__item" data-section="projects">
-          <span>projects</span>
-        </li>
-      </ul>
-    </nav>
 
     <header class="header">
       <h2 class="visually-hidden">Header</h2>
@@ -120,9 +106,9 @@
               <img
                 class="hero__image"
                 src="assets/images/jpndm.jpg"
-                alt="portrait"
-                width-="174"
-                height="383" />
+                alt="João Matos childhood portrait"
+                width="1079"
+                height="1074" />
             </picture>
             <div class="hero__text">
               <h1 class="hero__headline header-xl">
@@ -130,8 +116,8 @@
                 I'm <span>João Matos</span>.
               </h1>
               <p class="hero__description">
-                Based in Portugal,<br />Front-end focused,<br />Full-stack
-                developer.
+                Full-stack developer,<br />Front-end focused,<br />Based in
+                Portugal.
               </p>
               <div class="hero__socials">
                 <a href="mailto:jpnortem@gmail.com" class="hero__social-link">
@@ -231,9 +217,12 @@
       </section>
 
       <section id="skills" class="skills">
-        <div class="wrapper skills__wrapper">
-          <h2 class="skills__headline skills__headline--spaced header__title section-heading section-heading--dot-0">Skills</h2>
-          <div class="skills__grid">
+        <div class="skills__horizontal-viewport">
+          <div class="skills__horizontal-track">
+        <div class="wrapper skills__wrapper" data-scroll-panel="skills">
+          <div class="section-rail-block">
+            <h2 class="skills__headline skills__headline--spaced header__title section-heading section-heading--dot-0">Skills</h2>
+            <div class="skills__grid">
             <div class="skills__item">
               <h3 class="skills__title">React</h3>
               <div class="skills__progress-bar">
@@ -306,32 +295,47 @@
                 <div class="skills__progress-fill" data-progress="58"></div>
               </div>
             </div>
+            </div>
           </div>
-          <h3 class="skills__headline skills__headline--spaced header__title section-heading section-heading--dot-1">Languages</h3>
-          <div class="skills__grid">
+          <div class="section-rail-block">
+            <h3 class="skills__headline skills__headline--spaced header__title section-heading section-heading--dot-1">Languages</h3>
+            <div class="skills__grid">
             <div class="skills__item">
-              <h3 class="skills__title">Portuguese - Native</h3>
+              <h3 class="skills__title">
+                Portuguese
+                <span class="skills__level">Native</span>
+              </h3>
               <div class="skills__progress-bar">
                 <div class="skills__progress-fill" data-progress="100"></div>
               </div>
             </div>
             <div class="skills__item">
-              <h3 class="skills__title">English - Fluent C2</h3>
+              <h3 class="skills__title">
+                English
+                <span class="skills__level">Fluent C2</span>
+              </h3>
               <div class="skills__progress-bar">
                 <div class="skills__progress-fill" data-progress="98"></div>
               </div>
             </div>
             <div class="skills__item">
-              <h3 class="skills__title">Spanish - Intermediate B2</h3>
+              <h3 class="skills__title">
+                Spanish
+                <span class="skills__level">Intermediate B2</span>
+              </h3>
               <div class="skills__progress-bar">
                 <div class="skills__progress-fill" data-progress="82"></div>
               </div>
             </div>
+            </div>
           </div>
-          <div class="experience__header">
+        </div>
+        <div class="wrapper experience__wrapper" data-scroll-panel="experience">
+          <div class="section-rail-block section-rail-block--experience">
+            <div class="experience__header">
             <h2 class="skills__headline header__title section-heading section-heading--dot-2">Experience</h2>
-          </div>
-          <div class="experience__list">
+            </div>
+            <div class="experience__list">
             <div class="experience__item">
               <span class="experience__year">2026</span>
               <div class="experience__content">
@@ -345,7 +349,7 @@
                   Responsible for the SIM Conference app operations for an
                   edition with +4,000
                   attendees, +450 startups, +270 investors, +130 speakers and
-                  +1,000 meetings scheduled through the app.</br>Creation of SIM
+                  +1,000 meetings scheduled through the app.<br />Creation of SIM
                   Sync, an internal tool to import event data into the app
                   through the API, plus participant debugging and sync issue
                   resolution.
@@ -393,7 +397,7 @@
                   EBEC Coimbra
                 </p>
                 <p class="experience__description">
-                  European BEST Engineering Competition.</br>Board of European Students of Technology.
+                  European BEST Engineering Competition.<br />Board of European Students of Technology.
                 </p>
                 <div class="experience__tags">
                   <span>Illustrator</span>
@@ -405,28 +409,19 @@
                 </div>
               </div>
             </div>
+            </div>
           </div>
         </div>
-        <div class="wrapper projects__wrapper">
-          <a
-            id="projects"
-            href="https://github.com/jpndmatos"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="projects__heading header__title section-heading section-heading--dot-3"
-            aria-label="Other projects on GitHub">
-            Projects
-          </a>
-          <div class="projects">
+        <div id="projects" class="wrapper projects__wrapper" data-scroll-panel="projects">
+          <div class="projects__panel">
+            <h2
+              class="projects__heading header__title section-heading section-heading--dot-3"
+            >
+              Projects
+            </h2>
+            <div class="projects">
             <article class="projects__item">
-              <a
-                href="https://github.com/jpndmatos/simsync"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="projects__media"
-                aria-label="SIM Sync project on GitHub">
-                <span>SIM Sync</span>
-              </a>
+              <span class="projects__index" aria-hidden="true">01</span>
               <div class="projects__content">
                 <h3 class="projects__title">
                   <a
@@ -450,14 +445,7 @@
               </div>
             </article>
             <article class="projects__item">
-              <a
-                href="https://github.com/jpndmatos/Company-Website"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="projects__media"
-                aria-label="Company Website project on GitHub">
-                <span>Company Website</span>
-              </a>
+              <span class="projects__index" aria-hidden="true">02</span>
               <div class="projects__content">
                 <h3 class="projects__title">
                   <a
@@ -468,8 +456,8 @@
                   </a>
                 </h3>
                 <p class="projects__description">
-                  Doppel website dupe. Redacted to avoid copyright
-                  infringement.
+                  Company website rebuild from a professional reference,
+                  focused on responsive UI, 3D elements, and deployment.
                 </p>
                 <div class="experience__tags">
                   <span>React</span>
@@ -481,14 +469,7 @@
               </div>
             </article>
             <article class="projects__item">
-              <a
-                href="https://github.com/jpndmatos/HDF5-Dashboard"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="projects__media"
-                aria-label="HDF5 Dashboard project on GitHub">
-                <span>HDF5 Dashboard</span>
-              </a>
+              <span class="projects__index" aria-hidden="true">03</span>
               <div class="projects__content">
                 <h3 class="projects__title">
                   <a
@@ -512,14 +493,7 @@
               </div>
             </article>
             <article class="projects__item">
-              <a
-                href="https://github.com/the-mind-of-the-cabeco/cabecos-rift"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="projects__media"
-                aria-label="Riftbound deck builder project on GitHub">
-                <span>Riftbound</span>
-              </a>
+              <span class="projects__index" aria-hidden="true">04</span>
               <div class="projects__content">
                 <h3 class="projects__title">
                   <a
@@ -542,14 +516,7 @@
               </div>
             </article>
             <article class="projects__item">
-              <a
-                href="https://github.com/GorillazTech/MadCoAI"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="projects__media"
-                aria-label="MadCoAI project on GitHub">
-                <span>MadCoAI</span>
-              </a>
+              <span class="projects__index" aria-hidden="true">05</span>
               <div class="projects__content">
                 <h3 class="projects__title">
                   <a
@@ -577,14 +544,7 @@
               </div>
             </article>
             <article class="projects__item">
-              <a
-                href="https://jpndmatos.github.io/Crimes-Exemplares/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="projects__media"
-                aria-label="Crimes Exemplares project">
-                <span>Crimes Exemplares</span>
-              </a>
+              <span class="projects__index" aria-hidden="true">06</span>
               <div class="projects__content">
                 <h3 class="projects__title">
                   <a
@@ -606,14 +566,7 @@
               </div>
             </article>
             <article class="projects__item">
-              <a
-                href="https://github.com/jpndmatos/EatEasy"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="projects__media"
-                aria-label="EatEasy project on GitHub">
-                <span>EatEasy</span>
-              </a>
+              <span class="projects__index" aria-hidden="true">07</span>
               <div class="projects__content">
                 <h3 class="projects__title">
                   <a
@@ -635,24 +588,15 @@
                 </div>
               </div>
             </article>
+            </div>
+          </div>
+        </div>
           </div>
         </div>
       </section>
 
-      <footer class="footer">
-        <h2 class="visually-hidden">Footer</h2>
-        <div class="wrapper">
-          <nav class="header__nav">
-            <h2 class="visually-hidden">Navigation</h2>
-            <a href="./" class="header__home">
-              @jpndmatos 2026
-              <span class="visually-hidden">(to home page)</span>
-            </a>
-          </nav>
-        </div>
-      </footer>
     </main>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=no-item-dividers"></script>
   </body>
 </html>
