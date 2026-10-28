@@ -1,6 +1,7 @@
 """Compose compact SVG covers from real project screenshots and artwork.
 
-No product UI is generated: each panel is a view into an original asset.
+Source panels show original assets; vector details illustrate real controls
+and workflows at a size that remains readable in a thumbnail.
 Run from any directory with Python 3. Sources remain editable and replaceable.
 """
 from pathlib import Path
@@ -18,7 +19,7 @@ class Cover:
         self.panels = [f'<rect width="960" height="360" fill="{background}"/>']
         for key, (file, width, height) in sources.items():
             data = b64encode((ASSETS / file).read_bytes()).decode()
-            mime = 'image/png' if file.endswith('.png') else 'image/jpeg'
+            mime = {'.png': 'image/png', '.webp': 'image/webp'}.get(Path(file).suffix, 'image/jpeg')
             self.defs.append(f'<image id="{key}" width="{width}" height="{height}" href="data:{mime};base64,{data}"/>')
 
     def panel(self, source, crop, box, angle=0, radius=10):
@@ -38,6 +39,10 @@ class Cover:
     def save(self, description):
         text = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360"><title>{escape(description)}</title><defs>{"".join(self.defs)}</defs>{"".join(self.panels)}</svg>\n'
         (ASSETS / f'{self.name}-cover.svg').write_text(text, encoding='utf-8')
+
+    def graphic(self, markup):
+        self.panels.append(markup)
+        return self
 
 
 Cover('split', '#10231c', {'ui': ('split.jpg', 1280, 800)}) \
@@ -80,25 +85,43 @@ Cover('riftbound', '#15151c', {'ui': ('sources/riftbound.jpg', 1280, 720)}) \
     .panel('ui', (679, 141, 121, 174), (718, 90, 177, 255), 6) \
     .save('Riftbound: domain and card-type filters, search and three collectible card artworks')
 
-Cover('madcoai', '#080f1b', {'ui': ('sources/madcoai.jpg', 1280, 720)}) \
-    .panel('ui', (589, 72, 106, 100), (30, 57, 140, 132)) \
-    .panel('ui', (360, 361, 560, 63), (208, 35, 720, 81)) \
-    .panel('ui', (405, 439, 538, 29), (222, 127, 692, 37)) \
-    .panel('ui', (405, 514, 226, 172), (208, 183, 300, 164)) \
-    .panel('ui', (893, 514, 226, 172), (550, 183, 300, 164)) \
-    .save('MadCoAI: project mark, ticker search, popular assets and research tools')
+Cover('madcoai', '#0c1926', {'ui': ('sources/madcoai.jpg', 1280, 720), 'mark': ('sources/madcoai-mark.webp', 3000, 3000)}) \
+    .panel('mark', (490, 745, 2020, 1520), (30, 93, 230, 174)) \
+    .panel('ui', (360, 361, 560, 63), (310, 40, 620, 70)) \
+    .graphic('''<g font-family="Poppins,sans-serif">
+      <text x="310" y="164" fill="#bfccd7" font-size="24">Research pipeline</text>
+      <path d="M486 242h44m-10-8 10 8-10 8M706 242h44m-10-8 10 8-10 8" fill="none" stroke="#54778d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <g fill="#122638" stroke="#2b4559" stroke-width="2">
+        <rect x="310" y="197" width="176" height="90" rx="12"/>
+        <rect x="530" y="197" width="176" height="90" rx="12"/>
+        <rect x="750" y="197" width="176" height="90" rx="12"/>
+      </g>
+      <g fill="#e3edf4" font-size="25" text-anchor="middle">
+        <text x="398" y="252">Analysts</text><text x="618" y="252">Deep dive</text><text x="838" y="252">Council</text>
+      </g>
+    </g>''') \
+    .save('MadCoAI: original project mark and ticker search with a simplified research pipeline diagram')
 
 Cover('crimes', '#e9ddca', {'clue': ('crimes-evidence.jpg', 1280, 720), 'scene': ('sources/crimes-scene.jpg', 1280, 720)}) \
     .panel('scene', (0, 0, 1280, 720), (13, 33, 590, 300)) \
     .panel('clue', (277, 107, 355, 492), (624, 14, 238, 330), 5) \
     .save('Crimes Exemplares: illustrated room and the barber evidence card')
 
-Cover('eateasy', '#182820', {'ui': ('eateasy.jpg', 840, 868)}) \
-    .panel('ui', (251, 75, 547, 49), (27, 17, 906, 58)) \
-    .panel('ui', (252, 310, 260, 110), (27, 99, 423, 179)) \
-    .panel('ui', (536, 310, 262, 110), (510, 99, 423, 179)) \
-    .panel('ui', (267, 487, 230, 59), (43, 287, 390, 60)) \
-    .panel('ui', (551, 487, 230, 59), (526, 287, 390, 60)) \
-    .save('EatEasy: restaurant search, dining spaces, cuisines and booking details')
+Cover('eateasy', '#f3f1e9', {'photo': ('sources/eateasy-restaurant.jpg', 1000, 667)}) \
+    .panel('photo', (0, 0, 1000, 667), (0, 0, 540, 360), radius=0) \
+    .graphic('''<g font-family="Poppins,sans-serif">
+      <text x="574" y="65" fill="#18372c" font-size="32" font-weight="600">Mesa da Vila</text>
+      <text x="574" y="99" fill="#51665c" font-size="21">Portuguesa / Lisboa</text>
+      <g fill="#ffffff" stroke="#d5ddd5" stroke-width="2">
+        <rect x="574" y="140" width="206" height="64" rx="8"/>
+        <rect x="796" y="140" width="132" height="64" rx="8"/>
+      </g>
+      <g fill="#334d40" font-size="23">
+        <text x="592" y="180">dd/mm/yyyy</text><text x="812" y="180" font-size="20">2 pessoas</text>
+      </g>
+      <rect x="574" y="231" width="354" height="65" rx="8" fill="#007a5e"/>
+      <text x="751" y="271" fill="#ffffff" font-size="25" font-weight="500" text-anchor="middle">Confirmar reserva</text>
+    </g>''') \
+    .save('EatEasy: original restaurant photography with an enlarged illustration of the reservation controls')
 
 print('Built nine composed covers from original project assets.')
