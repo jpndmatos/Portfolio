@@ -751,6 +751,37 @@
         : 22 + Math.sin(time * 0.4 + phase) * 8;
       if (h < 60) {
         const left = 3, top = 3, right = w - 3, bottom = h - 3;
+        // Buttons have independent edge rhythms instead of mirrored waves.
+        const organic = (offset) => {
+          const t = time * frame.tempo;
+          const p = phase + offset;
+          return Math.sin(t * .57 + p) * 1.05
+            + Math.sin(t * .91 + p * 1.73) * .55;
+        };
+        if (frame.isButton) {
+          // Let the whole contour breathe, with smooth, independently moving sides.
+          const left = 3 + organic(9.4) * .85;
+          const top = 3 + organic(12.2) * .85;
+          const right = w - 3 + organic(15.1) * .85;
+          const bottom = h - 3 + organic(18.6) * .85;
+          const limit = Math.min(right - left, bottom - top) / 2;
+          const radiusAt = (offset) => Math.min(12 + organic(offset) * 2.5, limit);
+          const tl = radiusAt(0), tr = radiusAt(2.3);
+          const br = radiusAt(4.9), bl = radiusAt(7.1);
+          const k = .55228475;
+          path.setAttribute("d", `M ${left + tl} ${top}
+            H ${right - tr}
+            C ${right - tr + tr * k} ${top} ${right} ${top + tr - tr * k} ${right} ${top + tr}
+            V ${bottom - br}
+            C ${right} ${bottom - br + br * k} ${right - br + br * k} ${bottom} ${right - br} ${bottom}
+            H ${left + bl}
+            C ${left + bl - bl * k} ${bottom} ${left} ${bottom - bl + bl * k} ${left} ${bottom - bl}
+            V ${top + tl}
+            C ${left} ${top + tl - tl * k} ${left + tl - tl * k} ${top} ${left + tl} ${top} Z`);
+          return;
+        }
+        const topWave = wave, rightWave = -drift;
+        const bottomWave = -wave, leftWave = drift;
         const cx = w / 2, cy = h / 2;
         const radius = Math.min(r, (h - 6) / 3);
         const corner = radius * 0.55228475;
@@ -758,17 +789,17 @@
         const y = (cy - top - radius) * 0.45;
         // Cubic segments share tangent directions at every join, including corners.
         path.setAttribute("d", `M ${left + radius} ${top}
-          C ${left + radius + x} ${top} ${cx - x} ${top + wave} ${cx} ${top + wave}
-          C ${cx + x} ${top + wave} ${right - radius - x} ${top} ${right - radius} ${top}
+          C ${left + radius + x} ${top} ${cx - x} ${top + topWave} ${cx} ${top + topWave}
+          C ${cx + x} ${top + topWave} ${right - radius - x} ${top} ${right - radius} ${top}
           C ${right - radius + corner} ${top} ${right} ${top + radius - corner} ${right} ${top + radius}
-          C ${right} ${top + radius + y} ${right - drift} ${cy - y} ${right - drift} ${cy}
-          C ${right - drift} ${cy + y} ${right} ${bottom - radius - y} ${right} ${bottom - radius}
+          C ${right} ${top + radius + y} ${right + rightWave} ${cy - y} ${right + rightWave} ${cy}
+          C ${right + rightWave} ${cy + y} ${right} ${bottom - radius - y} ${right} ${bottom - radius}
           C ${right} ${bottom - radius + corner} ${right - radius + corner} ${bottom} ${right - radius} ${bottom}
-          C ${right - radius - x} ${bottom} ${cx + x} ${bottom - wave} ${cx} ${bottom - wave}
-          C ${cx - x} ${bottom - wave} ${left + radius + x} ${bottom} ${left + radius} ${bottom}
+          C ${right - radius - x} ${bottom} ${cx + x} ${bottom + bottomWave} ${cx} ${bottom + bottomWave}
+          C ${cx - x} ${bottom + bottomWave} ${left + radius + x} ${bottom} ${left + radius} ${bottom}
           C ${left + radius - corner} ${bottom} ${left} ${bottom - radius + corner} ${left} ${bottom - radius}
-          C ${left} ${bottom - radius - y} ${left + drift} ${cy + y} ${left + drift} ${cy}
-          C ${left + drift} ${cy - y} ${left} ${top + radius + y} ${left} ${top + radius}
+          C ${left} ${bottom - radius - y} ${left + leftWave} ${cy + y} ${left + leftWave} ${cy}
+          C ${left + leftWave} ${cy - y} ${left} ${top + radius + y} ${left} ${top + radius}
           C ${left} ${top + radius - corner} ${left + radius - corner} ${top} ${left + radius} ${top} Z`);
         return;
       }
@@ -806,7 +837,11 @@
         svg.appendChild(path);
         card.prepend(svg);
         card.classList.add("has-fluid-frame");
-        frames.set(card, { svg, path, width: 0, height: 0, phase: index * 1.7, visible: false });
+        frames.set(card, {
+          svg, path, width: 0, height: 0, phase: index * 1.7, visible: false,
+          isButton: card.matches(".footer__socials a, .hero__chip"),
+          tempo: .8 + ((index * .61803398875) % 1) * .4,
+        });
         resize.observe(card);
         visibility.observe(card);
       });
