@@ -200,8 +200,9 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 }
 @media (max-width: 900px) {
   a, button { -webkit-tap-highlight-color: transparent; }
-  .header { transform: translateY(-100%); transition: transform calc(300ms / var(--motion-speed)) ease-in-out, background-color calc(950ms / var(--motion-speed)) ease-in-out, border-color calc(950ms / var(--motion-speed)) ease-in-out; }
-  .header.scrolled { transform: translateY(0); }
+  .header { transition: background-color calc(950ms / var(--motion-speed)) ease-in-out, border-color calc(950ms / var(--motion-speed)) ease-in-out; }
+  .header::before { opacity: 1; }
+  .header { border-bottom-color: var(--glass-border); }
   :root { --header-height: 56px; }
   .wrapper { padding-inline: 24px; }
   .header__wrapper { --header-inset: 24px; gap: 16px; }
@@ -209,8 +210,8 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   .header__link { font-size: .75rem; }
   .header__home { font-size: .875rem; }
   .hero { min-height: 100svh; padding-block: 88px 48px; }
-  .hero__content { display: flex; flex-direction: column; align-items: center; gap: 0; }
-  .hero__picture { position: relative; order: 1; right: auto; top: auto; transform: none; width: clamp(220px, 68vw, 320px); max-width: 100%; margin: 0 auto -16px; }
+  .hero__content { display: flex; flex-direction: column; align-items: center; gap: 0; transform: translateY(-40px); }
+  .hero__picture { position: relative; order: 1; right: auto; top: auto; transform: none; width: clamp(220px, 68vw, 320px); max-width: 100%; margin: -20px auto -16px; }
   .hero__text { order: 2; width: 100%; margin-right: 0; text-align: center; }
   .hero__content > .hero__text--overlap { display: block; }
   .hero__headline { width: 100%; font-size: clamp(1.65rem, 7.5vw, 2.75rem); line-height: 1.18; letter-spacing: -.05em; margin-bottom: 18px; }
@@ -222,7 +223,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   .hero__action-row--secondary { display: grid; grid-template-columns: minmax(0, 1fr); }
   .hero__chip { min-height: 44px; justify-content: center; padding: 10px 12px; gap: 8px; font-size: .75rem; }
   .hero__chip > svg:not(.fluid-frame) { width: 16px; height: 16px; }
-  .hero__scroll-indicator { display: none; }
+  .hero__scroll-indicator { display: block; bottom: calc(62px + env(safe-area-inset-bottom)); }
   .section { padding-block: 36px; }
   .section__header { flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 24px; padding-top: 16px; }
   .section__header .header__title { font-size: 1.75rem; }
