@@ -1,15 +1,10 @@
-<h1><picture><source media="(prefers-color-scheme: dark)" srcset="docs/logo-dark.svg"><img src="docs/logo.svg" alt="João Matos" width="400" height="72"></picture></h1>
+# Portfolio
 
-My personal portfolio, with selected projects, work experience, skills, and contact details. Built with HTML, CSS, and JavaScript, with a WebGL background and responsive layouts.
+My portfolio, with projects, work experience and contact details. It uses HTML, CSS and JavaScript, with a WebGL background.
 
 <img src="assets/images/joao-matos-portrait.png" alt="João Matos, the portfolio author" width="240">
 
-## Features
-
-- Project links and an overview of my web development work.
-- Responsive navigation, keyboard focus states, and a skip link.
-- Poppins typography and a dark interface.
-- Reduced-motion support for animated effects.
+The layout adapts to mobile screens and includes keyboard navigation and reduced-motion support.
 
 ## Run locally
 
