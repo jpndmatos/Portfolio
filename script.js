@@ -507,7 +507,11 @@
 
     let headerScrollOverride = null;
     const onScroll = () => {
-      const scrolled = headerScrollOverride ?? (window.scrollY > 20);
+      const mobileHeroEnd = hero
+        ? hero.offsetTop + hero.offsetHeight - header.getBoundingClientRect().height - 24
+        : 20;
+      const scrolled = headerScrollOverride ??
+        (window.innerWidth <= 900 ? window.scrollY > mobileHeroEnd : window.scrollY > 20);
       header.classList.toggle("scrolled", scrolled);
       hero?.classList.toggle("is-scrolled", window.scrollY > 8);
       scrollbar?.classList.toggle("is-visible", window.scrollY > 0);
