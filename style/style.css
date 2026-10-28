@@ -18,6 +18,9 @@
   --header-height: 64px;
   --header-underline: var(--accent);
   --font-family: 'Poppins', sans-serif;
+  --project-image-light: #eef2f6;
+  --project-art-background: #06344a;
+  --project-workflow-background: #19191f;
   --weight-title: 500;
   --weight-subtitle: 400;
   --weight-body: 400;
@@ -172,6 +175,20 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .project-card--more { border-style: dashed; justify-content: center; }
 .project-card--more .project-card__content { flex: 0; }
 .project-card--more .project-card__desc { margin-bottom: 0; }
+.project-card__media { position: relative; flex-shrink: 0; margin: 0 0 20px; width: 100%; aspect-ratio: 16 / 10; overflow: clip; border-radius: 8px; background: var(--surface-hover); }
+.project-card__media img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.project-card__media--photo img { object-position: center; }
+.project-card__media--brand { background: var(--project-image-light); }
+.project-card__media--brand img { object-fit: contain; padding: 28px; }
+.project-card__media--art { background: var(--project-art-background); }
+.project-card__media--art img { object-fit: contain; padding: 20px; }
+.project-card__media--workflow { background: var(--project-workflow-background); }
+.project-card__media--workflow img { object-fit: contain; padding: 16px; }
+.project-card__index { margin-bottom: 12px; }
+.project-card__title .icon { position: static; flex-shrink: 0; }
+.project-card__repo { position: relative; z-index: 1; align-self: flex-start; margin-top: 16px; font-size: .75rem; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; }
+.project-card__repo:hover { color: var(--accent); }
+.project-card--more { grid-column: 1 / -1; }
 .footer { margin-top: 48px; padding-block: 24px; }
 .footer__wrapper, .footer__credit, .footer__socials { display: flex; align-items: center; }
 .footer__wrapper { justify-content: space-between; gap: 20px; }
