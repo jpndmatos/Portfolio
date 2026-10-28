@@ -412,6 +412,7 @@
   let setActiveNavInk = () => {};
   const initFluidNavigation = () => {
     const links = Array.from(document.querySelectorAll(".nav-link"));
+    const menu = document.querySelector(".header__menu");
     const labels = links.map((link) => {
       const label = document.createElement("span");
       label.className = "nav-label";
@@ -420,48 +421,24 @@
       return label;
     });
     let activeIndex = -1;
-    let animation = null;
-    let finishAnimation = null;
     const solid = (index, color) => {
       if (index >= 0) labels[index].style.backgroundImage = `linear-gradient(${color}, ${color})`;
+    };
+    const positionNavInk = (index, animate = true) => {
+      if (!menu || index < 0) return;
+      if (!animate) menu.classList.add("nav-ink-no-transition");
+      menu.style.setProperty("--nav-ink-left", `${links[index].offsetLeft}px`);
+      menu.style.setProperty("--nav-ink-width", `${links[index].offsetWidth}px`);
+      if (!animate) requestAnimationFrame(() => menu.classList.remove("nav-ink-no-transition"));
     };
     setActiveNavInk = (id) => {
       const nextIndex = links.findIndex((link) => link.dataset.section === id);
       if (nextIndex === activeIndex) return;
-      if (animation !== null) cancelAnimationFrame(animation);
-      if (finishAnimation) finishAnimation();
-      animation = null;
-      finishAnimation = null;
       const previousIndex = activeIndex;
       activeIndex = nextIndex;
-      const finish = () => {
-        labels.forEach((label, index) => solid(index,
-          index === activeIndex ? "var(--accent)" : "var(--text-muted)"));
-      };
-      if (previousIndex < 0 || nextIndex < 0 || prefersReducedMotion) { finish(); return; }
-      const parts = [labels[previousIndex], labels[nextIndex]];
-      const widths = parts.map((label) => label.getBoundingClientRect().width);
-      const distance = widths[0] + widths[1] + 4;
-      const direction = nextIndex > previousIndex ? 90 : 270;
-      const paint = (travel) => {
-        parts.forEach((label, index) => {
-          const front = travel - (index === 1 ? widths[0] : 0);
-          const behind = index === 0 ? "var(--text-muted)" : "var(--accent)";
-          const ahead = index === 0 ? "var(--accent)" : "var(--text-muted)";
-          label.style.backgroundImage = `linear-gradient(${direction}deg,
-            ${behind} ${front - 3}px, var(--accent) ${front}px, ${ahead} ${front + 3}px)`;
-        });
-      };
-      finishAnimation = finish;
-      const started = performance.now();
-      const tick = (now) => {
-        const t = Math.min(1, (now - started) / (900 / MOTION_SPEED));
-        paint(t * t * (3 - 2 * t) * distance);
-        if (t < 1) animation = requestAnimationFrame(tick);
-        else { animation = null; finish(); finishAnimation = null; }
-      };
-      paint(0);
-      animation = requestAnimationFrame(tick);
+      positionNavInk(nextIndex, previousIndex >= 0 && !prefersReducedMotion);
+      labels.forEach((label, index) => solid(index,
+        index === activeIndex ? "var(--text1)" : "var(--text-muted)"));
     };
   };
 
@@ -587,6 +564,7 @@
       scrollAnimation = requestAnimationFrame(animateScroll);
     };
     const snapTarget = (direction) => {
+      if (window.innerWidth <= 900) return null;
       const top = skillsTop();
       if (top === null) return null;
       if (direction > 0 && isOnLanding() &&
@@ -759,7 +737,7 @@
     const draw = (frame, time) => {
       time *= MOTION_SPEED;
       const { path, width: w, height: h, phase } = frame;
-      if (w < 60 || h < 24) return;
+      if (w < 24 || h < 24) return;
       const motionScale = h < 60 ? 0.18 : 1;
       const wave = Math.sin(time * 0.65 + phase) * 8 * motionScale;
       const drift = Math.cos(time * 0.5 + phase) * 6 * motionScale;
@@ -814,7 +792,7 @@
         frames.get(target).visible = isIntersecting;
       });
     });
-    document.querySelectorAll(".bento-card, .timeline-item__content, .project-card, .hero__text:not(.hero__text--overlap) .hero__chip")
+    document.querySelectorAll(".bento-card, .timeline-item__content, .project-card, .hero__text:not(.hero__text--overlap) .hero__chip, .footer__socials a")
       .forEach((card, index) => {
         const svg = document.createElementNS(ns, "svg");
         svg.classList.add("fluid-frame");
