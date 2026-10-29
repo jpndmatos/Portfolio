@@ -61,19 +61,30 @@ Cover('overlap', '#151e2d', {'ui': ('overlap.jpg', 1280, 800)}) \
     .save('Overlap: city timeline and selected meeting time')
 
 Cover('simsync', '#17171f', {}).graphic('''<g font-family="Poppins,sans-serif">
-  <rect x="32" y="40" width="896" height="280" rx="12" fill="#19191f"/>
-  <text x="58" y="91" font-size="27" fill="#f0f0f5">Participants</text>
-  <rect x="58" y="122" width="623" height="59" rx="6" fill="#101016" stroke="#44404b" stroke-width="2"/>
-  <text x="78" y="160" font-size="25" fill="#c8c3cf">participants.csv</text>
-  <rect x="705" y="122" width="196" height="59" rx="6" fill="#2a2a33"/>
-  <text x="803" y="160" text-anchor="middle" font-size="25" fill="#f0f0f5">Browse</text>
-  <rect x="663" y="231" width="238" height="59" rx="6" fill="#e6007e"/>
-  <text x="782" y="270" text-anchor="middle" font-size="27" fill="#ffffff">Preview</text>
-</g>''').save('SIMsync: illustration of the desktop app’s CSV picker and Preview control; no event data or credentials')
+  <rect x="32" y="28" width="657" height="58" rx="6" fill="#101016" stroke="#44404b" stroke-width="2"/>
+  <text x="54" y="65" font-size="25" fill="#ddd7e4">participants.csv</text>
+  <rect x="715" y="28" width="213" height="58" rx="6" fill="#e6007e"/>
+  <text x="821" y="66" text-anchor="middle" font-size="26" fill="#ffffff">Preview</text>
+  <text x="34" y="121" font-size="21" fill="#8e8e9a">Sample preview</text>
+  <path d="M32 144h430" stroke="#2dd4a8" stroke-width="3"/><path d="M498 144h430" stroke="#e6007e" stroke-width="3"/>
+  <g font-size="30"><text x="45" y="195" fill="#2dd4a8">1</text><text x="511" y="195" fill="#ff3da5">1</text></g>
+  <g font-size="24" fill="#b8b4c1"><text x="84" y="193">To add</text><text x="550" y="193">Updated</text></g>
+  <path d="M32 217h430M498 217h430" stroke="#2a2a33" stroke-width="2"/>
+  <g font-size="26" fill="#e0dbe5"><text x="45" y="274">alex@example.com</text><text x="511" y="274">sam@example.com</text></g>
+</g>''').save('SIMsync: illustrative CSV preview results with clearly labelled sample data, using the app’s actual result categories and colours')
 
-Cover('company', '#eeece7', {'art': ('sources/company-reconstruction.png', 858, 796)}) \
-    .panel('art', (312, 140, 530, 199), (0, 0, 960, 360), radius=0) \
-    .save('Company Website: original courtyard reconstruction from its project gallery')
+Cover('company', '#f7f7f4', {'art': ('sources/company-reconstruction.png', 858, 796)}) \
+    .graphic('''<g font-family="Poppins,sans-serif">
+      <text x="36" y="76" font-size="47" font-weight="700" letter-spacing="-2" fill="#191964">doppel</text>
+      <rect x="645" y="32" width="133" height="58" rx="8" fill="#eaeaf0"/>
+      <g font-size="23" fill="#5e6374"><text x="427" y="70">Doppel</text><text x="545" y="70">About</text><text x="797" y="70">Contact</text></g>
+      <text x="661" y="70" font-size="23" fill="#191964">Portfolio</text>
+      <path d="M0 114h960" stroke="#dcdde3" stroke-width="2"/>
+      <text x="36" y="212" font-size="47" font-weight="600" fill="#202340">Portfolio</text>
+      <text x="38" y="263" font-size="25" fill="#5e6374">Selected heritage projects.</text>
+    </g>''') \
+    .panel('art', (312, 140, 530, 199), (541, 148, 385, 175)) \
+    .save('Company Website: illustration of its original navigation bar and portfolio heading, with its own heritage gallery imagery')
 
 Cover('hdf5', '#162734', {'ui': ('hdf5-dashboard.jpg', 1265, 957)}) \
     .panel('ui', (32, 183, 1200, 340), (24, 51, 912, 258)) \
@@ -85,11 +96,25 @@ Cover('riftbound', '#15151c', {str(i): (f'sources/riftbound-card-{i}.jpg', 320, 
     .panel('3', (0, 0, 320, 447), (624, 28, 216, 304)) \
     .save('Riftbound: original Riot Games card artwork used in the project’s card gallery')
 
-Cover('madcoai', '#080f1b', {'ui': ('sources/madcoai.jpg', 1280, 720)}) \
-    .panel('ui', (330, 355, 620, 119), (24, 68, 912, 175)) \
-    .panel('ui', (425, 537, 180, 61), (74, 263, 300, 61)) \
-    .panel('ui', (913, 537, 180, 61), (587, 263, 300, 61)) \
-    .save('MadCoAI: original ticker search and research tool controls')
+madco = Cover('madcoai', '#04060d', {})
+madco.graphic('''<g font-family="Poppins,sans-serif">
+  <text x="32" y="56" font-size="30" fill="#e8eef4">Portfolio</text>
+  <text x="783" y="54" font-size="21" fill="#7a92ad">Sample data</text>
+  <rect x="32" y="82" width="587" height="242" rx="12" fill="#111827"/>
+  <rect x="642" y="82" width="286" height="242" rx="12" fill="#111827"/>
+  <g stroke="#263248" stroke-width="1.5"><path d="M84 126h510M84 206h510M84 286h510"/></g>
+  <g fill="#7a92ad" font-size="18"><text x="43" y="132">108</text><text x="43" y="212">104</text><text x="43" y="292">100</text></g>
+  <path d="M84 286h510" stroke="#818cf8" stroke-width="3"/>
+  <text x="667" y="124" font-size="25" fill="#e8eef4">Holdings</text>
+  <g fill="#b4c5d8" font-size="25"><text x="668" y="181">AAPL</text><text x="668" y="239">MSFT</text><text x="668" y="296">NVDA</text></g>
+  <g fill="#e8eef4" font-size="24" text-anchor="end"><text x="901" y="181">40%</text><text x="901" y="239">35%</text><text x="901" y="296">25%</text></g>
+  <g stroke="#263248" stroke-width="1.5"><path d="M665 200h240M665 258h240"/></g>
+</g>''')
+# Illustrative indexed history, never a claimed real account or market return.
+series = [100,100.8,100.2,101.5,103.3,102.1,104,103,105.5,105,104.7,107.3,106.8,108]
+points = ' '.join(f'{84+i*510/(len(series)-1):.1f},{286-(v-100)*20:.1f}' for i,v in enumerate(series))
+madco.graphic(f'<polyline points="{points}" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>')
+madco.graphic('''<g font-family="Poppins,sans-serif" font-size="20" fill="#7a92ad"><path d="M50 345h23" stroke="#38bdf8" stroke-width="3"/><text x="84" y="351">Total equity</text><path d="M270 345h23" stroke="#818cf8" stroke-width="3"/><text x="304" y="351">Invested</text></g>''').save('MadCoAI: portfolio chart and holdings illustration using sample data; indexed history and example allocations are not real performance')
 
 Cover('crimes', '#fffaf3', {'scene': ('sources/crimes-scene.jpg', 1280, 720)}) \
     .panel('scene', (20, 160, 1240, 349), (24, 51, 912, 258)) \

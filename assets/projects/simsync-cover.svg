@@ -1,10 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360"><title>SIMsync: illustration of the desktop app’s CSV picker and Preview control; no event data or credentials</title><defs></defs><rect width="960" height="360" fill="#17171f"/><g font-family="Poppins,sans-serif">
-  <rect x="32" y="40" width="896" height="280" rx="12" fill="#19191f"/>
-  <text x="58" y="91" font-size="27" fill="#f0f0f5">Participants</text>
-  <rect x="58" y="122" width="623" height="59" rx="6" fill="#101016" stroke="#44404b" stroke-width="2"/>
-  <text x="78" y="160" font-size="25" fill="#c8c3cf">participants.csv</text>
-  <rect x="705" y="122" width="196" height="59" rx="6" fill="#2a2a33"/>
-  <text x="803" y="160" text-anchor="middle" font-size="25" fill="#f0f0f5">Browse</text>
-  <rect x="663" y="231" width="238" height="59" rx="6" fill="#e6007e"/>
-  <text x="782" y="270" text-anchor="middle" font-size="27" fill="#ffffff">Preview</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360"><title>SIMsync: illustrative CSV preview results with clearly labelled sample data, using the app’s actual result categories and colours</title><defs></defs><rect width="960" height="360" fill="#17171f"/><g font-family="Poppins,sans-serif">
+  <rect x="32" y="28" width="657" height="58" rx="6" fill="#101016" stroke="#44404b" stroke-width="2"/>
+  <text x="54" y="65" font-size="25" fill="#ddd7e4">participants.csv</text>
+  <rect x="715" y="28" width="213" height="58" rx="6" fill="#e6007e"/>
+  <text x="821" y="66" text-anchor="middle" font-size="26" fill="#ffffff">Preview</text>
+  <text x="34" y="121" font-size="21" fill="#8e8e9a">Sample preview</text>
+  <path d="M32 144h430" stroke="#2dd4a8" stroke-width="3"/><path d="M498 144h430" stroke="#e6007e" stroke-width="3"/>
+  <g font-size="30"><text x="45" y="195" fill="#2dd4a8">1</text><text x="511" y="195" fill="#ff3da5">1</text></g>
+  <g font-size="24" fill="#b8b4c1"><text x="84" y="193">To add</text><text x="550" y="193">Updated</text></g>
+  <path d="M32 217h430M498 217h430" stroke="#2a2a33" stroke-width="2"/>
+  <g font-size="26" fill="#e0dbe5"><text x="45" y="274">alex@example.com</text><text x="511" y="274">sam@example.com</text></g>
 </g></svg>
