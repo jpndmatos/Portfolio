@@ -112,9 +112,9 @@ points = ' '.join(f'{84+i*510/(len(series)-1):.1f},{286-(v-100)*20:.1f}' for i,v
 madco.graphic(f'<polyline points="{points}" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>')
 madco.graphic('''<g font-family="Poppins,sans-serif" font-size="20" fill="#7a92ad"><path d="M50 345h23" stroke="#38bdf8" stroke-width="3"/><text x="84" y="351">Total equity</text><path d="M270 345h23" stroke="#818cf8" stroke-width="3"/><text x="304" y="351">Invested</text></g>''').save('MadCoAI: portfolio chart and holdings illustration using sample data; indexed history and example allocations are not real performance')
 
-Cover('crimes', '#fffaf3', {'scene': ('sources/crimes-scene.jpg', 1280, 720)}) \
-    .panel('scene', (20, 160, 1240, 349), (24, 51, 912, 258)) \
-    .save('Crimes Exemplares: original interactive room artwork')
+Cover('crimes', '#9e151a', {'loading': ('sources/crimes-loading.png', 8000, 4500)}) \
+    .panel('loading', (2000, 200, 4000, 3200), (255, 0, 450, 360), radius=0) \
+    .save('Crimes Exemplares: original red loading screen with its title and cutlery artwork')
 
 Cover('eateasy', '#202b25', {'ui': ('eateasy.jpg', 840, 868), 'photo': ('sources/eateasy-restaurant.jpg', 1000, 667)}) \
     .panel('photo', (60, 90, 900, 493), (24, 32, 548, 296)) \
