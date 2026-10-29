@@ -26,7 +26,8 @@
   --size-body: .875rem;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: 104px; background: var(--bg-page); }
+html { scroll-behavior: smooth; scroll-padding-top: 104px; scrollbar-gutter: stable; background: var(--bg-page); }
+html.is-jumping { overflow-y: hidden; scroll-behavior: auto; }
 body { font-family: var(--font-family); font-weight: var(--weight-body); color: var(--text2); line-height: 1.65; -webkit-font-smoothing: antialiased; background: var(--bg-page); }
 a { color: inherit; text-decoration: none; transition: color calc(180ms / var(--motion-speed)) ease, background calc(180ms / var(--motion-speed)) ease, border-color calc(180ms / var(--motion-speed)) ease; }
 img, svg { display: block; }

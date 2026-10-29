@@ -548,6 +548,16 @@
     const skillsHeading = document.querySelector("#skills .section__header");
     let scrollAnimation = null;
     let jumpUntil = 0;
+    let jumpDestination = null;
+    const scrollRoot = document.documentElement;
+    const finishJump = () => {
+      if (scrollAnimation !== null) cancelAnimationFrame(scrollAnimation);
+      scrollAnimation = null;
+      jumpDestination = null;
+      scrollRoot.classList.remove("is-jumping");
+      headerScrollOverride = null;
+      onScroll();
+    };
     const skillsTop = () => skillsHeading
       ? skillsHeading.getBoundingClientRect().top + window.scrollY -
         header.getBoundingClientRect().height - 28
@@ -556,31 +566,28 @@
       hero.offsetTop + hero.offsetHeight - window.innerHeight / 2;
     const jump = (top) => {
       if (top === null) return;
-      if (scrollAnimation !== null) cancelAnimationFrame(scrollAnimation);
+      if (scrollAnimation !== null) return;
+      jumpDestination = top;
       headerScrollOverride = top > 20;
       onScroll();
       if (prefersReducedMotion) {
         window.scrollTo({ top, behavior: "instant" });
-        jumpUntil = performance.now() + 180;
-        scrollAnimation = null;
-        headerScrollOverride = null;
-        onScroll();
+        finishJump();
+        jumpUntil = performance.now() + 90;
         return;
       }
       const from = window.scrollY;
       const started = performance.now();
+      scrollRoot.classList.add("is-jumping");
       const animateScroll = (now) => {
-        const progress = Math.min(1, (now - started) / (950 / MOTION_SPEED));
-        // Smooth acceleration and deceleration, with no abrupt start or stop.
-        const eased = progress * progress * progress *
-          (progress * (progress * 6 - 15) + 10);
+        const progress = Math.min(1, (now - started) / 300);
+        // Respond immediately, then settle precisely in one short transition.
+        const eased = 1 - (1 - progress) ** 3;
         window.scrollTo({ top: from + (top - from) * eased, behavior: "instant" });
         if (progress < 1) scrollAnimation = requestAnimationFrame(animateScroll);
         else {
-          scrollAnimation = null;
-          headerScrollOverride = null;
-          onScroll();
-          jumpUntil = performance.now() + 180;
+          finishJump();
+          jumpUntil = performance.now() + 90;
         }
       };
       scrollAnimation = requestAnimationFrame(animateScroll);
@@ -597,17 +604,31 @@
       return null;
     };
     window.addEventListener("wheel", (event) => {
-      if (event.ctrlKey || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
+      if (event.ctrlKey) return;
       if (scrollAnimation !== null || performance.now() < jumpUntil) {
         event.preventDefault();
-        jumpUntil = performance.now() + 180;
         return;
       }
+      if (Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
       const top = snapTarget(event.deltaY);
       if (top === null) return;
       event.preventDefault();
       jump(top);
     }, { passive: false });
+
+    window.addEventListener("keydown", (event) => {
+      if (scrollAnimation !== null &&
+          ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key) &&
+          !event.target?.closest("input, textarea, select, [contenteditable='true']")) {
+        event.preventDefault();
+      }
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && scrollAnimation !== null) {
+        window.scrollTo({ top: jumpDestination, behavior: "instant" });
+        finishJump();
+      }
+    });
 
     let touchStartY = null;
     window.addEventListener("touchstart", (event) => {
@@ -637,11 +658,8 @@
         if (!target || !heading) return;
 
         event.preventDefault();
-        if (scrollAnimation !== null) cancelAnimationFrame(scrollAnimation);
-        scrollAnimation = null;
+        finishJump();
         jumpUntil = 0;
-        headerScrollOverride = null;
-        onScroll();
         const offset = header.getBoundingClientRect().height + 28;
         const top = heading.getBoundingClientRect().top + window.scrollY - offset;
         window.history.pushState(null, "", targetId);
