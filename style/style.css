@@ -167,6 +167,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .project-card__action { position: relative; z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 8px; color: var(--accent); }
 .project-card__action:hover, .project-card__action:focus-visible { color: var(--text1); background: var(--accent-soft); }
 .project-card__action .icon { width: 14px; height: 14px; transform: none; }
+.project-card__action .icon[fill="none"] { width: 11px; height: 11px; }
 .project-card__content { display: flex; flex-direction: column; flex: 1; }
 .project-card__title { font-size: var(--size-card-title); line-height: 1.4; letter-spacing: -.025em; margin-bottom: 12px; }
 .project-card__title a { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
