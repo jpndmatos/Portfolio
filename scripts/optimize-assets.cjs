@@ -11,7 +11,7 @@ const asset = (file) => path.join(root, 'assets', file);
     await sharp(asset('images/joao-matos-portrait.png')).resize({ width })
       .webp({ quality: 86, effort: 6 }).toFile(asset(`images/portrait-${width}.webp`));
   }
-  for (const name of ['company', 'eateasy', 'crimes', 'hdf5', 'split', 'overlap', 'image-desk']) {
+  for (const name of ['company', 'eateasy', 'crimes', 'hdf5', 'split', 'overlap', 'image-desk', 'riftbound-angular']) {
     await sharp(asset(`projects/${name}-cover.svg`)).webp({ quality: 90, effort: 6 })
       .toFile(asset(`projects/${name}-cover.webp`));
   }

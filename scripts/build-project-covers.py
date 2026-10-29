@@ -121,4 +121,8 @@ Cover('eateasy', '#202b25', {'ui': ('eateasy.jpg', 840, 868), 'photo': ('sources
     .panel('ui', (267, 487, 230, 195), (615, 42, 288, 264)) \
     .save('EatEasy: original restaurant photography and its booking card details')
 
-print('Built ten image-only project covers.')
+Cover('riftbound-angular', '#101315', {'ui': ('sources/riftbound-angular.jpg', 1280, 720)}) \
+    .panel('ui', (200, 140, 1056, 396), (0, 0, 960, 360), radius=0) \
+    .save('Riftbound Deck Builder: original Angular card browser and live deck editor')
+
+print('Built eleven image-only project covers.')
