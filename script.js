@@ -26,7 +26,7 @@
       alpha: false,
       antialias: false,
       preserveDrawingBuffer: false,
-      powerPreference: "high-performance",
+      powerPreference: "low-power",
     });
 
     if (!gl) {
@@ -145,7 +145,9 @@
         float opacity = 0.3 * vignette;
         vec3 finalColor = mix(bgColor, color, opacity);
 
-        gl_FragColor = vec4(finalColor, 1.0);
+        // Match the existing monochrome treatment without a fullscreen CSS filter.
+        float gray = dot(finalColor, vec3(0.2126, 0.7152, 0.0722));
+        gl_FragColor = vec4(vec3(gray), 1.0);
       }
     `;
 
@@ -193,12 +195,12 @@
     const renderScale = prefersReducedMotion
       ? 0.6
       : isLowPowerDevice || isTouchDevice
-        ? 0.72
-        : 0.9;
-    let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        ? 0.45
+        : 0.6;
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.25);
 
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.25);
       canvas.width = Math.round(window.innerWidth * dpr * renderScale);
       canvas.height = Math.round(window.innerHeight * dpr * renderScale);
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -210,7 +212,7 @@
 
     let animationId = null;
     const startTime = performance.now();
-    const targetFrameMs = prefersReducedMotion ? 1000 / 24 : 1000 / 45;
+    const targetFrameMs = 1000 / 30;
     let lastFrameTime = 0;
 
     const animate = (now) => {
@@ -357,10 +359,13 @@
     };
 
     let blobVisible = true;
+    let blobAnimationId = null;
     let lastBlobFrameTime = 0;
     const blobTargetFrameMs = prefersReducedMotion ? 1000 / 20 : 1000 / 30;
 
     const updateBlob = (now) => {
+      blobAnimationId = null;
+      if (document.hidden || !blobVisible) return;
       if (now - lastBlobFrameTime >= blobTargetFrameMs) {
         lastBlobFrameTime = now;
         const t = now * 0.001 * MOTION_SPEED;
@@ -387,7 +392,7 @@
         });
       }
 
-      if (!prefersReducedMotion) requestAnimationFrame(updateBlob);
+      if (!prefersReducedMotion) blobAnimationId = requestAnimationFrame(updateBlob);
     };
 
     const heroSection = document.getElementById("hero");
@@ -396,6 +401,9 @@
         (entries) => {
           entries.forEach((entry) => {
             blobVisible = entry.isIntersecting;
+            if (blobVisible && blobAnimationId === null) {
+              blobAnimationId = requestAnimationFrame(updateBlob);
+            }
           });
         },
         { threshold: 0 },
@@ -403,7 +411,15 @@
       observer.observe(heroSection);
     }
 
-    requestAnimationFrame(updateBlob);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && blobAnimationId !== null) {
+        cancelAnimationFrame(blobAnimationId);
+        blobAnimationId = null;
+      } else if (!document.hidden && blobVisible && blobAnimationId === null) {
+        blobAnimationId = requestAnimationFrame(updateBlob);
+      }
+    });
+    blobAnimationId = requestAnimationFrame(updateBlob);
   };
 
   /* --------------------------------------------------------------------------
@@ -455,7 +471,7 @@
     let scrollFrame = null;
 
     const updateScrollbar = () => {
-      if (!scrollbarThumb) return;
+      if (!scrollbarThumb || !scrollbar.getClientRects().length) return;
       const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
       const trackHeight = document
         .querySelector(".custom-scrollbar")
@@ -502,11 +518,12 @@
         scrollFrame = null;
         updateScrollbar();
         updateActiveSection();
+        updateHeader();
       });
     };
 
     let headerScrollOverride = null;
-    const onScroll = () => {
+    const updateHeader = () => {
       const mobileHeroEnd = hero
         ? hero.offsetTop + hero.offsetHeight - header.getBoundingClientRect().height - 24
         : 20;
@@ -515,12 +532,13 @@
       header.classList.toggle("scrolled", scrolled);
       hero?.classList.toggle("is-scrolled", window.scrollY > 8);
       scrollbar?.classList.toggle("is-visible", window.scrollY > 0);
-      scheduleScrollbarUpdate();
     };
+    const onScroll = scheduleScrollbarUpdate;
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", scheduleScrollbarUpdate, { passive: true });
     onScroll();
+    updateHeader();
     updateScrollbar();
     updateActiveSection();
     window.addEventListener("load", scheduleScrollbarUpdate, { once: true });
@@ -739,15 +757,50 @@
     const ns = "http://www.w3.org/2000/svg";
     const frames = new Map();
     const finePointer = window.matchMedia("(any-pointer: fine)");
+    // Evaluate the authored Beziers directly. Native SVG length queries flatten
+    // the curve on every call and were the main cost during pointer movement.
+    const sampleContour = (data, isButton) => {
+      const tokens = data.match(/[MCQHVZ]|-?\d*\.?\d+(?:e[-+]?\d+)?/gi);
+      const points = [];
+      let x = 0, y = 0, index = 0;
+      const number = () => Number(tokens[index++]);
+      while (index < tokens.length) {
+        const command = tokens[index++];
+        if (command === "M") { x = number(); y = number(); continue; }
+        if (command === "Z") break;
+        const startX = x, startY = y;
+        let controls;
+        if (command === "C") controls = [number(), number(), number(), number(), number(), number()];
+        else if (command === "Q") controls = [number(), number(), number(), number()];
+        else if (command === "H") controls = [number(), y];
+        else if (command === "V") controls = [x, number()];
+        else break;
+        const steps = command === "Q" ? 6 : isButton ? 8 : 16;
+        for (let step = 0; step < steps; step++) {
+          const t = step / steps, u = 1 - t;
+          if (command === "C") points.push({
+            x: u*u*u*startX + 3*u*u*t*controls[0] + 3*u*t*t*controls[2] + t*t*t*controls[4],
+            y: u*u*u*startY + 3*u*u*t*controls[1] + 3*u*t*t*controls[3] + t*t*t*controls[5],
+          });
+          else if (command === "Q") points.push({
+            x: u*u*startX + 2*u*t*controls[0] + t*t*controls[2],
+            y: u*u*startY + 2*u*t*controls[1] + t*t*controls[3],
+          });
+          else points.push({ x: startX*u + controls[0]*t, y: startY*u + controls[1]*t });
+        }
+        x = controls[controls.length - 2]; y = controls[controls.length - 1];
+      }
+      return points;
+    };
     // Sample the existing contour, then apply pressure along its outward normal.
     // A damped spring carries the disturbance after the cursor leaves an edge.
     const disturb = (frame, delta) => {
       if (prefersReducedMotion || !finePointer.matches) return;
-      const { path, pointer, springs, width, height } = frame;
+      const { pointer, springs, height } = frame;
       if (!pointer.active && springs.every((spring) =>
         Math.abs(spring.position) < .015 && Math.abs(spring.velocity) < .04)) return;
-      const length = path.getTotalLength();
-      const count = Math.max(32, Math.min(180, Math.ceil((width + height) * 2 / 12)));
+      const points = sampleContour(frame.baseD, frame.isButton);
+      const count = points.length;
       if (springs.length !== count) {
         springs.splice(0, springs.length, ...Array.from({ length: count }, () =>
           ({ position: 0, velocity: 0 })));
@@ -755,8 +808,6 @@
       const follow = 1 - Math.exp(-14 * delta);
       pointer.smoothX += (pointer.x - pointer.smoothX) * follow;
       pointer.smoothY += (pointer.y - pointer.smoothY) * follow;
-      const points = Array.from({ length: count }, (_, i) =>
-        path.getPointAtLength(i * length / count));
       const radius = frame.isButton ? Math.min(38, height) : 100;
       const depth = frame.isButton ? 3.5 : 14;
       const displaced = points.map((point, i) => {
@@ -782,19 +833,25 @@
         }
         return { x: point.x + nx * spring.position, y: point.y + ny * spring.position };
       });
-      let contour = `M ${displaced[0].x} ${displaced[0].y}`;
+      const xy = (x, y) => `${x.toFixed(2)} ${y.toFixed(2)}`;
+      let contour = `M ${xy(displaced[0].x, displaced[0].y)}`;
       displaced.forEach((p1, i) => {
         const p0 = displaced[(i - 1 + count) % count];
         const p2 = displaced[(i + 1) % count];
         const p3 = displaced[(i + 2) % count];
-        contour += ` C ${p1.x + (p2.x - p0.x) / 6} ${p1.y + (p2.y - p0.y) / 6}, ${p2.x - (p3.x - p1.x) / 6} ${p2.y - (p3.y - p1.y) / 6}, ${p2.x} ${p2.y}`;
+        contour += ` C ${xy(p1.x + (p2.x - p0.x) / 6, p1.y + (p2.y - p0.y) / 6)}, ${xy(p2.x - (p3.x - p1.x) / 6, p2.y - (p3.y - p1.y) / 6)}, ${xy(p2.x, p2.y)}`;
       });
-      path.setAttribute("d", `${contour} Z`);
+      return `${contour} Z`;
     };
-    const releaseEdges = () => frames.forEach((frame) => { frame.pointer.active = false; });
-    if (!prefersReducedMotion) {
-      window.addEventListener("pointermove", (event) => {
-        if (event.pointerType === "touch" || !finePointer.matches) return;
+    let latestPointer = null;
+    const releaseEdges = () => {
+      latestPointer = null;
+      frames.forEach((frame) => { frame.pointer.active = false; });
+    };
+    const updatePointer = () => {
+        const event = latestPointer;
+        if (!event) return;
+        latestPointer = null;
         frames.forEach((frame, card) => {
           if (!frame.visible) return;
           const rect = card.getBoundingClientRect();
@@ -810,6 +867,10 @@
             y > -reach && y < rect.height + reach &&
             Math.min(x, y, rect.width - x, rect.height - y) < reach;
         });
+    };
+    if (!prefersReducedMotion) {
+      window.addEventListener("pointermove", (event) => {
+        if (event.pointerType !== "touch" && finePointer.matches) latestPointer = event;
       }, { passive: true });
       document.documentElement.addEventListener("pointerleave", releaseEdges);
       window.addEventListener("blur", releaseEdges);
@@ -817,7 +878,7 @@
     }
     const draw = (frame, time) => {
       time *= MOTION_SPEED;
-      const { path, width: w, height: h, phase } = frame;
+      const { geometry: path, width: w, height: h, phase } = frame;
       if (w < 24 || h < 24) return;
       const motionScale = h < 60 ? 0.18 : 1;
       const wave = Math.sin(time * 0.65 + phase) * 8 * motionScale;
@@ -897,12 +958,14 @@
         frame.height = target.clientHeight;
         frame.svg.setAttribute("viewBox", `0 0 ${frame.width} ${frame.height}`);
         draw(frame, performance.now() / 1000);
+        frame.path.setAttribute("d", frame.baseD);
       });
     });
     const visibility = new IntersectionObserver((entries) => {
       entries.forEach(({ target, isIntersecting }) => {
         frames.get(target).visible = isIntersecting;
       });
+      scheduleAnimation();
     });
     document.querySelectorAll(".bento-card, .timeline-item__content, .project-card, .hero__text:not(.hero__text--overlap) .hero__chip, .footer__socials a")
       .forEach((card, index) => {
@@ -914,31 +977,51 @@
         svg.appendChild(path);
         card.prepend(svg);
         card.classList.add("has-fluid-frame");
-        frames.set(card, {
+        const frame = {
           svg, path, width: 0, height: 0, phase: index * 1.7, visible: false,
           isButton: card.matches(".footer__socials a, .hero__chip"),
           tempo: .8 + ((index * .61803398875) % 1) * .4,
           pointer: { x: 0, y: 0, smoothX: 0, smoothY: 0, active: false }, springs: [],
-        });
+        };
+        frame.geometry = { setAttribute: (_, data) => { frame.baseD = data; } };
+        frames.set(card, frame);
         resize.observe(card);
         visibility.observe(card);
       });
     if (prefersReducedMotion) return;
     let lastFrame = 0;
+    let animationId = null;
     const frameInterval = 1000 / (finePointer.matches ? 60 : 30);
+    function scheduleAnimation() {
+      if (!prefersReducedMotion && !document.hidden && animationId === null &&
+          Array.from(frames.values()).some((frame) => frame.visible)) {
+        animationId = requestAnimationFrame(animate);
+      }
+    }
     const animate = (now) => {
-      if (!document.hidden && now - lastFrame >= frameInterval - 1) {
+      animationId = null;
+      if (document.hidden) return;
+      if (now - lastFrame >= frameInterval - 1) {
         const delta = Math.min((now - lastFrame) / 1000, .05);
         lastFrame = now;
+        // Read card bounds once per rendered frame, before any SVG writes.
+        updatePointer();
         frames.forEach((frame) => {
           if (!frame.visible) return;
           draw(frame, now / 1000);
-          disturb(frame, delta);
+          frame.path.setAttribute("d", disturb(frame, delta) || frame.baseD);
         });
       }
-      requestAnimationFrame(animate);
+      scheduleAnimation();
     };
-    requestAnimationFrame(animate);
+    document.addEventListener("visibilitychange", () => {
+      releaseEdges();
+      if (document.hidden && animationId !== null) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      } else scheduleAnimation();
+    });
+    scheduleAnimation();
   };
 
   /* --------------------------------------------------------------------------

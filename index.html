@@ -12,10 +12,10 @@
       rel="stylesheet" />
     <link
       rel="icon"
-      type="image/svg+xml"
-      sizes="32x32"
-      href="assets/images/icon.svg" />
-    <link rel="stylesheet" href="style/style.css?v=2026-project-link-actions" />
+      type="image/png"
+      sizes="64x64"
+      href="assets/images/favicon.png" />
+    <link rel="stylesheet" href="style/style.css?v=2026-performance" />
     <title>jpndmatos.dev</title>
   </head>
   <body>
@@ -91,15 +91,15 @@
           <div class="hero__content">
             <picture class="hero__picture">
               <source
-                media="(min-width: 62.5em)"
-                srcset="./assets/images/joao-matos-portrait.png" />
-              <source
-                media="(min-width: 37.5em)"
-                srcset="./assets/images/joao-matos-portrait.png" />
+                type="image/webp"
+                srcset="assets/images/portrait-480.webp 480w, assets/images/portrait-800.webp 800w"
+                sizes="(max-width: 600px) 62vw, (max-width: 1200px) 340px, 500px" />
               <img
                 class="hero__image"
                 src="assets/images/joao-matos-portrait.png"
                 alt="João Matos portrait"
+                fetchpriority="high"
+                decoding="async"
                 width="1086"
                 height="1448" />
             </picture>
@@ -517,7 +517,7 @@
                   Temperature and humidity dashboard with a Flask API, interactive Plotly charts and a full-length sensor heatmap.
                 </p>
                 <figure class="project-card__media project-card__media--hdf5">
-                  <img src="assets/projects/hdf5-cover.svg?v=imagery-6" alt="HDF5 Dashboard temperature and humidity charts" width="960" height="360" loading="lazy" decoding="async" />
+                  <img src="assets/projects/hdf5-cover.webp?v=optimized-1" alt="HDF5 Dashboard temperature and humidity charts" width="960" height="360" loading="lazy" decoding="async" />
                 </figure>
                 <div class="experience__tags">
                   <span>HTML</span>
@@ -546,7 +546,7 @@
                   Browser-based batch image tool with resizing, rotation, flipping, filename prefixes and ZIP downloads. Files stay on the device.
                 </p>
                 <figure class="project-card__media project-card__media--image">
-                  <img src="assets/projects/image-desk-cover.svg?v=imagery-6" alt="Image Desk processed image and export controls" width="960" height="360" loading="lazy" decoding="async" />
+                  <img src="assets/projects/image-desk-cover.webp?v=optimized-1" alt="Image Desk processed image and export controls" width="960" height="360" loading="lazy" decoding="async" />
                 </figure>
                 <div class="experience__tags"><span>React</span><span>TypeScript</span><span>Canvas API</span><span>Vite</span></div>
               </div>
@@ -568,7 +568,7 @@
                   Restaurant booking app with customer and admin accounts, cuisine filters, reservations and a local sample database.
                 </p>
                 <figure class="project-card__media project-card__media--eateasy">
-                  <img src="assets/projects/eateasy-cover.svg?v=imagery-6" alt="EatEasy restaurant photography and booking details" width="960" height="360" loading="lazy" decoding="async" />
+                  <img src="assets/projects/eateasy-cover.webp?v=optimized-1" alt="EatEasy restaurant photography and booking details" width="960" height="360" loading="lazy" decoding="async" />
                 </figure>
                 <div class="experience__tags">
                   <span>PHP</span>
@@ -595,7 +595,7 @@
                   Shared event expenses with exact splits, expense editing, repayment tracking and CSV export. Built with a Node.js API and SQLite.
                 </p>
                 <figure class="project-card__media project-card__media--split">
-                  <img src="assets/projects/split-cover.svg?v=imagery-6" alt="Split expense summary and ledger controls" width="960" height="360" loading="lazy" decoding="async" />
+                  <img src="assets/projects/split-cover.webp?v=optimized-1" alt="Split expense summary and ledger controls" width="960" height="360" loading="lazy" decoding="async" />
                 </figure>
                 <div class="experience__tags"><span>React</span><span>TypeScript</span><span>Node.js</span><span>SQLite</span><span>Vitest</span></div>
               </div>
@@ -618,7 +618,7 @@
                   Time zone meeting planner with working-hour comparisons, daylight-saving support, saved times and calendar exports.
                 </p>
                 <figure class="project-card__media project-card__media--overlap">
-                  <img src="assets/projects/overlap-cover.svg?v=imagery-6" alt="Overlap city timelines and selected meeting time" width="960" height="360" loading="lazy" decoding="async" />
+                  <img src="assets/projects/overlap-cover.webp?v=optimized-1" alt="Overlap city timelines and selected meeting time" width="960" height="360" loading="lazy" decoding="async" />
                 </figure>
                 <div class="experience__tags"><span>React</span><span>TypeScript</span><span>Intl API</span><span>Vitest</span></div>
               </div>
@@ -640,7 +640,7 @@
                   Responsive company website with a project gallery, service information and an interactive 3D viewer.
                 </p>
                 <figure class="project-card__media project-card__media--company">
-                  <img src="assets/projects/company-cover.svg?v=hero-10" alt="Actual company website 3D scan and original navigation" width="960" height="360" loading="lazy" decoding="async" />
+                  <img src="assets/projects/company-cover.webp?v=optimized-1" alt="Actual company website 3D scan and original navigation" width="960" height="360" loading="lazy" decoding="async" />
                 </figure>
                 <div class="experience__tags">
                   <span>React</span>
@@ -669,7 +669,7 @@
                   Interactive illustrated story inspired by Max Aub's Crimes Exemplares. Explore a room, open objects and listen to their clues.
                 </p>
                 <figure class="project-card__media project-card__media--crimes">
-                  <img src="assets/projects/crimes-cover.svg?v=red-loading-1" alt="Crimes Exemplares red loading screen with black title and cutlery artwork" width="960" height="360" loading="lazy" decoding="async" />
+                  <img src="assets/projects/crimes-cover.webp?v=optimized-1" alt="Crimes Exemplares red loading screen with black title and cutlery artwork" width="960" height="360" loading="lazy" decoding="async" />
                 </figure>
                 <div class="experience__tags">
                   <span>HTML</span>
@@ -750,6 +750,6 @@
       </div>
     </footer>
 
-    <script src="script.js?v=2026-smooth-edge-pressure"></script>
+    <script src="script.js?v=2026-performance"></script>
   </body>
 </html>

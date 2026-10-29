@@ -34,7 +34,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-
 ::selection { background: var(--accent); color: var(--bg-page); }
 .wrapper { width: min(100%, var(--container)); margin-inline: auto; padding-inline: 32px; }
 main, .footer { position: relative; z-index: 1; }
-#fluid-bg { position: fixed; inset: 0; width: 100%; height: 100%; opacity: .13; filter: grayscale(1); pointer-events: none; }
+#fluid-bg { position: fixed; inset: 0; width: 100%; height: 100%; opacity: .13; pointer-events: none; }
 .custom-scrollbar { display: none; }
 .skip-link { position: fixed; left: 20px; top: -80px; z-index: 200; padding: 12px 20px; color: var(--bg-page); background: var(--accent); border-radius: 8px; }
 .skip-link:focus { top: 16px; }
@@ -163,10 +163,10 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .project-card:hover, .project-card:focus-within { background-color: var(--surface-hover); border-color: var(--accent-border); }
 .project-card__topline { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px; margin: -8px -8px 8px 0; }
 .project-card__index { font-size: .6875rem; color: var(--accent); font-variant-numeric: tabular-nums; }
-.project-card__actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.project-card__actions { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
 .project-card__action { position: relative; z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 8px; color: var(--accent); }
 .project-card__action:hover, .project-card__action:focus-visible { color: var(--text1); background: var(--accent-soft); }
-.project-card__action .icon { width: 18px; height: 18px; transform: none; }
+.project-card__action .icon { width: 14px; height: 14px; transform: none; }
 .project-card__content { display: flex; flex-direction: column; flex: 1; }
 .project-card__title { font-size: var(--size-card-title); line-height: 1.4; letter-spacing: -.025em; margin-bottom: 12px; }
 .project-card__title a { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
