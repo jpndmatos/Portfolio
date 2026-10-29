@@ -1,12 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360"><title>SIMsync: CSV email and group mapping preview before syncing participant data to Brella</title><defs></defs><rect width="960" height="360" fill="#17171f"/><g font-family="Poppins,sans-serif">
-  <rect x="32" y="35" width="450" height="290" rx="12" fill="#222229"/>
-  <text x="58" y="83" fill="#f0f0f5" font-size="29" font-weight="600">participants.csv</text>
-  <path d="M58 108h398M58 172h398M58 236h398M272 122v167" stroke="#44404b" stroke-width="2"/>
-  <g font-size="24" fill="#b8b4c1"><text x="58" y="148">CSV field</text><text x="298" y="148">Brella field</text><text x="58" y="212">Email</text><text x="58" y="277">Group</text></g>
-  <g font-size="24" fill="#ff58b2"><text x="298" y="212">Email</text><text x="298" y="277">Group</text></g>
-  <path d="M510 177h66m-14-14 14 14-14 14" fill="none" stroke="#ed3d9e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="617" y="126" fill="#f0f0f5" font-size="50" font-weight="600">Brella</text>
-  <text x="619" y="177" fill="#b8b4c1" font-size="24">Preview mappings</text>
-  <rect x="617" y="226" width="308" height="61" rx="7" fill="#e6007e"/>
-  <text x="771" y="266" fill="#ffffff" font-size="26" text-anchor="middle">Sync data</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360"><title>SIMsync: CSV import into Brella, retaining the desktop tool’s pink and charcoal identity</title><defs></defs><rect width="960" height="360" fill="#17171f"/><text x="32" y="47" font-family="Poppins,sans-serif" font-size="29" font-weight="600" fill="#ff58b2">SIMsync</text><g font-family="Poppins,sans-serif">
+  <path d="M184 99h104l34 34v172H184zM288 99v35h34" fill="#222229" stroke="#7e7688" stroke-width="3" stroke-linejoin="round"/>
+  <text x="253" y="228" font-size="40" text-anchor="middle" fill="#f0f0f5">CSV</text>
+  <path d="M397 204h103m-17-17 17 17-17 17" fill="none" stroke="#ed3d9e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="575" y="228" fill="#f03a9c" font-size="65" font-weight="600">Brella</text>
 </g></svg>
