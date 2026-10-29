@@ -52,8 +52,13 @@ function check(reduced) {
   const active = cards[0].svg.child.data.d;
   assert(active.length > initial.length);
   assert(!/NaN|Infinity/.test(active));
+  assert.equal(active.split(' C ')[0], initial.split(' C ')[0], 'Hover must not pull the corner');
+  assert((active.match(/ C /g) || []).length <= 52, 'Keep the active contour compact');
+  events.get('pointermove')({ pointerType: 'mouse', clientX: 533, clientY: 462 });
+  for (let i = 91; i <= 120; i++) tick(i * 17);
+  assert.equal(cards[0].svg.child.data.d.split(' C ')[0], initial.split(' C ')[0]);
   events.get('pointerleave')();
-  for (let i = 91; i <= 300; i++) tick(i * 17);
+  for (let i = 121; i <= 330; i++) tick(i * 17);
   assert(cards[0].svg.child.data.d.length < active.length);
   observers[1].flush(false);
   tick(5200);

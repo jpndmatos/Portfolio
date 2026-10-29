@@ -756,272 +756,185 @@
   const initFluidCards = () => {
     const ns = "http://www.w3.org/2000/svg";
     const frames = new Map();
+    const visibleFrames = new Set();
     const finePointer = window.matchMedia("(any-pointer: fine)");
-    // Evaluate the authored Beziers directly. Native SVG length queries flatten
-    // the curve on every call and were the main cost during pointer movement.
-    const sampleContour = (data, isButton) => {
-      const tokens = data.match(/[MCQHVZ]|-?\d*\.?\d+(?:e[-+]?\d+)?/gi);
-      const points = [];
-      let x = 0, y = 0, index = 0;
-      const number = () => Number(tokens[index++]);
-      while (index < tokens.length) {
-        const command = tokens[index++];
-        if (command === "M") { x = number(); y = number(); continue; }
-        if (command === "Z") break;
-        const startX = x, startY = y;
-        let controls;
-        if (command === "C") controls = [number(), number(), number(), number(), number(), number()];
-        else if (command === "Q") controls = [number(), number(), number(), number()];
-        else if (command === "H") controls = [number(), y];
-        else if (command === "V") controls = [x, number()];
-        else break;
-        const steps = command === "Q" ? 6 : isButton ? 8 : 16;
-        for (let step = 0; step < steps; step++) {
-          const t = step / steps, u = 1 - t;
-          if (command === "C") points.push({
-            x: u*u*u*startX + 3*u*u*t*controls[0] + 3*u*t*t*controls[2] + t*t*t*controls[4],
-            y: u*u*u*startY + 3*u*u*t*controls[1] + 3*u*t*t*controls[3] + t*t*t*controls[5],
-          });
-          else if (command === "Q") points.push({
-            x: u*u*startX + 2*u*t*controls[0] + t*t*controls[2],
-            y: u*u*startY + 2*u*t*controls[1] + t*t*controls[3],
-          });
-          else points.push({ x: startX*u + controls[0]*t, y: startY*u + controls[1]*t });
-        }
-        x = controls[controls.length - 2]; y = controls[controls.length - 1];
-      }
-      return points;
-    };
-    // Sample the existing contour, then apply pressure along its outward normal.
-    // A damped spring carries the disturbance after the cursor leaves an edge.
-    const disturb = (frame, delta) => {
-      if (prefersReducedMotion || !finePointer.matches) return;
-      const { pointer, springs, height } = frame;
-      if (!pointer.active && springs.every((spring) =>
-        Math.abs(spring.position) < .015 && Math.abs(spring.velocity) < .04)) return;
-      const points = sampleContour(frame.baseD, frame.isButton);
-      const count = points.length;
-      if (springs.length !== count) {
-        springs.splice(0, springs.length, ...Array.from({ length: count }, () =>
-          ({ position: 0, velocity: 0 })));
-      }
-      const follow = 1 - Math.exp(-14 * delta);
-      pointer.smoothX += (pointer.x - pointer.smoothX) * follow;
-      pointer.smoothY += (pointer.y - pointer.smoothY) * follow;
-      const radius = frame.isButton ? Math.min(38, height) : 100;
-      const depth = frame.isButton ? 3.5 : 14;
-      const displaced = points.map((point, i) => {
-        const previous = points[(i - 1 + count) % count];
-        const next = points[(i + 1) % count];
-        const dx = next.x - previous.x, dy = next.y - previous.y;
-        const magnitude = Math.hypot(dx, dy) || 1;
-        const nx = dy / magnitude, ny = -dx / magnitude;
-        const px = pointer.smoothX - point.x, py = pointer.smoothY - point.y;
-        const distance = Math.hypot(px, py) / radius;
-        // A broad indentation with small shoulders gives a liquid edge, without
-        // adding jagged noise or moving the card's contents or click targets.
-        const pressure = pointer.active
-          ? (1 - distance * distance * .65) * Math.exp(-distance * distance * 1.4)
-          : 0;
-        const side = Math.tanh((px * nx + py * ny) / 10);
-        const target = -depth * pressure * (.8 + side * .35);
-        const spring = springs[i];
-        // Two bounded substeps keep the rebound stable after a slow frame.
-        for (let step = 0; step < 2; step++) {
-          spring.velocity += ((target - spring.position) * 140 - spring.velocity * 24) * delta / 2;
-          spring.position += spring.velocity * delta / 2;
-        }
-        return { x: point.x + nx * spring.position, y: point.y + ny * spring.position };
-      });
-      const xy = (x, y) => `${x.toFixed(2)} ${y.toFixed(2)}`;
-      let contour = `M ${xy(displaced[0].x, displaced[0].y)}`;
-      displaced.forEach((p1, i) => {
-        const p0 = displaced[(i - 1 + count) % count];
-        const p2 = displaced[(i + 1) % count];
-        const p3 = displaced[(i + 2) % count];
-        contour += ` C ${xy(p1.x + (p2.x - p0.x) / 6, p1.y + (p2.y - p0.y) / 6)}, ${xy(p2.x - (p3.x - p1.x) / 6, p2.y - (p3.y - p1.y) / 6)}, ${xy(p2.x, p2.y)}`;
-      });
-      return `${contour} Z`;
-    };
     let latestPointer = null;
+    let animationId = null;
+    let lastFrame = 0;
+    const xy = (x, y) => `${x.toFixed(2)} ${y.toFixed(2)}`;
+
+    // Each side has one spring. Corners stay fixed, and analytic tangents keep
+    // every join smooth without sampling, parsing or measuring an SVG path.
+    const draw = (frame, now, delta = 0) => {
+      const { width: w, height: h, pointer, edges } = frame;
+      if (w < 24 || h < 24) return;
+      const left = 3, top = 3, right = w - 3, bottom = h - 3;
+      const r = Math.min(frame.isButton ? 12 : 22, (w - 6) / 2, (h - 6) / 2);
+      const k = r * .55228475;
+      const sides = [
+        [left + r, top, w - 6 - 2*r, 0],
+        [right, top + r, 0, h - 6 - 2*r],
+        [right - r, bottom, -(w - 6 - 2*r), 0],
+        [left, bottom - r, 0, -(h - 6 - 2*r)],
+      ];
+      const corners = [
+        ` C ${xy(right-r+k, top)}, ${xy(right, top+r-k)}, ${xy(right, top+r)}`,
+        ` C ${xy(right, bottom-r+k)}, ${xy(right-r+k, bottom)}, ${xy(right-r, bottom)}`,
+        ` C ${xy(left+r-k, bottom)}, ${xy(left, bottom-r+k)}, ${xy(left, bottom-r)}`,
+        ` C ${xy(left, top+r-k)}, ${xy(left+r-k, top)}, ${xy(left+r, top)}`,
+      ];
+      const time = prefersReducedMotion ? 0 : now * .001 * MOTION_SPEED;
+      let data = `M ${xy(left + r, top)}`;
+      sides.forEach(([x, y, dx, dy], index) => {
+        const edge = edges[index];
+        const length = Math.hypot(dx, dy) || 1;
+        const nx = dy / length, ny = -dx / length;
+        const projection = ((pointer.x-x)*dx + (pointer.y-y)*dy) / (length*length);
+        const center = Math.max(0, Math.min(1, projection));
+        const distanceSquared = (pointer.x-x-dx*center)**2 + (pointer.y-y-dy*center)**2;
+        const reach = frame.isButton ? 28 : 72;
+        const target = pointer.active
+          ? -(frame.isButton ? 1.4 : 5) * Math.exp(-distanceSquared / (reach*reach))
+          : 0;
+        if (delta) {
+          edge.center += (center - edge.center) * (1 - Math.exp(-12*delta));
+          for (let step = 0; step < 2; step++) {
+            edge.velocity += ((target-edge.position)*120 - edge.velocity*24) * delta/2;
+            edge.position += edge.velocity * delta/2;
+          }
+          if (!pointer.active && Math.abs(edge.position) < .015 && Math.abs(edge.velocity) < .05) {
+            edge.position = 0;
+            edge.velocity = 0;
+          }
+        }
+        const idle = Math.sin(time * .4 * frame.tempo + frame.phase + index*1.7)
+          * (frame.isButton ? .45 : 1.8);
+        const spread = Math.max(1, length / (frame.isButton ? 35 : 110));
+        const deformed = Math.abs(edge.position) > .02;
+        const segments = deformed
+          ? Math.min(12, Math.max(4, Math.ceil(length/48))) : 2;
+        const point = (t) => {
+          // The window and its derivative are both zero at the corners.
+          const window = Math.sin(Math.PI*t)**2;
+          const slope = Math.PI * Math.sin(2*Math.PI*t);
+          const z = (t-edge.center)*spread;
+          const bell = deformed ? Math.exp(-z*z*1.5) : 0;
+          const offset = window * (idle + edge.position*bell);
+          const derivative = slope * (idle + edge.position*bell)
+            - window * edge.position * bell * 3*z*spread;
+          return { x: x+dx*t+nx*offset, y: y+dy*t+ny*offset,
+            tx: dx+nx*derivative, ty: dy+ny*derivative };
+        };
+        let previous = point(0);
+        for (let segment = 1; segment <= segments; segment++) {
+          const next = point(segment/segments);
+          const step = 1/(segments*3);
+          data += ` C ${xy(previous.x+previous.tx*step, previous.y+previous.ty*step)}, ${xy(next.x-next.tx*step, next.y-next.ty*step)}, ${xy(next.x, next.y)}`;
+          previous = next;
+        }
+        data += corners[index];
+      });
+      data += ' Z';
+      if (data !== frame.lastD) {
+        frame.path.setAttribute('d', data);
+        frame.lastD = data;
+      }
+    };
     const releaseEdges = () => {
       latestPointer = null;
       frames.forEach((frame) => { frame.pointer.active = false; });
     };
     const updatePointer = () => {
-        const event = latestPointer;
-        if (!event) return;
-        latestPointer = null;
-        frames.forEach((frame, card) => {
-          if (!frame.visible) return;
-          const rect = card.getBoundingClientRect();
-          const x = event.clientX - rect.left, y = event.clientY - rect.top;
-          if (!frame.pointer.active) {
-            frame.pointer.smoothX = x;
-            frame.pointer.smoothY = y;
-          }
-          frame.pointer.x = x;
-          frame.pointer.y = y;
-          const reach = frame.isButton ? 48 : 120;
-          frame.pointer.active = x > -reach && x < rect.width + reach &&
-            y > -reach && y < rect.height + reach &&
-            Math.min(x, y, rect.width - x, rect.height - y) < reach;
-        });
+      if (!latestPointer) return;
+      const event = latestPointer;
+      latestPointer = null;
+      // Batch layout reads before drawing any borders, even with a fast mouse.
+      visibleFrames.forEach((frame) => {
+        const rect = frame.card.getBoundingClientRect();
+        const x = event.clientX-rect.left, y = event.clientY-rect.top;
+        frame.pointer.x = x;
+        frame.pointer.y = y;
+        const reach = frame.isButton ? 38 : 90;
+        frame.pointer.active = x > -reach && x < rect.width+reach &&
+          y > -reach && y < rect.height+reach &&
+          Math.min(x, y, rect.width-x, rect.height-y) < reach;
+      });
     };
-    if (!prefersReducedMotion) {
-      window.addEventListener("pointermove", (event) => {
-        if (event.pointerType !== "touch" && finePointer.matches) latestPointer = event;
-      }, { passive: true });
-      document.documentElement.addEventListener("pointerleave", releaseEdges);
-      window.addEventListener("blur", releaseEdges);
-      window.addEventListener("scroll", releaseEdges, { passive: true });
-    }
-    const draw = (frame, time) => {
-      time *= MOTION_SPEED;
-      const { geometry: path, width: w, height: h, phase } = frame;
-      if (w < 24 || h < 24) return;
-      const motionScale = h < 60 ? 0.18 : 1;
-      const wave = Math.sin(time * 0.65 + phase) * 8 * motionScale;
-      const drift = Math.cos(time * 0.5 + phase) * 6 * motionScale;
-      // More visible edge movement, with the content staying still inside.
-      const r = h < 60
-        ? 12 + Math.sin(time * 0.4 + phase) * 1.5
-        : 22 + Math.sin(time * 0.4 + phase) * 8;
-      if (h < 60) {
-        const left = 3, top = 3, right = w - 3, bottom = h - 3;
-        // Buttons have independent edge rhythms instead of mirrored waves.
-        const organic = (offset) => {
-          const t = time * frame.tempo;
-          const p = phase + offset;
-          return Math.sin(t * .57 + p) * 1.05
-            + Math.sin(t * .91 + p * 1.73) * .55;
-        };
-        if (frame.isButton) {
-          // Let the whole contour breathe, with smooth, independently moving sides.
-          const left = 3 + organic(9.4) * .85;
-          const top = 3 + organic(12.2) * .85;
-          const right = w - 3 + organic(15.1) * .85;
-          const bottom = h - 3 + organic(18.6) * .85;
-          const limit = Math.min(right - left, bottom - top) / 2;
-          const radiusAt = (offset) => Math.min(12 + organic(offset) * 2.5, limit);
-          const tl = radiusAt(0), tr = radiusAt(2.3);
-          const br = radiusAt(4.9), bl = radiusAt(7.1);
-          const k = .55228475;
-          path.setAttribute("d", `M ${left + tl} ${top}
-            H ${right - tr}
-            C ${right - tr + tr * k} ${top} ${right} ${top + tr - tr * k} ${right} ${top + tr}
-            V ${bottom - br}
-            C ${right} ${bottom - br + br * k} ${right - br + br * k} ${bottom} ${right - br} ${bottom}
-            H ${left + bl}
-            C ${left + bl - bl * k} ${bottom} ${left} ${bottom - bl + bl * k} ${left} ${bottom - bl}
-            V ${top + tl}
-            C ${left} ${top + tl - tl * k} ${left + tl - tl * k} ${top} ${left + tl} ${top} Z`);
-          return;
-        }
-        const topWave = wave, rightWave = -drift;
-        const bottomWave = -wave, leftWave = drift;
-        const cx = w / 2, cy = h / 2;
-        const radius = Math.min(r, (h - 6) / 3);
-        const corner = radius * 0.55228475;
-        const x = (cx - left - radius) * 0.45;
-        const y = (cy - top - radius) * 0.45;
-        // Cubic segments share tangent directions at every join, including corners.
-        path.setAttribute("d", `M ${left + radius} ${top}
-          C ${left + radius + x} ${top} ${cx - x} ${top + topWave} ${cx} ${top + topWave}
-          C ${cx + x} ${top + topWave} ${right - radius - x} ${top} ${right - radius} ${top}
-          C ${right - radius + corner} ${top} ${right} ${top + radius - corner} ${right} ${top + radius}
-          C ${right} ${top + radius + y} ${right + rightWave} ${cy - y} ${right + rightWave} ${cy}
-          C ${right + rightWave} ${cy + y} ${right} ${bottom - radius - y} ${right} ${bottom - radius}
-          C ${right} ${bottom - radius + corner} ${right - radius + corner} ${bottom} ${right - radius} ${bottom}
-          C ${right - radius - x} ${bottom} ${cx + x} ${bottom + bottomWave} ${cx} ${bottom + bottomWave}
-          C ${cx - x} ${bottom + bottomWave} ${left + radius + x} ${bottom} ${left + radius} ${bottom}
-          C ${left + radius - corner} ${bottom} ${left} ${bottom - radius + corner} ${left} ${bottom - radius}
-          C ${left} ${bottom - radius - y} ${left + leftWave} ${cy + y} ${left + leftWave} ${cy}
-          C ${left + leftWave} ${cy - y} ${left} ${top + radius + y} ${left} ${top + radius}
-          C ${left} ${top + radius - corner} ${left + radius - corner} ${top} ${left + radius} ${top} Z`);
-        return;
-      }
-      path.setAttribute("d", `M ${r} 3
-        C ${w * .3} ${3 + wave} ${w * .7} ${3 - drift} ${w - r} 3
-        Q ${w - 3} 3 ${w - 3} ${r}
-        C ${w - 3 - wave} ${h * .3} ${w - 3 + drift} ${h * .7} ${w - 3} ${h - r}
-        Q ${w - 3} ${h - 3} ${w - r} ${h - 3}
-        C ${w * .7} ${h - 3 + wave} ${w * .3} ${h - 3 - drift} ${r} ${h - 3}
-        Q 3 ${h - 3} 3 ${h - r}
-        C ${3 + drift} ${h * .7} ${3 - wave} ${h * .3} 3 ${r}
-        Q 3 3 ${r} 3 Z`);
-    };
-    const resize = new ResizeObserver((entries) => {
-      entries.forEach(({ target }) => {
-        const frame = frames.get(target);
-        frame.width = target.clientWidth;
-        frame.height = target.clientHeight;
-        frame.svg.setAttribute("viewBox", `0 0 ${frame.width} ${frame.height}`);
-        draw(frame, performance.now() / 1000);
-        frame.path.setAttribute("d", frame.baseD);
-      });
-    });
-    const visibility = new IntersectionObserver((entries) => {
-      entries.forEach(({ target, isIntersecting }) => {
-        frames.get(target).visible = isIntersecting;
-      });
-      scheduleAnimation();
-    });
-    document.querySelectorAll(".bento-card, .timeline-item__content, .project-card, .hero__text:not(.hero__text--overlap) .hero__chip, .footer__socials a")
-      .forEach((card, index) => {
-        const svg = document.createElementNS(ns, "svg");
-        svg.classList.add("fluid-frame");
-        svg.setAttribute("aria-hidden", "true");
-        svg.setAttribute("focusable", "false");
-        const path = document.createElementNS(ns, "path");
-        svg.appendChild(path);
-        card.prepend(svg);
-        card.classList.add("has-fluid-frame");
-        const frame = {
-          svg, path, width: 0, height: 0, phase: index * 1.7, visible: false,
-          isButton: card.matches(".footer__socials a, .hero__chip"),
-          tempo: .8 + ((index * .61803398875) % 1) * .4,
-          pointer: { x: 0, y: 0, smoothX: 0, smoothY: 0, active: false }, springs: [],
-        };
-        frame.geometry = { setAttribute: (_, data) => { frame.baseD = data; } };
-        frames.set(card, frame);
-        resize.observe(card);
-        visibility.observe(card);
-      });
-    if (prefersReducedMotion) return;
-    let lastFrame = 0;
-    let animationId = null;
-    const frameInterval = 1000 / (finePointer.matches ? 60 : 30);
     function scheduleAnimation() {
-      if (!prefersReducedMotion && !document.hidden && animationId === null &&
-          Array.from(frames.values()).some((frame) => frame.visible)) {
+      if (!prefersReducedMotion && !document.hidden && animationId === null && visibleFrames.size) {
         animationId = requestAnimationFrame(animate);
       }
     }
     const animate = (now) => {
       animationId = null;
       if (document.hidden) return;
-      if (now - lastFrame >= frameInterval - 1) {
-        const delta = Math.min((now - lastFrame) / 1000, .05);
+      let interacting = latestPointer !== null;
+      visibleFrames.forEach((frame) => {
+        if (frame.edges.some((edge) => Math.abs(edge.velocity) > .05))
+          interacting = true;
+      });
+      // Slow idle movement needs fewer paints; interactions retain 60 fps.
+      const interval = 1000/(interacting && finePointer.matches ? 60 : 30);
+      if (now-lastFrame >= interval-1) {
+        const delta = Math.min((now-lastFrame)/1000, .05);
         lastFrame = now;
-        // Read card bounds once per rendered frame, before any SVG writes.
         updatePointer();
-        frames.forEach((frame) => {
-          if (!frame.visible) return;
-          draw(frame, now / 1000);
-          frame.path.setAttribute("d", disturb(frame, delta) || frame.baseD);
-        });
+        visibleFrames.forEach((frame) => draw(frame, now, delta));
       }
       scheduleAnimation();
     };
-    document.addEventListener("visibilitychange", () => {
+    const resize = new ResizeObserver((entries) => {
+      entries.forEach(({ target }) => {
+        const frame = frames.get(target);
+        frame.width = target.clientWidth;
+        frame.height = target.clientHeight;
+        frame.svg.setAttribute('viewBox', `0 0 ${frame.width} ${frame.height}`);
+        draw(frame, performance.now());
+      });
+    });
+    const visibility = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting }) => {
+        const frame = frames.get(target);
+        if (isIntersecting) visibleFrames.add(frame);
+        else { visibleFrames.delete(frame); frame.pointer.active = false; }
+      });
+      scheduleAnimation();
+    });
+    document.querySelectorAll(".bento-card, .timeline-item__content, .project-card, .hero__text:not(.hero__text--overlap) .hero__chip, .footer__socials a")
+      .forEach((card, index) => {
+        const svg = document.createElementNS(ns, 'svg');
+        svg.classList.add('fluid-frame');
+        svg.setAttribute('aria-hidden', 'true');
+        svg.setAttribute('focusable', 'false');
+        const path = document.createElementNS(ns, 'path');
+        svg.appendChild(path);
+        card.prepend(svg);
+        card.classList.add('has-fluid-frame');
+        const frame = {
+          card, svg, path, width: 0, height: 0, phase: index*1.7,
+          isButton: card.matches('.footer__socials a, .hero__chip'),
+          tempo: .8 + ((index*.61803398875)%1)*.4,
+          pointer: { x: 0, y: 0, active: false },
+          edges: Array.from({ length: 4 }, () => ({ position: 0, velocity: 0, center: .5 })),
+        };
+        frames.set(card, frame);
+        resize.observe(card);
+        visibility.observe(card);
+      });
+    if (prefersReducedMotion) return;
+    window.addEventListener('pointermove', (event) => {
+      if (event.pointerType !== 'touch' && finePointer.matches) latestPointer = event;
+    }, { passive: true });
+    document.documentElement.addEventListener('pointerleave', releaseEdges);
+    window.addEventListener('blur', releaseEdges);
+    window.addEventListener('scroll', releaseEdges, { passive: true });
+    document.addEventListener('visibilitychange', () => {
       releaseEdges();
       if (document.hidden && animationId !== null) {
         cancelAnimationFrame(animationId);
         animationId = null;
       } else scheduleAnimation();
     });
-    scheduleAnimation();
   };
 
   /* --------------------------------------------------------------------------
