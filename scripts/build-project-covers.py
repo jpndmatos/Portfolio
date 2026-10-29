@@ -74,17 +74,14 @@ Cover('simsync', '#17171f', {}).graphic('''<g font-family="Poppins,sans-serif">
 </g>''').save('SIMsync: illustrative CSV preview results with clearly labelled sample data, using the app’s actual result categories and colours')
 
 Cover('company', '#f7f7f4', {'art': ('sources/company-reconstruction.png', 858, 796)}) \
-    .graphic('''<g font-family="Poppins,sans-serif">
-      <text x="36" y="76" font-size="47" font-weight="700" letter-spacing="-2" fill="#191964">doppel</text>
-      <rect x="645" y="32" width="133" height="58" rx="8" fill="#eaeaf0"/>
-      <g font-size="23" fill="#5e6374"><text x="427" y="70">Doppel</text><text x="545" y="70">About</text><text x="797" y="70">Contact</text></g>
-      <text x="661" y="70" font-size="23" fill="#191964">Portfolio</text>
-      <path d="M0 114h960" stroke="#dcdde3" stroke-width="2"/>
-      <text x="36" y="212" font-size="47" font-weight="600" fill="#202340">Portfolio</text>
-      <text x="38" y="263" font-size="25" fill="#5e6374">Selected heritage projects.</text>
+    .graphic('''<g font-family="Poppins,sans-serif" font-size="25">
+      <rect x="280" y="16" width="142" height="53" rx="8" fill="#eaeaf0"/>
+      <g fill="#5e6374"><text x="36" y="51">Home</text><text x="164" y="51">About</text><text x="460" y="51">Contact</text></g>
+      <text x="302" y="51" fill="#191964">Projects</text>
+      <path d="M0 86h960" stroke="#dcdde3" stroke-width="2"/>
     </g>''') \
-    .panel('art', (312, 140, 530, 199), (541, 148, 385, 175)) \
-    .save('Company Website: illustration of its original navigation bar and portfolio heading, with its own heritage gallery imagery')
+    .panel('art', (312, 218, 530, 138), (24, 98, 912, 238)) \
+    .save('Company Website: neutral navigation and a larger architectural project preview, without a company name')
 
 Cover('hdf5', '#162734', {'ui': ('hdf5-dashboard.jpg', 1265, 957)}) \
     .panel('ui', (32, 183, 1200, 340), (24, 51, 912, 258)) \
