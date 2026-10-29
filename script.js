@@ -738,6 +738,76 @@
   const initFluidCards = () => {
     const ns = "http://www.w3.org/2000/svg";
     const frames = new Map();
+    const finePointer = window.matchMedia("(any-pointer: fine)");
+    // Sample the existing contour, then apply pressure along its outward normal.
+    // A damped spring carries the disturbance after the cursor leaves an edge.
+    const disturb = (frame, delta) => {
+      if (prefersReducedMotion || !finePointer.matches) return;
+      const { path, pointer, springs, width, height } = frame;
+      if (!pointer.active && springs.every((spring) =>
+        Math.abs(spring.position) < .015 && Math.abs(spring.velocity) < .04)) return;
+      const length = path.getTotalLength();
+      const count = Math.max(32, Math.min(180, Math.ceil((width + height) * 2 / 12)));
+      if (springs.length !== count) {
+        springs.splice(0, springs.length, ...Array.from({ length: count }, () =>
+          ({ position: 0, velocity: 0 })));
+      }
+      const points = Array.from({ length: count }, (_, i) =>
+        path.getPointAtLength(i * length / count));
+      const radius = frame.isButton ? Math.min(30, height * .8) : 68;
+      const depth = frame.isButton ? 5 : 18;
+      const displaced = points.map((point, i) => {
+        const previous = points[(i - 1 + count) % count];
+        const next = points[(i + 1) % count];
+        const dx = next.x - previous.x, dy = next.y - previous.y;
+        const magnitude = Math.hypot(dx, dy) || 1;
+        const nx = dy / magnitude, ny = -dx / magnitude;
+        const px = pointer.x - point.x, py = pointer.y - point.y;
+        const distance = Math.hypot(px, py) / radius;
+        // A broad indentation with small shoulders gives a liquid edge, without
+        // adding jagged noise or moving the card's contents or click targets.
+        const pressure = pointer.active
+          ? (1 - distance * distance * 2) * Math.exp(-distance * distance * 2)
+          : 0;
+        const side = Math.tanh((px * nx + py * ny) / 10);
+        const target = -depth * pressure * (side * .65 + .35);
+        const spring = springs[i];
+        // Two bounded substeps keep the rebound stable after a slow frame.
+        for (let step = 0; step < 2; step++) {
+          spring.velocity += ((target - spring.position) * 210 - spring.velocity * 17) * delta / 2;
+          spring.position += spring.velocity * delta / 2;
+        }
+        return { x: point.x + nx * spring.position, y: point.y + ny * spring.position };
+      });
+      let contour = `M ${displaced[0].x} ${displaced[0].y}`;
+      displaced.forEach((p1, i) => {
+        const p0 = displaced[(i - 1 + count) % count];
+        const p2 = displaced[(i + 1) % count];
+        const p3 = displaced[(i + 2) % count];
+        contour += ` C ${p1.x + (p2.x - p0.x) / 6} ${p1.y + (p2.y - p0.y) / 6}, ${p2.x - (p3.x - p1.x) / 6} ${p2.y - (p3.y - p1.y) / 6}, ${p2.x} ${p2.y}`;
+      });
+      path.setAttribute("d", `${contour} Z`);
+    };
+    const releaseEdges = () => frames.forEach((frame) => { frame.pointer.active = false; });
+    if (!prefersReducedMotion) {
+      window.addEventListener("pointermove", (event) => {
+        if (event.pointerType === "touch" || !finePointer.matches) return;
+        frames.forEach((frame, card) => {
+          if (!frame.visible) return;
+          const rect = card.getBoundingClientRect();
+          const x = event.clientX - rect.left, y = event.clientY - rect.top;
+          frame.pointer.x = x;
+          frame.pointer.y = y;
+          const reach = frame.isButton ? 36 : 84;
+          frame.pointer.active = x > -reach && x < rect.width + reach &&
+            y > -reach && y < rect.height + reach &&
+            Math.min(x, y, rect.width - x, rect.height - y) < reach;
+        });
+      }, { passive: true });
+      document.documentElement.addEventListener("pointerleave", releaseEdges);
+      window.addEventListener("blur", releaseEdges);
+      window.addEventListener("scroll", releaseEdges, { passive: true });
+    }
     const draw = (frame, time) => {
       time *= MOTION_SPEED;
       const { path, width: w, height: h, phase } = frame;
@@ -841,6 +911,7 @@
           svg, path, width: 0, height: 0, phase: index * 1.7, visible: false,
           isButton: card.matches(".footer__socials a, .hero__chip"),
           tempo: .8 + ((index * .61803398875) % 1) * .4,
+          pointer: { x: 0, y: 0, active: false }, springs: [],
         });
         resize.observe(card);
         visibility.observe(card);
@@ -849,8 +920,13 @@
     let lastFrame = 0;
     const animate = (now) => {
       if (!document.hidden && now - lastFrame >= 1000 / 30) {
+        const delta = Math.min((now - lastFrame) / 1000, .05);
         lastFrame = now;
-        frames.forEach((frame) => { if (frame.visible) draw(frame, now / 1000); });
+        frames.forEach((frame) => {
+          if (!frame.visible) return;
+          draw(frame, now / 1000);
+          disturb(frame, delta);
+        });
       }
       requestAnimationFrame(animate);
     };
