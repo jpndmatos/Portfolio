@@ -9,7 +9,6 @@ Keep explanatory labels at 23 px or larger on the 960 x 360 artboard.
 from pathlib import Path
 from base64 import b64encode
 from html import escape
-import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'assets/projects'
@@ -47,73 +46,58 @@ class Cover:
         self.panels.append(markup)
         return self
 
-    def brand(self, name, colour, icon=None):
-        x = 32
-        if icon:
-            root = ET.parse(ASSETS / 'sources' / icon).getroot()
-            root.set('x', '32')
-            root.set('y', '20')
-            root.set('width', '32')
-            root.set('height', '32')
-            self.graphic(ET.tostring(root, encoding='unicode'))
-            x = 78
-        self.graphic(f'<text x="{x}" y="47" font-family="Poppins,sans-serif" font-size="29" font-weight="600" fill="{colour}">{escape(name)}</text>')
-        return self
-
-
-# The identity header is deliberately secondary to the original product UI.
-# Use real screenshots/artwork, one clear screen region and no invented data.
+# Covers contain product imagery only; names and descriptions live in HTML.
 Cover('split', '#0f1b16', {'ui': ('split.jpg', 1280, 800)}) \
-    .brand('Split', '#d6ecde', 'split-icon.svg') \
-    .panel('ui', (232, 95, 1024, 300), (32, 76, 896, 260)) \
-    .save('Split: original expense summary and ledger controls, with its existing green identity')
+    .panel('ui', (232, 95, 1024, 300), (24, 42, 912, 267)) \
+    .save('Split: original expense summary and ledger controls')
 
 Cover('image-desk', '#22211e', {'ui': ('sources/image-desk.jpg', 1280, 720)}) \
-    .brand('Image Desk', '#f1d6bc', 'image-desk-icon.svg') \
-    .panel('ui', (40, 230, 263, 274), (122, 76, 300, 260)) \
-    .panel('ui', (892, 262, 340, 227), (470, 76, 390, 260)) \
-    .save('Image Desk: the original processed image card and export settings, with its orange identity')
+    .panel('ui', (40, 230, 263, 274), (112, 32, 310, 296)) \
+    .panel('ui', (892, 262, 340, 227), (466, 32, 408, 296)) \
+    .save('Image Desk: processed image card and export settings')
 
 Cover('overlap', '#151e2d', {'ui': ('overlap.jpg', 1280, 800)}) \
-    .brand('Overlap', '#c1d3fa', 'overlap-icon.svg') \
-    .panel('ui', (40, 310, 910, 227), (32, 89, 896, 224)) \
-    .save('Overlap: original city timeline and selected meeting time, with its blue identity')
+    .panel('ui', (40, 310, 910, 227), (24, 66, 912, 228)) \
+    .save('Overlap: city timeline and selected meeting time')
 
-Cover('simsync', '#17171f', {}).brand('SIMsync', '#ff58b2').graphic('''<g font-family="Poppins,sans-serif">
-  <path d="M184 99h104l34 34v172H184zM288 99v35h34" fill="#222229" stroke="#7e7688" stroke-width="3" stroke-linejoin="round"/>
-  <text x="253" y="228" font-size="40" text-anchor="middle" fill="#f0f0f5">CSV</text>
-  <path d="M397 204h103m-17-17 17 17-17 17" fill="none" stroke="#ed3d9e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="575" y="228" fill="#f03a9c" font-size="65" font-weight="600">Brella</text>
-</g>''').save('SIMsync: CSV import into Brella, retaining the desktop tool’s pink and charcoal identity')
+Cover('simsync', '#17171f', {}).graphic('''<g font-family="Poppins,sans-serif">
+  <rect x="32" y="40" width="896" height="280" rx="12" fill="#19191f"/>
+  <text x="58" y="91" font-size="27" fill="#f0f0f5">Participants</text>
+  <rect x="58" y="122" width="623" height="59" rx="6" fill="#101016" stroke="#44404b" stroke-width="2"/>
+  <text x="78" y="160" font-size="25" fill="#c8c3cf">participants.csv</text>
+  <rect x="705" y="122" width="196" height="59" rx="6" fill="#2a2a33"/>
+  <text x="803" y="160" text-anchor="middle" font-size="25" fill="#f0f0f5">Browse</text>
+  <rect x="663" y="231" width="238" height="59" rx="6" fill="#e6007e"/>
+  <text x="782" y="270" text-anchor="middle" font-size="27" fill="#ffffff">Preview</text>
+</g>''').save('SIMsync: illustration of the desktop app’s CSV picker and Preview control; no event data or credentials')
 
-Cover('company', '#eeece7', {'art': ('company-heritage.png', 916, 426)}) \
-    .brand('Company Website', '#353934') \
-    .panel('art', (301, 141, 315, 93), (32, 76, 896, 265)) \
-    .save('Company Website: the original Roman villa virtual visit from its project gallery')
+Cover('company', '#eeece7', {'art': ('sources/company-reconstruction.png', 858, 796)}) \
+    .panel('art', (312, 140, 530, 199), (0, 0, 960, 360), radius=0) \
+    .save('Company Website: original courtyard reconstruction from its project gallery')
 
 Cover('hdf5', '#162734', {'ui': ('hdf5-dashboard.jpg', 1265, 957)}) \
-    .brand('HDF5 Dashboard', '#c6def1', 'hdf5-icon.svg') \
-    .panel('ui', (32, 183, 1200, 340), (32, 76, 896, 254)) \
-    .save('HDF5 Dashboard: the original paired temperature and humidity chart panel')
+    .panel('ui', (32, 183, 1200, 340), (24, 51, 912, 258)) \
+    .save('HDF5 Dashboard: original temperature and humidity chart panel')
 
-Cover('riftbound', '#15151c', {'ui': ('sources/riftbound.jpg', 1280, 720)}) \
-    .brand('Riftbound', '#d6b66b') \
-    .panel('ui', (376, 80, 877, 244), (32, 76, 896, 250)) \
-    .save('Riftbound: original card gallery and search interface, retaining its gold and charcoal identity')
+Cover('riftbound', '#15151c', {str(i): (f'sources/riftbound-card-{i}.jpg', 320, 447) for i in range(1,4)}) \
+    .panel('1', (0, 0, 320, 447), (120, 28, 216, 304)) \
+    .panel('2', (0, 0, 320, 447), (372, 28, 216, 304)) \
+    .panel('3', (0, 0, 320, 447), (624, 28, 216, 304)) \
+    .save('Riftbound: original Riot Games card artwork used in the project’s card gallery')
 
-Cover('madcoai', '#0c1926', {'ui': ('sources/madcoai.jpg', 1280, 720)}) \
-    .brand('MadCoAI', '#52b5d3') \
-    .panel('ui', (330, 355, 620, 119), (56, 113, 848, 163)) \
-    .save('MadCoAI: original ticker search, Analyze button and popular tickers, with its cyan identity')
+Cover('madcoai', '#080f1b', {'ui': ('sources/madcoai.jpg', 1280, 720)}) \
+    .panel('ui', (330, 355, 620, 119), (24, 68, 912, 175)) \
+    .panel('ui', (425, 537, 180, 61), (74, 263, 300, 61)) \
+    .panel('ui', (913, 537, 180, 61), (587, 263, 300, 61)) \
+    .save('MadCoAI: original ticker search and research tool controls')
 
 Cover('crimes', '#fffaf3', {'scene': ('sources/crimes-scene.jpg', 1280, 720)}) \
-    .brand('Crimes Exemplares', '#423a32') \
-    .panel('scene', (20, 160, 1240, 349), (32, 76, 896, 252)) \
-    .save('Crimes Exemplares: original interactive room artwork, retaining its paper and ink identity')
+    .panel('scene', (20, 160, 1240, 349), (24, 51, 912, 258)) \
+    .save('Crimes Exemplares: original interactive room artwork')
 
-Cover('eateasy', '#182820', {'ui': ('eateasy.jpg', 840, 868)}) \
-    .brand('eatEasy', '#88ccb1', 'eateasy-icon.svg') \
-    .panel('ui', (251, 294, 547, 250), (32, 76, 896, 252)) \
-    .save('EatEasy: original restaurant cards, photography and cuisine labels, with its mint green identity')
+Cover('eateasy', '#202b25', {'ui': ('eateasy.jpg', 840, 868), 'photo': ('sources/eateasy-restaurant.jpg', 1000, 667)}) \
+    .panel('photo', (60, 90, 900, 493), (24, 32, 548, 296)) \
+    .panel('ui', (267, 487, 230, 195), (615, 42, 288, 264)) \
+    .save('EatEasy: original restaurant photography and its booking card details')
 
-print('Built ten product-led covers with the existing project identities.')
+print('Built ten image-only project covers.')

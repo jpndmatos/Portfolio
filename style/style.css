@@ -172,7 +172,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .project-card--more { border-style: dashed; justify-content: center; }
 .project-card--more .project-card__content { flex: 0; }
 .project-card--more .project-card__desc { margin-bottom: 0; }
-.project-card__media { position: relative; flex-shrink: 0; margin: 0 0 16px; width: 100%; aspect-ratio: 8 / 3; max-height: 180px; overflow: clip; border-radius: 8px; background: var(--surface-hover); }
+.project-card__media { position: relative; flex-shrink: 0; margin: 0 0 20px; width: 100%; aspect-ratio: 8 / 3; max-height: 180px; overflow: clip; border-radius: 8px; background: var(--surface-hover); }
 .project-card__media img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .project-card__index { margin-bottom: 12px; }
 .project-card__title .icon { position: static; flex-shrink: 0; }

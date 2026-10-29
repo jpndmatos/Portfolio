@@ -1,6 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360"><title>SIMsync: CSV import into Brella, retaining the desktop tool’s pink and charcoal identity</title><defs></defs><rect width="960" height="360" fill="#17171f"/><text x="32" y="47" font-family="Poppins,sans-serif" font-size="29" font-weight="600" fill="#ff58b2">SIMsync</text><g font-family="Poppins,sans-serif">
-  <path d="M184 99h104l34 34v172H184zM288 99v35h34" fill="#222229" stroke="#7e7688" stroke-width="3" stroke-linejoin="round"/>
-  <text x="253" y="228" font-size="40" text-anchor="middle" fill="#f0f0f5">CSV</text>
-  <path d="M397 204h103m-17-17 17 17-17 17" fill="none" stroke="#ed3d9e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="575" y="228" fill="#f03a9c" font-size="65" font-weight="600">Brella</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360"><title>SIMsync: illustration of the desktop app’s CSV picker and Preview control; no event data or credentials</title><defs></defs><rect width="960" height="360" fill="#17171f"/><g font-family="Poppins,sans-serif">
+  <rect x="32" y="40" width="896" height="280" rx="12" fill="#19191f"/>
+  <text x="58" y="91" font-size="27" fill="#f0f0f5">Participants</text>
+  <rect x="58" y="122" width="623" height="59" rx="6" fill="#101016" stroke="#44404b" stroke-width="2"/>
+  <text x="78" y="160" font-size="25" fill="#c8c3cf">participants.csv</text>
+  <rect x="705" y="122" width="196" height="59" rx="6" fill="#2a2a33"/>
+  <text x="803" y="160" text-anchor="middle" font-size="25" fill="#f0f0f5">Browse</text>
+  <rect x="663" y="231" width="238" height="59" rx="6" fill="#e6007e"/>
+  <text x="782" y="270" text-anchor="middle" font-size="27" fill="#ffffff">Preview</text>
 </g></svg>
