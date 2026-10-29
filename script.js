@@ -752,29 +752,32 @@
         springs.splice(0, springs.length, ...Array.from({ length: count }, () =>
           ({ position: 0, velocity: 0 })));
       }
+      const follow = 1 - Math.exp(-14 * delta);
+      pointer.smoothX += (pointer.x - pointer.smoothX) * follow;
+      pointer.smoothY += (pointer.y - pointer.smoothY) * follow;
       const points = Array.from({ length: count }, (_, i) =>
         path.getPointAtLength(i * length / count));
-      const radius = frame.isButton ? Math.min(30, height * .8) : 68;
-      const depth = frame.isButton ? 5 : 18;
+      const radius = frame.isButton ? Math.min(38, height) : 100;
+      const depth = frame.isButton ? 3.5 : 14;
       const displaced = points.map((point, i) => {
         const previous = points[(i - 1 + count) % count];
         const next = points[(i + 1) % count];
         const dx = next.x - previous.x, dy = next.y - previous.y;
         const magnitude = Math.hypot(dx, dy) || 1;
         const nx = dy / magnitude, ny = -dx / magnitude;
-        const px = pointer.x - point.x, py = pointer.y - point.y;
+        const px = pointer.smoothX - point.x, py = pointer.smoothY - point.y;
         const distance = Math.hypot(px, py) / radius;
         // A broad indentation with small shoulders gives a liquid edge, without
         // adding jagged noise or moving the card's contents or click targets.
         const pressure = pointer.active
-          ? (1 - distance * distance * 2) * Math.exp(-distance * distance * 2)
+          ? (1 - distance * distance * .65) * Math.exp(-distance * distance * 1.4)
           : 0;
         const side = Math.tanh((px * nx + py * ny) / 10);
         const target = -depth * pressure * (.8 + side * .35);
         const spring = springs[i];
         // Two bounded substeps keep the rebound stable after a slow frame.
         for (let step = 0; step < 2; step++) {
-          spring.velocity += ((target - spring.position) * 210 - spring.velocity * 17) * delta / 2;
+          spring.velocity += ((target - spring.position) * 140 - spring.velocity * 24) * delta / 2;
           spring.position += spring.velocity * delta / 2;
         }
         return { x: point.x + nx * spring.position, y: point.y + ny * spring.position };
@@ -796,9 +799,13 @@
           if (!frame.visible) return;
           const rect = card.getBoundingClientRect();
           const x = event.clientX - rect.left, y = event.clientY - rect.top;
+          if (!frame.pointer.active) {
+            frame.pointer.smoothX = x;
+            frame.pointer.smoothY = y;
+          }
           frame.pointer.x = x;
           frame.pointer.y = y;
-          const reach = frame.isButton ? 36 : 84;
+          const reach = frame.isButton ? 48 : 120;
           frame.pointer.active = x > -reach && x < rect.width + reach &&
             y > -reach && y < rect.height + reach &&
             Math.min(x, y, rect.width - x, rect.height - y) < reach;
@@ -911,15 +918,16 @@
           svg, path, width: 0, height: 0, phase: index * 1.7, visible: false,
           isButton: card.matches(".footer__socials a, .hero__chip"),
           tempo: .8 + ((index * .61803398875) % 1) * .4,
-          pointer: { x: 0, y: 0, active: false }, springs: [],
+          pointer: { x: 0, y: 0, smoothX: 0, smoothY: 0, active: false }, springs: [],
         });
         resize.observe(card);
         visibility.observe(card);
       });
     if (prefersReducedMotion) return;
     let lastFrame = 0;
+    const frameInterval = 1000 / (finePointer.matches ? 60 : 30);
     const animate = (now) => {
-      if (!document.hidden && now - lastFrame >= 1000 / 30) {
+      if (!document.hidden && now - lastFrame >= frameInterval - 1) {
         const delta = Math.min((now - lastFrame) / 1000, .05);
         lastFrame = now;
         frames.forEach((frame) => {
