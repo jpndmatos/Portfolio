@@ -26,7 +26,16 @@
   --size-body: .875rem;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: 104px; scrollbar-gutter: stable; background: var(--bg-page); }
+html { scroll-behavior: smooth; scroll-padding-top: 104px; scrollbar-gutter: stable; scrollbar-width: thin; scrollbar-color: #594c63 var(--bg-page); background: var(--bg-page); }
+/* Keep native dragging and keyboard support, with a quiet four-pixel thumb. */
+@supports selector(::-webkit-scrollbar) {
+  html { scrollbar-width: auto; scrollbar-color: auto; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-page); }
+  ::-webkit-scrollbar-thumb { background: #594c63; border: 1px solid var(--bg-page); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #887197; }
+  ::-webkit-scrollbar-corner { background: var(--bg-page); }
+}
 html.is-jumping { overflow-y: hidden; scroll-behavior: auto; }
 body { font-family: var(--font-family); font-weight: var(--weight-body); color: var(--text2); line-height: 1.65; -webkit-font-smoothing: antialiased; background: var(--bg-page); }
 a { color: inherit; text-decoration: none; transition: color calc(180ms / var(--motion-speed)) ease, background calc(180ms / var(--motion-speed)) ease, border-color calc(180ms / var(--motion-speed)) ease; }
@@ -36,7 +45,6 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-
 .wrapper { width: min(100%, var(--container)); margin-inline: auto; padding-inline: 32px; }
 main, .footer { position: relative; z-index: 1; }
 #fluid-bg { position: fixed; inset: 0; width: 100%; height: 100%; opacity: .13; pointer-events: none; }
-.custom-scrollbar { display: none; }
 .skip-link { position: fixed; left: 20px; top: -80px; z-index: 200; padding: 12px 20px; color: var(--bg-page); background: var(--accent); border-radius: 8px; }
 .skip-link:focus { top: 16px; }
 .header { position: fixed; inset: 0 0 auto; z-index: 100; isolation: isolate; height: var(--header-height); background: transparent; border-bottom: 1px solid transparent; transition: background-color calc(950ms / var(--motion-speed)) ease-in-out, border-color calc(950ms / var(--motion-speed)) ease-in-out; }

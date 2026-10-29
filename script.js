@@ -460,8 +460,6 @@
 
   const initHeaderScrollSpy = () => {
     const header = document.querySelector(".header");
-    const scrollbar = document.querySelector(".custom-scrollbar");
-    const scrollbarThumb = document.querySelector(".custom-scrollbar__thumb");
     const hero = document.getElementById("hero");
     const navLinks = document.querySelectorAll(".nav-link");
     const sections = document.querySelectorAll("section[id]");
@@ -469,23 +467,6 @@
     if (!header) return;
 
     let scrollFrame = null;
-
-    const updateScrollbar = () => {
-      if (!scrollbarThumb || !scrollbar.getClientRects().length) return;
-      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const trackHeight = document
-        .querySelector(".custom-scrollbar")
-        ?.getBoundingClientRect().height ?? 0;
-      const thumbHeight = scrollableHeight > 0
-        ? Math.max(32, trackHeight * (window.innerHeight / document.documentElement.scrollHeight))
-        : trackHeight;
-      const maxOffset = Math.max(0, trackHeight - thumbHeight);
-      const offset = scrollableHeight > 0
-        ? (window.scrollY / scrollableHeight) * maxOffset
-        : 0;
-      scrollbarThumb.style.height = `${thumbHeight}px`;
-      scrollbarThumb.style.transform = `translateY(${offset}px)`;
-    };
 
     const sectionMarkers = Array.from(sections, (section) => ({
       id: section.id,
@@ -512,11 +493,10 @@
       });
     };
 
-    const scheduleScrollbarUpdate = () => {
+    const scheduleScrollUpdate = () => {
       if (scrollFrame !== null) return;
       scrollFrame = window.requestAnimationFrame(() => {
         scrollFrame = null;
-        updateScrollbar();
         updateActiveSection();
         updateHeader();
       });
@@ -531,18 +511,16 @@
         (window.innerWidth <= 900 ? window.scrollY > mobileHeroEnd : window.scrollY > 20);
       header.classList.toggle("scrolled", scrolled);
       hero?.classList.toggle("is-scrolled", window.scrollY > 8);
-      scrollbar?.classList.toggle("is-visible", window.scrollY > 0);
     };
-    const onScroll = scheduleScrollbarUpdate;
+    const onScroll = scheduleScrollUpdate;
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", scheduleScrollbarUpdate, { passive: true });
+    window.addEventListener("resize", scheduleScrollUpdate, { passive: true });
     onScroll();
     updateHeader();
-    updateScrollbar();
     updateActiveSection();
-    window.addEventListener("load", scheduleScrollbarUpdate, { once: true });
-    document.fonts?.ready.then(scheduleScrollbarUpdate);
+    window.addEventListener("load", scheduleScrollUpdate, { once: true });
+    document.fonts?.ready.then(scheduleScrollUpdate);
 
     // Smooth snapping is limited to the landing / Skills boundary.
     const skillsHeading = document.querySelector("#skills .section__header");
@@ -580,9 +558,9 @@
       const started = performance.now();
       scrollRoot.classList.add("is-jumping");
       const animateScroll = (now) => {
-        const progress = Math.min(1, (now - started) / 300);
-        // Respond immediately, then settle precisely in one short transition.
-        const eased = 1 - (1 - progress) ** 3;
+        const progress = Math.min(1, (now - started) / 480);
+        // Ease gently into the jump and arrive with zero velocity.
+        const eased = progress * progress * (3 - 2 * progress);
         window.scrollTo({ top: from + (top - from) * eased, behavior: "instant" });
         if (progress < 1) scrollAnimation = requestAnimationFrame(animateScroll);
         else {
