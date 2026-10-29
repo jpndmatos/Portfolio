@@ -770,7 +770,7 @@
           ? (1 - distance * distance * 2) * Math.exp(-distance * distance * 2)
           : 0;
         const side = Math.tanh((px * nx + py * ny) / 10);
-        const target = -depth * pressure * (side * .65 + .35);
+        const target = -depth * pressure * (.8 + side * .35);
         const spring = springs[i];
         // Two bounded substeps keep the rebound stable after a slow frame.
         for (let step = 0; step < 2; step++) {
