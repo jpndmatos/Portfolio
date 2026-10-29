@@ -77,12 +77,10 @@ Cover('simsync', '#17171f', {}).graphic('''<g font-family="Poppins,sans-serif">
 # The company name is outside these crops; the portfolio title stays generic.
 Cover('company', '#f7f5fc', {
     'hero': ('sources/company-actual-hero.png', 1918, 930),
-    'services': ('sources/company-actual-services.png', 1342, 940),
 }) \
-    .panel('hero', (780, 302, 360, 464), (28, 24, 282, 312), radius=12) \
-    .panel('hero', (850, 21, 312, 54), (348, 28, 584, 92), radius=32) \
-    .panel('services', (160, 600, 665, 250), (348, 140, 584, 196), radius=12) \
-    .save('Company Website: real user-provided screenshots showing the 3D architectural scan, original navigation and cultural heritage services')
+    .panel('hero', (610, 302, 1253, 470), (0, 0, 960, 360), radius=0) \
+    .panel('hero', (850, 21, 312, 54), (510, 145, 400, 70), radius=30) \
+    .save('Company Website: a clean composition of the real 3D scan and original navigation from the supplied screenshot')
 
 Cover('hdf5', '#162734', {'ui': ('hdf5-dashboard.jpg', 1265, 957)}) \
     .panel('ui', (32, 183, 1200, 340), (24, 51, 912, 258)) \
