@@ -73,15 +73,16 @@ Cover('simsync', '#17171f', {}).graphic('''<g font-family="Poppins,sans-serif">
   <g font-size="26" fill="#e0dbe5"><text x="45" y="274">alex@example.com</text><text x="511" y="274">sam@example.com</text></g>
 </g>''').save('SIMsync: illustrative CSV preview results with clearly labelled sample data, using the app’s actual result categories and colours')
 
-Cover('company', '#f7f7f4', {'art': ('sources/company-reconstruction.png', 858, 796)}) \
-    .graphic('''<g font-family="Poppins,sans-serif" font-size="25">
-      <rect x="280" y="16" width="142" height="53" rx="8" fill="#eaeaf0"/>
-      <g fill="#5e6374"><text x="36" y="51">Home</text><text x="164" y="51">About</text><text x="460" y="51">Contact</text></g>
-      <text x="302" y="51" fill="#191964">Projects</text>
-      <path d="M0 86h960" stroke="#dcdde3" stroke-width="2"/>
-    </g>''') \
-    .panel('art', (312, 218, 530, 138), (24, 98, 912, 238)) \
-    .save('Company Website: neutral navigation and a larger architectural project preview, without a company name')
+# Exact crops of the screenshots supplied by the user. No recreated UI.
+# The company name is outside these crops; the portfolio title stays generic.
+Cover('company', '#f7f5fc', {
+    'hero': ('sources/company-actual-hero.png', 1918, 930),
+    'services': ('sources/company-actual-services.png', 1342, 940),
+}) \
+    .panel('hero', (780, 302, 360, 464), (28, 24, 282, 312), radius=12) \
+    .panel('hero', (850, 21, 312, 54), (348, 28, 584, 92), radius=32) \
+    .panel('services', (160, 600, 665, 250), (348, 140, 584, 196), radius=12) \
+    .save('Company Website: real user-provided screenshots showing the 3D architectural scan, original navigation and cultural heritage services')
 
 Cover('hdf5', '#162734', {'ui': ('hdf5-dashboard.jpg', 1265, 957)}) \
     .panel('ui', (32, 183, 1200, 340), (24, 51, 912, 258)) \
