@@ -15,7 +15,7 @@ with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
         path = (source / name).resolve()
         if not path.is_relative_to(source) or not path.is_file():
             continue
-        if any(part in {'data', 'node_modules', 'bin', 'obj', '.git'} for part in path.relative_to(source).parts) or path.name.startswith('.env'):
+        if any(part in {'data', 'node_modules', 'bin', 'obj', '.git', '.hallmark'} for part in path.relative_to(source).parts) or path.name.startswith('.env'):
             continue
         archive.write(path, 'relay/' + name)
 print(f'Packaged {output.name}: {output.stat().st_size:,} bytes')
