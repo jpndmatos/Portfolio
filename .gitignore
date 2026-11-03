@@ -1,0 +1,17 @@
+# Local development and verification output
+**/bin/
+**/obj/
+**/node_modules/
+**/test-results/
+**/test-results-*/
+**/playwright-report/
+**/data/
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/.env
+**/.env.local
+**/TestResults/
+**/*.tsbuildinfo
+tmp/
+.hallmark/
