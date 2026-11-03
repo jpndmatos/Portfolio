@@ -1,5 +1,5 @@
 /* ==========================================================================
-   JOÃO MATOS — PORTFOLIO CORE SCRIPTS (RESTORED SHADER & CLEAN REFINEMENTS)
+   Portfolio interactions
    ========================================================================== */
 
 (() => {
@@ -12,7 +12,7 @@
   ).matches;
 
   /* --------------------------------------------------------------------------
-     1. EXACT ORIGINAL FLUID BACKGROUND (Aubergine / Plum Domain Warp)
+     1. Fluid background
      -------------------------------------------------------------------------- */
   const initFluidBackground = () => {
     const canvas = document.getElementById("fluid-bg");
@@ -244,12 +244,12 @@
   };
 
   /* --------------------------------------------------------------------------
-     2. EXACT ORIGINAL BLOB MASK & ENHANCED PHOTO MOVEMENT
+     2. Portrait mask
      -------------------------------------------------------------------------- */
   const initBlobMask = () => {
     const blobPath = document.getElementById("blob-path");
     const pictureEl = document.querySelector(".hero__picture");
-    if (!blobPath) return;
+    if (!blobPath || prefersReducedMotion) return;
 
     const numPoints = 12;
     const baseRadius = 0.48;

@@ -4,7 +4,7 @@
     "name": "drafts"
   },
   "index.html": {
-    "file": "assets/index-C65OBYh2.js",
+    "file": "assets/index-DhwR31Cb.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -19,7 +19,7 @@
     ]
   },
   "src/Forms.tsx": {
-    "file": "assets/Forms-CfkmBnj4.js",
+    "file": "assets/Forms-C-JEPTqG.js",
     "name": "Forms",
     "src": "src/Forms.tsx",
     "isDynamicEntry": true,
@@ -29,7 +29,7 @@
     ]
   },
   "src/IncidentDetail.tsx": {
-    "file": "assets/IncidentDetail-DYBYblO5.js",
+    "file": "assets/IncidentDetail-Da1kgq4p.js",
     "name": "IncidentDetail",
     "src": "src/IncidentDetail.tsx",
     "isDynamicEntry": true,
@@ -39,7 +39,7 @@
     ]
   },
   "src/demo.ts": {
-    "file": "assets/demo-DX_bHWEB.js",
+    "file": "assets/demo-nV5R6e0M.js",
     "name": "demo",
     "src": "src/demo.ts",
     "isDynamicEntry": true,

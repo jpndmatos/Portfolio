@@ -24,6 +24,11 @@ foreach ($project in $exports) {
     if (Test-Path -LiteralPath $destination) { Remove-Item -LiteralPath $destination -Recurse -Force }
     New-Item -ItemType Directory -Path $destination -Force | Out-Null
     Copy-Item -Path (Join-Path $projectRoot "$($project.Output)/*") -Destination $destination -Recurse
+    # Keep exported markup consistent across Windows and Linux builds.
+    Get-ChildItem -LiteralPath $destination -File -Recurse | Where-Object { $_.Extension -in @('.html', '.svg') } | ForEach-Object {
+        $html = [IO.File]::ReadAllText($_.FullName).Replace("`r", '')
+        [IO.File]::WriteAllText($_.FullName, $html, [Text.UTF8Encoding]::new($false))
+    }
 }
 python (Join-Path $PSScriptRoot 'package-relay.py') (Join-Path $ProjectsRoot 'relay')
 if ($LASTEXITCODE -ne 0) { throw 'Relay source packaging failed.' }
