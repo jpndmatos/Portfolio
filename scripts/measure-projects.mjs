@@ -7,10 +7,10 @@ const {default:lighthouse}=await import(process.env.LIGHTHOUSE_MODULE ? pathToFi
 const base=process.env.PORTFOLIO_URL ?? 'http://127.0.0.1:5181';
 const browser=await chromium.launch({args:['--remote-debugging-port=9228']});
 try {
- for(const app of (process.env.AUDIT_PROJECTS?.split(',') ?? ['split','image-desk','overlap'])) {
+ for(const app of (process.env.AUDIT_PROJECTS?.split(',') ?? ['split','image-desk','overlap','eateasy'])) {
   const {lhr}=await lighthouse(`${base}/demo/${app}/`,{port:9228,logLevel:'error',onlyCategories:['performance','accessibility','best-practices'],throttlingMethod:'simulate'});
   const result={date:new Date().toISOString(),app,url:lhr.finalDisplayedUrl,lighthouseVersion:lhr.lighthouseVersion,formFactor:lhr.configSettings.formFactor,scores:Object.fromEntries(Object.entries(lhr.categories).map(([key,value])=>[key,Math.round(value.score*100)])),metrics:Object.fromEntries(['first-contentful-paint','largest-contentful-paint','total-blocking-time','cumulative-layout-shift','total-byte-weight'].map(key=>[key,{value:lhr.audits[key].numericValue,display:lhr.audits[key].displayValue}]))};
-  await writeFile(new URL(`../../${app}/docs/performance.json`,import.meta.url),JSON.stringify(result,null,2)+'\n');
+  await writeFile(new URL(`../../${app === "eateasy" ? "EatEasy/Projeto" : app}/docs/performance.json`,import.meta.url),JSON.stringify(result,null,2)+'\n');
   console.log(app,JSON.stringify(result.scores),result.metrics['largest-contentful-paint'].display);
   for (const category of ['accessibility','best-practices']) {
    for (const ref of lhr.categories[category].auditRefs.filter(ref=>ref.weight>0)) {

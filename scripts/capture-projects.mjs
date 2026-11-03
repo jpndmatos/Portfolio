@@ -13,12 +13,13 @@ try {
     "split",
     "image-desk",
     "overlap",
+    "eateasy",
   ]) {
-    const docs = fileURLToPath(new URL(`../../${app}/docs/`, import.meta.url));
+    const docs = fileURLToPath(new URL(`../../${app === "eateasy" ? "EatEasy/Projeto" : app}/docs/`, import.meta.url));
     await mkdir(docs, { recursive: true });
     await mkdir(`${root}/tmp/covers`, { recursive: true });
     const context = await browser.newContext({
-      viewport: { width: 1440, height: 1000 },
+      viewport: { width: 1440, height: 900 },
       reducedMotion: "reduce",
     });
     const page = await context.newPage();
@@ -32,6 +33,7 @@ try {
       await page.getByRole("button", { name: "Explore as commander" }).click();
       await page.getByRole("table").first().waitFor();
     }
+    if (app === "eateasy") await page.locator(".restaurant-grid .card").first().waitFor();
     if (app === "split")
       await page.getByRole("heading", { name: "Birthday dinner" }).waitFor();
     if (app === "image-desk") {
@@ -48,6 +50,7 @@ try {
           split: ".summary",
           "image-desk": ".workspace",
           overlap: ".timeline-table",
+          eateasy: ".app-layout",
         }[app],
       )
       .boundingBox();

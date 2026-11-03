@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#702737" />
+    <meta
+      name="description"
+      content="Restaurantes e reservas de mesa. Demonstração local do EatEasy."
+    />
+    <title>eatEasy — Restaurantes e reservas</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body class="dashboard-page browser-demo">
+    <a class="skip-link" href="#main">Ir para o conteúdo</a>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div class="logo">eatEasy</div>
+        <div class="user-info">
+          <p>Olá, <strong>Alex</strong></p>
+          <small data-role-label>Cliente</small>
+        </div>
+        <nav class="menu-links" aria-label="Navegação principal">
+          <a href="?view=restaurants" data-view="restaurants">Restaurantes</a>
+          <a href="?view=bookings" data-view="bookings">Reservas</a>
+          <a href="?view=manage" data-view="manage" data-admin hidden
+            >Novo restaurante</a
+          >
+        </nav>
+        <label class="demo-role"
+          >Demo como
+          <select aria-label="Papel na demonstração">
+            <option value="cliente">Cliente</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </label>
+      </aside>
+      <main id="main" class="main-content" tabindex="-1"></main>
+    </div>
+    <noscript
+      >Ative JavaScript para usar a demonstração. O projeto completo inclui um
+      servidor PHP.</noscript
+    >
+  </body>
+</html>

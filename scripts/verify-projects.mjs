@@ -38,6 +38,10 @@ async function download(page, action) {
   for await (const part of stream) chunks.push(part);
   return { name: file.suggestedFilename(), bytes: Buffer.concat(chunks) };
 }
+async function openPanel(page, name) {
+  const button = page.getByRole("button", { name, exact: true });
+  if (await button.isVisible()) await button.click();
+}
 try {
   for (const width of [1440, 390]) {
     const context = await browser.newContext({
@@ -77,6 +81,7 @@ try {
     await page.getByRole("tab", { name: "Balances" }).click();
     await expect(page.locator(".balance-row")).toHaveCount(4);
     await page.getByRole("tab", { name: /Expenses/ }).click();
+    await openPanel(page, "Repayments");
     await page.getByRole("button", { name: "Mark paid" }).first().click();
     await page.getByText("Recorded payments (1)", { exact: true }).click();
     await page.getByRole("button", { name: /Undo payment/ }).click();
@@ -105,10 +110,12 @@ try {
     await check(page, `Image Desk empty ${width}`);
     await page.getByRole("button", { name: "Load sample" }).click();
     await expect(page.locator(".studio-stage img")).toBeVisible();
+    await openPanel(page, "Export settings");
     await page.getByRole("button", { name: "Transform", exact: true }).click();
     await page.getByLabel("Image rotation").selectOption("90");
     await page.getByLabel("Flip horizontally").check();
     await page.getByRole("button", { name: "Process images" }).click();
+    await openPanel(page, "Preview");
     await expect(
       page.getByRole("button", {
         name: "Download sample-landscape.png",
@@ -145,11 +152,13 @@ try {
     await expect(page.locator(".city-row")).toHaveCount(4);
     await page.getByLabel("Planning date").fill("2026-03-29");
     await page.getByLabel("Meeting duration").selectOption("30");
+    await openPanel(page, "Meeting options");
     await page.getByRole("button", { name: /Saved times/ }).click();
     await page.getByLabel("Meeting name").fill("Team sync");
     await page.getByRole("button", { name: "Save current time" }).click();
     await expect(page.locator(".saved-open")).toContainText("Team sync");
     await page.reload();
+    await openPanel(page, "Meeting options");
     await page.getByRole("button", { name: /Saved times/ }).click();
     await expect(page.locator(".saved-open")).toContainText("Team sync");
     const calendar = await download(page, () =>

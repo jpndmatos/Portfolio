@@ -28,5 +28,14 @@ foreach ($project in $exports) {
         [IO.File]::WriteAllText($_.FullName, $html, [Text.UTF8Encoding]::new($false))
     }
 }
+$eatEasyRoot = Join-Path $ProjectsRoot 'EatEasy/Projeto'
+Push-Location $eatEasyRoot
+try {
+    php -n scripts/build-demo.php
+    if ($LASTEXITCODE -ne 0) { throw 'EatEasy demo build failed.' }
+} finally { Pop-Location }
+$eatEasyTarget = [IO.Path]::GetFullPath((Join-Path $portfolioRoot 'demo/eateasy'))
+New-Item -ItemType Directory -Force -Path $eatEasyTarget | Out-Null
+Copy-Item -Path (Join-Path $eatEasyRoot 'dist/*') -Destination $eatEasyTarget -Recurse -Force
 python (Join-Path $PSScriptRoot 'package-relay.py') (Join-Path $ProjectsRoot 'relay')
 if ($LASTEXITCODE -ne 0) { throw 'Relay source packaging failed.' }

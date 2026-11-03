@@ -16,13 +16,13 @@ try {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto(`${base}/#projects`);
-  await expect(page.getByRole("link", { name: "Try demo" })).toHaveCount(4);
+  await expect(page.getByRole("link", { name: "Try demo" })).toHaveCount(5);
   const source = await page.request.get(
     `${base}/assets/downloads/relay-source.zip`,
   );
   expect(source.status()).toBe(200);
   expect((await source.body()).subarray(0, 2).toString()).toBe("PK");
-  for (const app of ["split", "image-desk", "overlap", "relay"]) {
+  for (const app of ["split", "image-desk", "overlap", "relay", "eateasy"]) {
     const response = await page.goto(`${base}/demo/${app}/`);
     expect(response.status()).toBe(200);
     await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();

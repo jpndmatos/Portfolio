@@ -1,0 +1,680 @@
+:root {
+  --font-body: "Segoe UI", Arial, sans-serif;
+  --primary-color: #8b2938;
+  --primary-hover: #6d1b2b;
+  --primary-light: #f8e7e5;
+  --bg-color: #f7f3ed;
+  --surface: #fffefa;
+  --text-color: #302725;
+  --text-muted: #6f615c;
+  --border: #e1d8ce;
+  --success-bg: #e7f0e5;
+  --on-primary: #fff;
+}
+html {
+  height: 100%;
+}
+body.dashboard-page {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+.dashboard-page .app-layout {
+  height: 100dvh;
+  min-height: 0;
+  max-width: none;
+  grid-template-columns: 204px minmax(0, 1fr);
+}
+.dashboard-page .sidebar {
+  position: static;
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+  padding: 24px 18px;
+  background: #702737;
+  color: #fff5e9;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-page .logo {
+  color: #fff5e9;
+  font:
+    700 31px Georgia,
+    serif;
+  letter-spacing: -1px;
+  margin: 0 0 28px;
+}
+.dashboard-page .user-info {
+  padding-bottom: 18px;
+  margin-bottom: 16px;
+  border-color: #a3636e;
+}
+.dashboard-page .user-info small {
+  color: #f0d9d5;
+}
+.dashboard-page .menu-links a {
+  color: #f5ded8;
+}
+.dashboard-page .menu-links a.active,
+.dashboard-page .menu-links a:hover {
+  background: #fff3e5;
+  color: #702737;
+}
+.dashboard-page .menu-links .btn-logout {
+  margin-top: 18px;
+}
+.demo-role {
+  margin-top: auto;
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+.demo-role select {
+  background: #fff3e5;
+  color: #702737;
+  width: 100%;
+  min-height: 44px;
+  border-color: #fff3e5;
+}
+.dashboard-page .sidebar :focus-visible {
+  outline-color: #ffe9bd;
+}
+.dashboard-page .main-content {
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 28px;
+  gap: 12px;
+  overflow: hidden;
+}
+.dashboard-page .main-content > h1,
+.dashboard-page .main-content > h2 {
+  flex: none;
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 29px;
+}
+.dashboard-page .restaurant-header {
+  flex: none;
+  margin: 0 !important;
+}
+.restaurant-header h1 {
+  margin-bottom: 10px;
+  font-family: Georgia, serif;
+}
+.demo-notice {
+  flex: none;
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.dashboard-page .search-box {
+  flex: none;
+  margin: 0;
+}
+.dashboard-page .search-box input {
+  min-width: 0;
+}
+.dashboard-page .filter-bar {
+  flex: none;
+  margin: 0;
+  gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.tag-pill {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+}
+.dashboard-page .restaurant-grid {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-content: start;
+  gap: 16px;
+  padding: 2px 4px 4px 2px;
+}
+.dashboard-page .card {
+  min-width: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.dashboard-page .card-img {
+  height: 130px !important;
+  flex: none;
+}
+.dashboard-page .card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dashboard-page .card-info {
+  padding: 14px;
+}
+.dashboard-page .card-info > div:first-child {
+  margin-bottom: 6px !important;
+}
+.dashboard-page .card-title {
+  font:
+    600 18px/1.3 Georgia,
+    serif;
+  margin: 0 0 4px;
+}
+.dashboard-page .card-info small {
+  margin-bottom: 4px !important;
+}
+.dashboard-page .card-meta {
+  margin: 8px 0;
+}
+.dashboard-page .btn-card {
+  min-height: 40px;
+  margin: 0;
+}
+.dashboard-page .white-box {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 18px;
+  overscroll-behavior: contain;
+}
+.white-box thead {
+  position: sticky;
+  top: -18px;
+  z-index: 2;
+  background: var(--surface);
+}
+.white-box th {
+  background: var(--surface);
+}
+.dashboard-page .reservation-section {
+  flex: 1;
+  min-height: 0;
+  max-width: none !important;
+  overflow: auto;
+  background: var(--surface);
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.reservation-section h3 {
+  font:
+    600 23px Georgia,
+    serif;
+  margin: 0 0 16px;
+}
+.reservation-section form > div:first-of-type {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px !important;
+}
+.reservation-section .form-group {
+  min-width: 0 !important;
+  margin-bottom: 12px;
+}
+.reservation-section form > div:last-child {
+  position: sticky;
+  bottom: -20px;
+  background: var(--surface);
+  padding: 12px 0;
+}
+.dashboard-page .main-content:has(.restaurant-banner) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: stretch;
+}
+.dashboard-page .main-content:has(.restaurant-banner) .restaurant-header {
+  grid-column: 1/-1;
+  grid-row: 1;
+}
+.dashboard-page .restaurant-banner {
+  grid-column: 1;
+  grid-row: 2;
+  min-height: 0;
+  height: 100%;
+  margin: 0;
+  border-radius: 12px;
+}
+.dashboard-page .main-content:has(.restaurant-banner) .reservation-section {
+  grid-column: 2;
+  grid-row: 2;
+}
+.restaurant-tags {
+  margin-bottom: 8px;
+  gap: 12px;
+}
+.info-hours {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 12px;
+}
+.dashboard-page .theme-toggle {
+  top: 12px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  min-height: 38px;
+}
+.dashboard-page .main-content > .restaurant-header:first-child {
+  padding-right: 44px;
+}
+.auth-container {
+  height: 100dvh;
+  min-height: 0;
+  overflow: auto;
+}
+.auth-logo {
+  font-family: Georgia, serif;
+}
+.dashboard-page .aviso,
+.dashboard-page .sucesso {
+  flex: none;
+  margin: 0;
+  padding: 10px 12px;
+}
+.dashboard-page [role="status"]:empty {
+  display: none;
+}
+.empty-state {
+  padding: 24px;
+  font-size: 14px;
+}
+@media (max-width: 1150px) {
+  .dashboard-page .restaurant-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dashboard-page .app-layout {
+    grid-template-columns: 184px minmax(0, 1fr);
+  }
+  .dashboard-page .main-content {
+    padding: 18px 20px;
+  }
+}
+@media (max-width: 760px) {
+  .dashboard-page .app-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  .dashboard-page .sidebar {
+    flex: none;
+    width: 100%;
+    height: auto;
+    padding: 10px 14px 6px;
+    overflow: visible;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 12px;
+  }
+  .dashboard-page .logo {
+    font-size: 27px;
+    margin: 0;
+  }
+  .dashboard-page .user-info {
+    display: none;
+  }
+  .dashboard-page .menu-links {
+    grid-column: 1/-1;
+    flex-direction: row;
+    gap: 4px;
+    overflow: auto;
+    flex-wrap: nowrap;
+  }
+  .dashboard-page .menu-links a {
+    min-height: 40px;
+    white-space: nowrap;
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  .dashboard-page .menu-links .btn-logout {
+    margin: 0 0 0 auto;
+  }
+  .demo-role {
+    margin: 0;
+    padding: 0;
+    justify-self: end;
+    font-size: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+  .demo-role select {
+    min-height: 36px;
+    max-width: 126px;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  .dashboard-page .main-content {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    padding: 12px 14px;
+    gap: 8px;
+  }
+  .dashboard-page .main-content > h1,
+  .dashboard-page .main-content > h2 {
+    font-size: 25px;
+  }
+  .demo-notice {
+    font-size: 12px;
+  }
+  .dashboard-page .search-box input {
+    min-height: 42px;
+    padding: 8px 10px;
+  }
+  .dashboard-page .search-box button {
+    min-height: 42px;
+    padding: 8px 12px;
+  }
+  .dashboard-page .filter-bar {
+    flex-wrap: nowrap;
+    overflow: auto;
+    gap: 6px;
+    padding-bottom: 3px;
+  }
+  .tag-pill {
+    min-height: 36px;
+    padding: 5px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .dashboard-page .restaurant-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .dashboard-page .card {
+    flex: none;
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    min-height: 112px;
+  }
+  .dashboard-page .card-img {
+    height: 100% !important;
+    min-height: 112px;
+  }
+  .dashboard-page .card-info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3px 6px;
+    padding: 10px;
+  }
+  .dashboard-page .card-info > div:first-child {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0 !important;
+  }
+  .dashboard-page .card-title {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 16px;
+  }
+  .dashboard-page .card-info small {
+    grid-column: 1;
+    grid-row: 3;
+    font-size: 12px;
+    margin: 0 !important;
+  }
+  .dashboard-page .card-meta {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    align-self: center;
+  }
+  .card-meta > span:first-child {
+    display: none;
+  }
+  .price-badge {
+    font-size: 14px;
+  }
+  .dashboard-page .btn-card {
+    grid-column: 2;
+    grid-row: 2/4;
+    min-height: 44px;
+    padding: 6px 9px;
+    font-size: 12px;
+    align-self: center;
+  }
+  .card-pill {
+    font-size: 12px;
+  }
+  .dashboard-page .white-box {
+    padding: 10px;
+  }
+  .white-box th,
+  .white-box td {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+  .white-box thead {
+    top: -10px;
+  }
+  .dashboard-page .main-content:has(.restaurant-banner) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 100px minmax(0, 1fr);
+    gap: 8px;
+  }
+  .dashboard-page .main-content:has(.restaurant-banner) .restaurant-header {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 0;
+  }
+  .restaurant-header h1 {
+    font-size: 25px;
+    margin: 0 0 6px;
+  }
+  .restaurant-tags {
+    gap: 4px 10px;
+    margin-bottom: 4px;
+  }
+  .tag-item {
+    font-size: 12px;
+  }
+  .info-hours {
+    font-size: 12px;
+  }
+  .dashboard-page .restaurant-banner {
+    grid-column: 1;
+    grid-row: 2;
+    border-radius: 8px;
+  }
+  .dashboard-page .main-content:has(.restaurant-banner) .reservation-section {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .dashboard-page .reservation-section {
+    padding: 14px;
+    border-radius: 8px;
+  }
+  .reservation-section h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  .reservation-section form > div:last-child {
+    bottom: -14px;
+    flex-wrap: wrap;
+  }
+  .reservation-section form > div:last-child button {
+    min-width: 0 !important;
+    flex: 1;
+  }
+  .reservation-section form > div:first-of-type {
+    gap: 10px !important;
+  }
+  .reservation-section label {
+    font-size: 12px;
+  }
+  .dashboard-page .theme-toggle {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+  }
+  .dashboard-page:not(.browser-demo) .logo {
+    padding-right: 44px;
+  }
+  .dashboard-page .main-content > .restaurant-header:first-child {
+    padding-right: 0;
+  }
+}
+@media (max-height: 650px) {
+  .dashboard-page .card-img {
+    height: 100px !important;
+  }
+  .dashboard-page .main-content {
+    padding-block: 10px;
+  }
+  .dashboard-page .main-content:has(.restaurant-banner) {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .dashboard-page .restaurant-banner {
+    display: none;
+  }
+  .dashboard-page .main-content:has(.restaurant-banner) .reservation-section {
+    grid-row: 2;
+  }
+  .dashboard-page .main-content:has(.restaurant-banner) .restaurant-header {
+    grid-column: 1/-1;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}
+.filter-bar .tag-pill {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.filter-bar .tag-pill.active {
+  background: var(--primary-light);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.reservation-section h2 {
+  font:
+    600 23px Georgia,
+    serif;
+  margin: 0 0 16px;
+}
+.booking-demo-note {
+  margin-top: 8px;
+}
+.cancel-booking,
+.undo-booking {
+  min-height: 36px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--primary-color);
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+.undo-booking {
+  margin-left: 12px;
+}
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 12px;
+  z-index: 100;
+  background: var(--surface);
+  color: var(--primary-color);
+  padding: 12px;
+}
+.skip-link:focus {
+  top: 10px;
+}
+.card-info h2 {
+  color: var(--text-color);
+}
+@media (max-height: 650px) {
+  .dashboard-page .main-content:has(.restaurant-banner) .reservation-section {
+    grid-column: 1/-1;
+  }
+}
+
+.filter-bar .tag-pill {
+  width: auto;
+  flex: none;
+}
+.sidebar .demo-role {
+  color: #f7dfd4;
+}
+@media (min-width: 761px) {
+  .dashboard-page .restaurant-grid {
+    grid-auto-rows: 258px;
+  }
+  .dashboard-page .card-img {
+    height: 120px !important;
+  }
+  .dashboard-page .card-info {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto minmax(40px, auto);
+    gap: 4px 10px;
+    padding: 12px;
+    align-items: center;
+  }
+  .dashboard-page .card-title {
+    grid-column: 1/-1;
+    grid-row: 1;
+    margin: 0;
+  }
+  .dashboard-page .card-info > div:first-child {
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0 !important;
+  }
+  .dashboard-page .card-info small {
+    grid-column: 1;
+    grid-row: 3;
+    margin: 0 !important;
+  }
+  .dashboard-page .card-meta {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0;
+  }
+  .dashboard-page .card-meta > span:first-child {
+    display: none;
+  }
+  .dashboard-page .btn-card {
+    grid-column: 2;
+    grid-row: 3;
+    min-width: 90px;
+    padding: 6px 14px;
+  }
+  .dashboard-page .card-info > div:has(.btn-card) {
+    grid-column: 1/-1;
+    grid-row: 3;
+    margin: 0 !important;
+  }
+}
+
+@media (max-height: 430px) {
+  .dashboard-page .main-content {
+    overflow: auto;
+  }
+  .dashboard-page .restaurant-grid {
+    flex: none;
+    min-height: 300px;
+  }
+  .dashboard-page .main-content:has(.restaurant-banner) {
+    display: flex;
+  }
+  .dashboard-page .reservation-section {
+    flex: none;
+    min-height: 300px;
+  }
+}
