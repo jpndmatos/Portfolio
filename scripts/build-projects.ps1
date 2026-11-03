@@ -9,15 +9,13 @@ $exports = @(
 )
 foreach ($project in $exports) {
     $projectRoot = Join-Path $ProjectsRoot $project.Name
-    $previousPortfolioUrl = $env:VITE_PORTFOLIO_URL
-    $env:VITE_PORTFOLIO_URL = '../../#projects'
     $previousSourceUrl = $env:VITE_SOURCE_URL
     if ($project.Name -eq 'relay') { $env:VITE_SOURCE_URL = '../../assets/downloads/relay-source.zip' }
     Push-Location (Join-Path $projectRoot $project.Directory)
     try {
         npm run $project.Script
         if ($LASTEXITCODE -ne 0) { throw "Build failed: $($project.Name)" }
-    } finally { Pop-Location; $env:VITE_SOURCE_URL = $previousSourceUrl; $env:VITE_PORTFOLIO_URL = $previousPortfolioUrl }
+    } finally { Pop-Location; $env:VITE_SOURCE_URL = $previousSourceUrl }
     $destination = [IO.Path]::GetFullPath((Join-Path $portfolioRoot "demo/$($project.Name)"))
     $allowedRoot = [IO.Path]::GetFullPath((Join-Path $portfolioRoot 'demo')) + [IO.Path]::DirectorySeparatorChar
     if (-not $destination.StartsWith($allowedRoot, [StringComparison]::OrdinalIgnoreCase)) { throw 'Invalid demo destination.' }
