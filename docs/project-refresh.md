@@ -17,7 +17,7 @@ Present working tools and their full source, with Touchline among the first proj
 - [x] Review Touchline's source and portfolio handoff.
 - [x] Run the relevant builds, domain checks, responsive/accessibility and interaction checks.
 - [x] Review the actual interfaces and fix observed issues.
-- [ ] Push the portfolio and verify its browser checks and deployment.
+- [x] Push the portfolio and verify its browser checks and deployment.
 
 ## Initial findings
 
@@ -38,3 +38,5 @@ The additional Touchline phone pass creates one shared footer, larger controls, 
 ## Verification
 
 Local unit/domain checks: Split 15, Overlap 12, Image Desk 7, Relay frontend 18 and .NET 25, Touchline frontend 44. Touchline CI also runs 94 backend tests and container checks. EatEasy's isolated PHP/SQLite test covers sign-in, CSRF rejection, bookings, conflict recovery, cancellation, admin creation/removal and private storage. Separate browser workflows exercise real processing/API paths, calendar continuity and accessibility at desktop, phone and landscape sizes. See each repository's workflow runs for the current revision.
+
+Published verification: portfolio workflow `42067875533` passed its browser/accessibility checks and Pages deployment. Touchline workflow `42066918938` passed viewport, accessibility, playback recovery, scroll retention, backend and container checks. The feature commits in Split, Overlap, Image Desk, EatEasy and Relay also passed their application workflows. Screenshot-only documentation updates skip redundant CI runs.
