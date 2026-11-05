@@ -522,6 +522,24 @@
     window.addEventListener("load", scheduleScrollUpdate, { once: true });
     document.fonts?.ready.then(scheduleScrollUpdate);
 
+    // Align incoming section links after fonts and images have settled.
+    const initialHash = window.location.hash;
+    if (["#skills", "#experience", "#projects"].includes(initialHash)) {
+      const loaded = document.readyState === "complete"
+        ? Promise.resolve()
+        : new Promise((resolve) => window.addEventListener("load", resolve, { once: true }));
+      Promise.all([loaded, document.fonts?.ready]).then(() => {
+        if (window.location.hash !== initialHash) return;
+        const heading = document.querySelector(`${initialHash} .section__header`);
+        if (!heading) return;
+        window.scrollTo({
+          top: heading.getBoundingClientRect().top + window.scrollY - header.getBoundingClientRect().height - 28,
+          behavior: "instant",
+        });
+        scheduleScrollUpdate();
+      });
+    }
+
     // Smooth snapping is limited to the landing / Skills boundary.
     const skillsHeading = document.querySelector("#skills .section__header");
     let scrollAnimation = null;

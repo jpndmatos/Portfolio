@@ -1,0 +1,13 @@
+{
+  "name": "joao-matos-portfolio",
+  "private": true,
+  "scripts": {
+    "check": "python scripts/build-site.py",
+    "test:browser": "node scripts/verify-portfolio.mjs",
+    "test:motion": "node scripts/check-motion.cjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.56.0"
+  }
+}

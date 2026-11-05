@@ -1,13 +1,13 @@
 import {
   chromium,
   expect,
-} from "../../relay/web/node_modules/@playwright/test/index.mjs";
-import AxeBuilder from "../../relay/web/node_modules/@axe-core/playwright/dist/index.mjs";
+} from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 const base = (process.env.PORTFOLIO_URL ?? "http://127.0.0.1:5181").replace(
   /\/$/,
   "",
 );
-const browser = await chromium.launch();
+const browser = await chromium.launch({ channel: process.env.PLAYWRIGHT_CHANNEL || undefined });
 try {
   for (const width of [390, 1440]) {
     const context = await browser.newContext({
@@ -21,6 +21,12 @@ try {
         thirdParty.push(r.url());
     });
     await page.goto(`${base}/`);
+    const projects = page.locator('.project-card__title');
+    expect((await projects.allTextContents()).slice(0, 6).map(value => value.trim())).toEqual(['Touchline', 'Split', 'Overlap', 'Image Desk', 'EatEasy', 'Relay']);
+    expect(await page.locator('a[href^="demo/"]').count()).toBe(0);
+    expect(await page.locator('a[href$="relay-source.zip"]').count()).toBe(0);
+    await expect(page.getByRole('link', {name:'View source: Relay',exact:true})).toHaveAttribute('href','https://github.com/jpndmatos/relay');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.evaluate(() => document.fonts.ready);
     const initial = await page.locator("#blob-path").getAttribute("d");
     await page.waitForTimeout(250);
@@ -39,6 +45,8 @@ try {
       `PASS portfolio ${width}px: accessibility, static portrait and local fonts.`,
     );
     expect(thirdParty).toEqual([]);
+    await page.goto(`${base}/#projects`);
+    await expect(page.getByRole('heading',{name:'Touchline',exact:true})).toBeInViewport();
     await context.close();
   }
   const context = await browser.newContext({

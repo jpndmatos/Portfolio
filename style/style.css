@@ -177,12 +177,15 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .experience__tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .experience__tags span { color: var(--text2); background: color-mix(in srgb, var(--accent) 6%, var(--surface-card)); border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border)); border-radius: 5px; padding: 4px 9px; font-size: .75rem; line-height: 1.6; }
 .projects-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.projects-section { padding-block: 48px 64px; scroll-margin-top: 80px; }
+.projects-section .section__header { padding-top: 0; }
 .project-card { position: relative; display: flex; flex-direction: column; transition: background calc(180ms / var(--motion-speed)) ease, border-color calc(180ms / var(--motion-speed)) ease; }
 .project-card:hover, .project-card:focus-within { background-color: var(--surface-hover); border-color: var(--accent-border); }
 .project-card__topline { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px; margin: -8px -8px 8px 0; }
 .project-card__index { font-size: .6875rem; color: var(--accent); font-variant-numeric: tabular-nums; }
 .project-card__actions { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
 .project-card__action { position: relative; z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 8px; color: var(--accent); }
+.project-card__action--primary { display: inline-flex; gap: 8px; width: auto; padding-inline: 12px; font-size: .75rem; font-weight: 500; }
 .project-card__action:hover, .project-card__action:focus-visible { color: var(--text1); background: var(--accent-soft); }
 .project-card__action .icon { width: 14px; height: 14px; transform: none; }
 .project-card__action .icon[fill="none"] { width: 11px; height: 11px; }
@@ -197,6 +200,8 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .project-card--more .project-card__content { flex: 0; }
 .project-card--more .project-card__desc { margin-bottom: 0; }
 .project-card__media { position: relative; flex-shrink: 0; margin: 0 0 20px; width: 100%; aspect-ratio: 8 / 3; max-height: 180px; overflow: clip; border-radius: 8px; background: var(--surface-hover); }
+.project-card--app .project-card__media { aspect-ratio: 16 / 9; max-height: none; }
+.project-card__media--touchline { background: #101211; }
 .project-card__media img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .project-card--more { grid-column: 1 / -1; }
 @media (max-width: 600px) {
