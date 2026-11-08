@@ -22,7 +22,7 @@ try {
     });
     await page.goto(`${base}/`);
     const projects = page.locator('.project-card__title');
-    expect((await projects.allTextContents()).slice(0, 6).map(value => value.trim())).toEqual(['Dinho80', 'Split', 'Overlap', 'Image Desk', 'EatEasy', 'Relay']);
+    expect((await projects.allTextContents()).slice(0, 6).map(value => value.trim())).toEqual(['Extra Time', 'Split', 'Overlap', 'Image Desk', 'EatEasy', 'Relay']);
     expect(await page.locator('a[href^="demo/"]').count()).toBe(0);
     expect(await page.locator('a[href$="relay-source.zip"]').count()).toBe(0);
     await expect(page.getByRole('link', {name:'View source: Relay',exact:true})).toHaveAttribute('href','https://github.com/jpndmatos/relay');
@@ -46,7 +46,7 @@ try {
     );
     expect(thirdParty).toEqual([]);
     await page.goto(`${base}/#projects`);
-    await expect(page.getByRole('heading',{name:'Dinho80',exact:true})).toBeInViewport();
+    await expect(page.getByRole('heading',{name:'Extra Time',exact:true})).toBeInViewport();
     await context.close();
   }
   const context = await browser.newContext({
