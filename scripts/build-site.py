@@ -16,6 +16,9 @@ class Page(HTMLParser):
         for attr in ('src', 'href'):
             if attrs.get(attr):
                 self.references.append(attrs[attr])
+        for candidate in attrs.get('srcset', '').split(','):
+            if candidate.strip():
+                self.references.append(candidate.strip().split()[0])
 
 def build():
     page = Page()
