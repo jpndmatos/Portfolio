@@ -21,6 +21,8 @@
     const isTouchDevice =
       "ontouchstart" in window || navigator.maxTouchPoints > 0;
     const isLowPowerDevice = (navigator.hardwareConcurrency || 4) <= 4;
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    if (coarsePointer || navigator.connection?.saveData) return;
 
     const gl = canvas.getContext("webgl", {
       alpha: false,
@@ -231,16 +233,23 @@
       animationId = requestAnimationFrame(animate);
     };
 
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        if (animationId) cancelAnimationFrame(animationId);
-      } else {
+    let heroVisible = true;
+    const syncAnimation = () => {
+      if (document.hidden || !heroVisible) {
+        if (animationId !== null) cancelAnimationFrame(animationId);
+        animationId = null;
+      } else if (animationId === null) {
         lastFrameTime = performance.now();
         animationId = requestAnimationFrame(animate);
       }
-    });
-
-    animationId = requestAnimationFrame(animate);
+    };
+    const hero = document.getElementById("hero");
+    if (hero) new IntersectionObserver(([entry]) => {
+      heroVisible = entry.isIntersecting;
+      syncAnimation();
+    }).observe(hero);
+    document.addEventListener("visibilitychange", syncAnimation);
+    syncAnimation();
   };
 
   /* --------------------------------------------------------------------------
@@ -645,7 +654,7 @@
 
     if (!sections.length || !navLinks.length) return;
 
-    navLinks.forEach((link) => {
+    document.querySelectorAll(".nav-link, .hero__work-link").forEach((link) => {
       link.addEventListener("click", (event) => {
         const targetId = link.getAttribute("href");
         const target = targetId ? document.querySelector(targetId) : null;
@@ -735,7 +744,7 @@
 
     const overlay = text.cloneNode(true);
     // Buttons are opaque controls, so only heading and description get the accent overlay.
-    overlay.querySelector(".hero__actions")?.remove();
+    overlay.querySelectorAll(".hero__actions, .hero__work-link").forEach((element) => element.remove());
     overlay.classList.add("hero__text--overlap");
     overlay.setAttribute("aria-hidden", "true");
     overlay.setAttribute("inert", "");
@@ -822,7 +831,7 @@
           }
         }
         const idle = Math.sin(time * .4 * frame.tempo + frame.phase + index*1.7)
-          * (frame.isButton ? .45 : 1.8);
+          * (frame.isButton ? .2 : .7);
         const spread = Math.max(1, length / (frame.isButton ? 35 : 110));
         const deformed = Math.abs(edge.position) > .02;
         const segments = deformed
@@ -875,7 +884,7 @@
       });
     };
     function scheduleAnimation() {
-      if (!prefersReducedMotion && !document.hidden && animationId === null && visibleFrames.size) {
+      if (!prefersReducedMotion && finePointer.matches && !document.hidden && animationId === null && visibleFrames.size) {
         animationId = requestAnimationFrame(animate);
       }
     }
@@ -888,7 +897,7 @@
           interacting = true;
       });
       // Slow idle movement needs fewer paints; interactions retain 60 fps.
-      const interval = 1000/(interacting && finePointer.matches ? 60 : 30);
+      const interval = 1000/(interacting && finePointer.matches ? 60 : 15);
       if (now-lastFrame >= interval-1) {
         const delta = Math.min((now-lastFrame)/1000, .05);
         lastFrame = now;

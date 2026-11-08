@@ -9,7 +9,7 @@ const base = (process.env.PORTFOLIO_URL ?? "http://127.0.0.1:5181").replace(
 );
 const browser = await chromium.launch({ channel: process.env.PLAYWRIGHT_CHANNEL || undefined });
 try {
-  for (const width of [390, 1440]) {
+  for (const width of [320, 390, 768, 1440]) {
     const context = await browser.newContext({
       viewport: { width, height: 1000 },
       reducedMotion: "reduce",
@@ -45,6 +45,9 @@ try {
       `PASS portfolio ${width}px: accessibility, static portrait and local fonts.`,
     );
     expect(thirdParty).toEqual([]);
+    await page.getByRole('link', {name:'View projects',exact:false}).click();
+    await expect(page.getByRole('heading', {name:'Projects',exact:true})).toBeInViewport();
+    await expect(page.locator('.header__link[data-section="projects"]')).toHaveAttribute('aria-current','location');
     await page.goto(`${base}/#projects`);
     await expect(page.getByRole('heading',{name:'Extra Time',exact:true})).toBeInViewport();
     await context.close();

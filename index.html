@@ -12,7 +12,7 @@
       type="image/png"
       sizes="64x64"
       href="assets/images/favicon.png" />
-    <link rel="stylesheet" href="style/style.css?v=20261105-projects" />
+    <link rel="stylesheet" href="style/style.css?v=20261108-refine" />
     <title>João Matos — Web Developer</title>
   </head>
   <body>
@@ -108,6 +108,7 @@
                 <span class="hero__description-location"
                   >Based in Portugal.</span>
               </p>
+              <a class="hero__work-link" href="#projects">View projects <span aria-hidden="true">↘</span></a>
               <div class="hero__actions">
                 <div class="hero__action-row hero__action-row--primary">
                   <a
@@ -342,19 +343,14 @@
               <span class="timeline-item__year">2026</span>
               <div class="timeline-item__content">
                 <h3 class="timeline-item__role">
-                  SIM Conference App Responsible
+                  Conference App Operations
                 </h3>
                 <p class="timeline-item__company">
                   Internship at Startup Portugal
                 </p>
                 <p class="timeline-item__description">
-                  Responsible for the SIM Conference app operations for an
-                  edition with +4,000 attendees, +450 startups, +270 investors,
-                  +130 speakers and +1,000 meetings scheduled through the
-                  app.<br />
-                  Creation of SIM Sync, an internal tool to import event data
-                  into the app through the API, plus participant debugging and
-                  sync issue resolution.
+                  Managed the SIM Conference app for 4,000+ attendees, 450+ startups, 270+ investors, 130+ speakers and 1,000+ scheduled meetings.<br />
+                  Built SIM Sync to import event data through the API and resolve participant and sync issues.
                 </p>
                 <div class="experience__tags">
                   <span>Python</span>
@@ -377,9 +373,7 @@
                   Internship at Doppel (IPN Coimbra)
                 </p>
                 <p class="timeline-item__description">
-                  Creation of the company website using React + Tailwind and
-                  TypeScript, with 3D elements implemented with ThreeJS, and its
-                  subsequent deployment.
+                  Built and deployed the company website with React, TypeScript and Tailwind, including interactive Three.js elements.
                 </p>
                 <div class="experience__tags">
                   <span>React</span>
@@ -396,7 +390,7 @@
             <div class="timeline-item">
               <span class="timeline-item__year">2017</span>
               <div class="timeline-item__content">
-                <h3 class="timeline-item__role">Visual Identity Responsible</h3>
+                <h3 class="timeline-item__role">Visual Identity</h3>
                 <p class="timeline-item__company">
                   EBEC Coimbra · Board of European Students of Technology
                 </p>
@@ -427,11 +421,11 @@
           <div class="projects-grid">
             <article class="project-card project-card--app project-card--touchline">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">01</span>
+                <h3 class="project-card__title"><a href="https://jpndmatos.github.io/touchline/" target="_blank" rel="noopener noreferrer">Extra Time</a></h3>
                 <div class="project-card__actions"><a class="project-card__action project-card__action--primary" href="https://jpndmatos.github.io/touchline/" target="_blank" rel="noopener noreferrer" aria-label="Open app: Extra Time"><span>Open app</span><svg class="icon" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a><a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/touchline" target="_blank" rel="noopener noreferrer" aria-label="Source: Extra Time"><span>Source</span><svg class="icon" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></div>
               </div>
               <div class="project-card__content">
-                <h3 class="project-card__title"><a href="https://jpndmatos.github.io/touchline/" target="_blank" rel="noopener noreferrer">Extra Time</a></h3>
+
                 <p class="project-card__desc">Individual football goals from the last 48 hours, with search, same-match clips and viewing history.</p>
                 <figure class="project-card__media project-card__media--touchline">
                   <img src="assets/projects/touchline-cover.webp?v=20261108" alt="Extra Time running with a compact goal list, match scores and a large video player" width="1280" height="720" loading="lazy" decoding="async" />
@@ -442,15 +436,15 @@
 
             <article class="project-card project-card--app">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">02</span>
+                <h3 class="project-card__title">
+                  <a href="https://github.com/jpndmatos/split" target="_blank" rel="noopener noreferrer">Split</a>
+                </h3>
                 <div class="project-card__actions">
                   <a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/split" target="_blank" rel="noopener noreferrer" aria-label="View source: Split"><span>Source</span><svg class="icon" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
                 </div>
               </div>
               <div class="project-card__content">
-                <h3 class="project-card__title">
-                  <a href="https://github.com/jpndmatos/split" target="_blank" rel="noopener noreferrer">Split</a>
-                </h3>
+
                 <p class="project-card__desc">Shared expenses, exact balances and repayment tracking for dinners, trips and events.</p>
                 <figure class="project-card__media project-card__media--split">
                   <img src="assets/projects/split-cover.webp?v=projects-20261105" alt="Split warm paper ledger with shared totals and an expense list" width="1280" height="720" loading="lazy" decoding="async" />
@@ -461,16 +455,16 @@
 
             <article class="project-card project-card--app">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">03</span>
+                <h3 class="project-card__title">
+                  <a href="https://jpndmatos.github.io/overlap/" target="_blank" rel="noopener noreferrer">Overlap</a>
+                </h3>
                 <div class="project-card__actions">
                   <a class="project-card__action project-card__action--primary" href="https://jpndmatos.github.io/overlap/" target="_blank" rel="noopener noreferrer" aria-label="Open app: Overlap"><span>Open app</span><svg class="icon" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
                   <a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/overlap" target="_blank" rel="noopener noreferrer" aria-label="Source: Overlap"><span>Source</span><svg class="icon" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
                 </div>
               </div>
               <div class="project-card__content">
-                <h3 class="project-card__title">
-                  <a href="https://jpndmatos.github.io/overlap/" target="_blank" rel="noopener noreferrer">Overlap</a>
-                </h3>
+
                 <p class="project-card__desc">Find a meeting time across cities and export it to your calendar.</p>
                 <figure class="project-card__media project-card__media--overlap">
                   <img src="assets/projects/overlap-cover.webp?v=projects-20261105" alt="Overlap blue city timelines with local times and a shared meeting window" width="1280" height="720" loading="lazy" decoding="async" />
@@ -481,16 +475,16 @@
 
             <article class="project-card project-card--app">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">04</span>
+                <h3 class="project-card__title">
+                  <a href="https://jpndmatos.github.io/image-desk/" target="_blank" rel="noopener noreferrer">Image Desk</a>
+                </h3>
                 <div class="project-card__actions">
                   <a class="project-card__action project-card__action--primary" href="https://jpndmatos.github.io/image-desk/" target="_blank" rel="noopener noreferrer" aria-label="Open app: Image Desk"><span>Open app</span><svg class="icon" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
                   <a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/image-desk" target="_blank" rel="noopener noreferrer" aria-label="Source: Image Desk"><span>Source</span><svg class="icon" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
                 </div>
               </div>
               <div class="project-card__content">
-                <h3 class="project-card__title">
-                  <a href="https://jpndmatos.github.io/image-desk/" target="_blank" rel="noopener noreferrer">Image Desk</a>
-                </h3>
+
                 <p class="project-card__desc">Batch resize and convert images locally. Download individual files or a ZIP.</p>
                 <figure class="project-card__media project-card__media--image">
                   <img src="assets/projects/image-desk-cover.webp?v=projects-20261105" alt="Image Desk processed image and export controls" width="1280" height="720" loading="lazy" decoding="async" />
@@ -501,15 +495,15 @@
 
             <article class="project-card project-card--app">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">05</span>
+                <h3 class="project-card__title">
+                  <a href="https://github.com/jpndmatos/EatEasy" target="_blank" rel="noopener noreferrer">EatEasy</a>
+                </h3>
                 <div class="project-card__actions">
                   <a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/EatEasy" target="_blank" rel="noopener noreferrer" aria-label="View source: EatEasy"><span>Source</span><svg class="icon" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
                 </div>
               </div>
               <div class="project-card__content">
-                <h3 class="project-card__title">
-                  <a href="https://github.com/jpndmatos/EatEasy" target="_blank" rel="noopener noreferrer">EatEasy</a>
-                </h3>
+
                 <p class="project-card__desc">Restaurant search and table reservations with customer and admin accounts.</p>
                 <figure class="project-card__media project-card__media--eateasy">
                   <img src="assets/projects/eateasy-cover.webp?v=projects-20261105" alt="EatEasy restaurant dashboard with cuisine filters and booking actions" width="1280" height="720" loading="lazy" decoding="async" />
@@ -525,13 +519,13 @@
 
             <article class="project-card project-card--app">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">06</span>
+                <h3 class="project-card__title"><a href="https://github.com/jpndmatos/relay" target="_blank" rel="noopener noreferrer">Relay</a></h3>
                 <div class="project-card__actions">
                   <a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/relay" target="_blank" rel="noopener noreferrer" aria-label="View source: Relay"><span>Source</span><svg class="icon" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
                 </div>
               </div>
               <div class="project-card__content">
-                <h3 class="project-card__title"><a href="https://github.com/jpndmatos/relay" target="_blank" rel="noopener noreferrer">Relay</a></h3>
+
                 <p class="project-card__desc">Incident ownership, recovery stages and live updates for on-call teams.</p>
                 <figure class="project-card__media">
                   <img src="assets/projects/relay-cover.webp?v=projects-20261105" alt="Relay incident queue with severity, recovery stages and service health from the running .NET application" width="1280" height="720" loading="lazy" decoding="async" />
@@ -542,15 +536,15 @@
 
             <article class="project-card">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">07</span>
-                <div class="project-card__actions">
-                  <a class="project-card__action" href="https://github.com/jpndmatos/SIMsync" target="_blank" rel="noopener noreferrer" aria-label="View SIM Sync source on GitHub" title="View source on GitHub"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.61 24.61" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.3 0C5.5 0 0 5.5 0 12.3c0 5.44 3.52 10.04 8.41 11.67.62.11.85-.26.85-.58 0-.3-.02-1.26-.02-2.29-3.09.57-3.89-.75-4.14-1.45-.14-.35-.74-1.45-1.26-1.74-.43-.23-1.05-.8-.02-.81.97-.02 1.66.89 1.89 1.26 1.11 1.86 2.88 1.34 3.58 1.01.11-.8.43-1.34.78-1.65-2.74-.31-5.6-1.37-5.6-6.07 0-1.34.48-2.45 1.26-3.31-.12-.31-.55-1.57.12-3.26 0 0 1.03-.32 3.38 1.26.99-.28 2.03-.42 3.08-.42s2.09.14 3.08.42c2.35-1.6 3.38-1.26 3.38-1.26.68 1.69.25 2.95.12 3.26.78.86 1.26 1.95 1.26 3.31 0 4.72-2.88 5.77-5.61 6.07.45.39.83 1.12.83 2.28 0 1.65-.02 2.97-.02 3.38 0 .32.23.71.85.58a12.32 12.32 0 0 0 8.38-11.67C24.61 5.5 19.1 0 12.3 0Z"/></svg></a>
-                </div>
-              </div>
-              <div class="project-card__content">
                 <h3 class="project-card__title">
                   <a href="https://github.com/jpndmatos/SIMsync" target="_blank" rel="noopener noreferrer">SIM Sync</a>
                 </h3>
+                <div class="project-card__actions">
+                  <a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/SIMsync" target="_blank" rel="noopener noreferrer" aria-label="View SIM Sync source on GitHub" title="View source on GitHub"><span>Source</span><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.61 24.61" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.3 0C5.5 0 0 5.5 0 12.3c0 5.44 3.52 10.04 8.41 11.67.62.11.85-.26.85-.58 0-.3-.02-1.26-.02-2.29-3.09.57-3.89-.75-4.14-1.45-.14-.35-.74-1.45-1.26-1.74-.43-.23-1.05-.8-.02-.81.97-.02 1.66.89 1.89 1.26 1.11 1.86 2.88 1.34 3.58 1.01.11-.8.43-1.34.78-1.65-2.74-.31-5.6-1.37-5.6-6.07 0-1.34.48-2.45 1.26-3.31-.12-.31-.55-1.57.12-3.26 0 0 1.03-.32 3.38 1.26.99-.28 2.03-.42 3.08-.42s2.09.14 3.08.42c2.35-1.6 3.38-1.26 3.38-1.26.68 1.69.25 2.95.12 3.26.78.86 1.26 1.95 1.26 3.31 0 4.72-2.88 5.77-5.61 6.07.45.39.83 1.12.83 2.28 0 1.65-.02 2.97-.02 3.38 0 .32.23.71.85.58a12.32 12.32 0 0 0 8.38-11.67C24.61 5.5 19.1 0 12.3 0Z"/></svg></a>
+                </div>
+              </div>
+              <div class="project-card__content">
+
                 <p class="project-card__desc">Import event participants, speakers and schedules into Brella, with CSV previews and sync logs.</p>
                 <figure class="project-card__media project-card__media--simsync">
                   <img src="assets/projects/simsync-cover.svg?v=detail-7" alt="SIMsync preview results with labelled sample data" width="960" height="360" loading="lazy" decoding="async" />
@@ -566,15 +560,15 @@
 
             <article class="project-card">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">08</span>
-                <div class="project-card__actions">
-                  <a class="project-card__action" href="https://github.com/jpndmatos/HDF5-Dashboard" target="_blank" rel="noopener noreferrer" aria-label="View HDF5 Dashboard source on GitHub" title="View source on GitHub"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.61 24.61" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.3 0C5.5 0 0 5.5 0 12.3c0 5.44 3.52 10.04 8.41 11.67.62.11.85-.26.85-.58 0-.3-.02-1.26-.02-2.29-3.09.57-3.89-.75-4.14-1.45-.14-.35-.74-1.45-1.26-1.74-.43-.23-1.05-.8-.02-.81.97-.02 1.66.89 1.89 1.26 1.11 1.86 2.88 1.34 3.58 1.01.11-.8.43-1.34.78-1.65-2.74-.31-5.6-1.37-5.6-6.07 0-1.34.48-2.45 1.26-3.31-.12-.31-.55-1.57.12-3.26 0 0 1.03-.32 3.38 1.26.99-.28 2.03-.42 3.08-.42s2.09.14 3.08.42c2.35-1.6 3.38-1.26 3.38-1.26.68 1.69.25 2.95.12 3.26.78.86 1.26 1.95 1.26 3.31 0 4.72-2.88 5.77-5.61 6.07.45.39.83 1.12.83 2.28 0 1.65-.02 2.97-.02 3.38 0 .32.23.71.85.58a12.32 12.32 0 0 0 8.38-11.67C24.61 5.5 19.1 0 12.3 0Z"/></svg></a>
-                </div>
-              </div>
-              <div class="project-card__content">
                 <h3 class="project-card__title">
                   <a href="https://github.com/jpndmatos/HDF5-Dashboard" target="_blank" rel="noopener noreferrer">HDF5 Dashboard</a>
                 </h3>
+                <div class="project-card__actions">
+                  <a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/HDF5-Dashboard" target="_blank" rel="noopener noreferrer" aria-label="View HDF5 Dashboard source on GitHub" title="View source on GitHub"><span>Source</span><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.61 24.61" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.3 0C5.5 0 0 5.5 0 12.3c0 5.44 3.52 10.04 8.41 11.67.62.11.85-.26.85-.58 0-.3-.02-1.26-.02-2.29-3.09.57-3.89-.75-4.14-1.45-.14-.35-.74-1.45-1.26-1.74-.43-.23-1.05-.8-.02-.81.97-.02 1.66.89 1.89 1.26 1.11 1.86 2.88 1.34 3.58 1.01.11-.8.43-1.34.78-1.65-2.74-.31-5.6-1.37-5.6-6.07 0-1.34.48-2.45 1.26-3.31-.12-.31-.55-1.57.12-3.26 0 0 1.03-.32 3.38 1.26.99-.28 2.03-.42 3.08-.42s2.09.14 3.08.42c2.35-1.6 3.38-1.26 3.38-1.26.68 1.69.25 2.95.12 3.26.78.86 1.26 1.95 1.26 3.31 0 4.72-2.88 5.77-5.61 6.07.45.39.83 1.12.83 2.28 0 1.65-.02 2.97-.02 3.38 0 .32.23.71.85.58a12.32 12.32 0 0 0 8.38-11.67C24.61 5.5 19.1 0 12.3 0Z"/></svg></a>
+                </div>
+              </div>
+              <div class="project-card__content">
+
                 <p class="project-card__desc">Temperature and humidity charts with a full-length sensor heatmap.</p>
                 <figure class="project-card__media project-card__media--hdf5">
                   <img src="assets/projects/hdf5-cover.webp?v=optimized-1" alt="HDF5 Dashboard temperature and humidity charts" width="960" height="360" loading="lazy" decoding="async" />
@@ -591,16 +585,16 @@
 
             <article class="project-card">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">09</span>
-                <div class="project-card__actions">
-                  <a class="project-card__action" href="https://jpndmatos.github.io/riftbound-deck-builder/" target="_blank" rel="noopener noreferrer" aria-label="Open Riftbound Deck Builder website" title="Open website"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-                  <a class="project-card__action" href="https://github.com/jpndmatos/riftbound-deck-builder" target="_blank" rel="noopener noreferrer" aria-label="View Riftbound Deck Builder source on GitHub" title="View source on GitHub"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.61 24.61" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.3 0C5.5 0 0 5.5 0 12.3c0 5.44 3.52 10.04 8.41 11.67.62.11.85-.26.85-.58 0-.3-.02-1.26-.02-2.29-3.09.57-3.89-.75-4.14-1.45-.14-.35-.74-1.45-1.26-1.74-.43-.23-1.05-.8-.02-.81.97-.02 1.66.89 1.89 1.26 1.11 1.86 2.88 1.34 3.58 1.01.11-.8.43-1.34.78-1.65-2.74-.31-5.6-1.37-5.6-6.07 0-1.34.48-2.45 1.26-3.31-.12-.31-.55-1.57.12-3.26 0 0 1.03-.32 3.38 1.26.99-.28 2.03-.42 3.08-.42s2.09.14 3.08.42c2.35-1.6 3.38-1.26 3.38-1.26.68 1.69.25 2.95.12 3.26.78.86 1.26 1.95 1.26 3.31 0 4.72-2.88 5.77-5.61 6.07.45.39.83 1.12.83 2.28 0 1.65-.02 2.97-.02 3.38 0 .32.23.71.85.58a12.32 12.32 0 0 0 8.38-11.67C24.61 5.5 19.1 0 12.3 0Z"/></svg></a>
-                </div>
-              </div>
-              <div class="project-card__content">
                 <h3 class="project-card__title">
                   <a href="https://jpndmatos.github.io/riftbound-deck-builder/" target="_blank" rel="noopener noreferrer">Riftbound Deck Builder</a>
                 </h3>
+                <div class="project-card__actions">
+                  <a class="project-card__action project-card__action--primary" href="https://jpndmatos.github.io/riftbound-deck-builder/" target="_blank" rel="noopener noreferrer" aria-label="Open Riftbound Deck Builder website" title="Open website"><span>Open app</span><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+                  <a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/riftbound-deck-builder" target="_blank" rel="noopener noreferrer" aria-label="View Riftbound Deck Builder source on GitHub" title="View source on GitHub"><span>Source</span><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.61 24.61" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.3 0C5.5 0 0 5.5 0 12.3c0 5.44 3.52 10.04 8.41 11.67.62.11.85-.26.85-.58 0-.3-.02-1.26-.02-2.29-3.09.57-3.89-.75-4.14-1.45-.14-.35-.74-1.45-1.26-1.74-.43-.23-1.05-.8-.02-.81.97-.02 1.66.89 1.89 1.26 1.11 1.86 2.88 1.34 3.58 1.01.11-.8.43-1.34.78-1.65-2.74-.31-5.6-1.37-5.6-6.07 0-1.34.48-2.45 1.26-3.31-.12-.31-.55-1.57.12-3.26 0 0 1.03-.32 3.38 1.26.99-.28 2.03-.42 3.08-.42s2.09.14 3.08.42c2.35-1.6 3.38-1.26 3.38-1.26.68 1.69.25 2.95.12 3.26.78.86 1.26 1.95 1.26 3.31 0 4.72-2.88 5.77-5.61 6.07.45.39.83 1.12.83 2.28 0 1.65-.02 2.97-.02 3.38 0 .32.23.71.85.58a12.32 12.32 0 0 0 8.38-11.67C24.61 5.5 19.1 0 12.3 0Z"/></svg></a>
+                </div>
+              </div>
+              <div class="project-card__content">
+
                 <p class="project-card__desc">Build Riftbound decks with card search, deck checks, energy curves and saved lists.</p>
                 <figure class="project-card__media project-card__media--riftbound-angular">
                   <img src="assets/projects/riftbound-angular-cover.webp?v=1" alt="Riftbound Angular card browser and live deck editor" width="960" height="360" loading="lazy" decoding="async" />
@@ -611,15 +605,15 @@
 
             <article class="project-card">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">10</span>
-                <div class="project-card__actions">
-                  <a class="project-card__action" href="https://github.com/jpndmatos/Company-Website" target="_blank" rel="noopener noreferrer" aria-label="View Company Website source on GitHub" title="View source on GitHub"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.61 24.61" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.3 0C5.5 0 0 5.5 0 12.3c0 5.44 3.52 10.04 8.41 11.67.62.11.85-.26.85-.58 0-.3-.02-1.26-.02-2.29-3.09.57-3.89-.75-4.14-1.45-.14-.35-.74-1.45-1.26-1.74-.43-.23-1.05-.8-.02-.81.97-.02 1.66.89 1.89 1.26 1.11 1.86 2.88 1.34 3.58 1.01.11-.8.43-1.34.78-1.65-2.74-.31-5.6-1.37-5.6-6.07 0-1.34.48-2.45 1.26-3.31-.12-.31-.55-1.57.12-3.26 0 0 1.03-.32 3.38 1.26.99-.28 2.03-.42 3.08-.42s2.09.14 3.08.42c2.35-1.6 3.38-1.26 3.38-1.26.68 1.69.25 2.95.12 3.26.78.86 1.26 1.95 1.26 3.31 0 4.72-2.88 5.77-5.61 6.07.45.39.83 1.12.83 2.28 0 1.65-.02 2.97-.02 3.38 0 .32.23.71.85.58a12.32 12.32 0 0 0 8.38-11.67C24.61 5.5 19.1 0 12.3 0Z"/></svg></a>
-                </div>
-              </div>
-              <div class="project-card__content">
                 <h3 class="project-card__title">
                   <a href="https://github.com/jpndmatos/Company-Website" target="_blank" rel="noopener noreferrer">Company Website</a>
                 </h3>
+                <div class="project-card__actions">
+                  <a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/Company-Website" target="_blank" rel="noopener noreferrer" aria-label="View Company Website source on GitHub" title="View source on GitHub"><span>Source</span><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.61 24.61" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.3 0C5.5 0 0 5.5 0 12.3c0 5.44 3.52 10.04 8.41 11.67.62.11.85-.26.85-.58 0-.3-.02-1.26-.02-2.29-3.09.57-3.89-.75-4.14-1.45-.14-.35-.74-1.45-1.26-1.74-.43-.23-1.05-.8-.02-.81.97-.02 1.66.89 1.89 1.26 1.11 1.86 2.88 1.34 3.58 1.01.11-.8.43-1.34.78-1.65-2.74-.31-5.6-1.37-5.6-6.07 0-1.34.48-2.45 1.26-3.31-.12-.31-.55-1.57.12-3.26 0 0 1.03-.32 3.38 1.26.99-.28 2.03-.42 3.08-.42s2.09.14 3.08.42c2.35-1.6 3.38-1.26 3.38-1.26.68 1.69.25 2.95.12 3.26.78.86 1.26 1.95 1.26 3.31 0 4.72-2.88 5.77-5.61 6.07.45.39.83 1.12.83 2.28 0 1.65-.02 2.97-.02 3.38 0 .32.23.71.85.58a12.32 12.32 0 0 0 8.38-11.67C24.61 5.5 19.1 0 12.3 0Z"/></svg></a>
+                </div>
+              </div>
+              <div class="project-card__content">
+
                 <p class="project-card__desc">A company site with a project gallery and interactive 3D viewer.</p>
                 <figure class="project-card__media project-card__media--company">
                   <img src="assets/projects/company-cover.webp?v=optimized-1" alt="Actual company website 3D scan and original navigation" width="960" height="360" loading="lazy" decoding="async" />
@@ -636,16 +630,16 @@
 
             <article class="project-card">
               <div class="project-card__topline">
-                <span class="project-card__index" aria-hidden="true">11</span>
-                <div class="project-card__actions">
-                  <a class="project-card__action" href="https://jpndmatos.github.io/Crimes-Exemplares/" target="_blank" rel="noopener noreferrer" aria-label="Open Crimes Exemplares website" title="Open website"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
-                  <a class="project-card__action" href="https://github.com/jpndmatos/Crimes-Exemplares" target="_blank" rel="noopener noreferrer" aria-label="View Crimes Exemplares source on GitHub" title="View source on GitHub"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.61 24.61" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.3 0C5.5 0 0 5.5 0 12.3c0 5.44 3.52 10.04 8.41 11.67.62.11.85-.26.85-.58 0-.3-.02-1.26-.02-2.29-3.09.57-3.89-.75-4.14-1.45-.14-.35-.74-1.45-1.26-1.74-.43-.23-1.05-.8-.02-.81.97-.02 1.66.89 1.89 1.26 1.11 1.86 2.88 1.34 3.58 1.01.11-.8.43-1.34.78-1.65-2.74-.31-5.6-1.37-5.6-6.07 0-1.34.48-2.45 1.26-3.31-.12-.31-.55-1.57.12-3.26 0 0 1.03-.32 3.38 1.26.99-.28 2.03-.42 3.08-.42s2.09.14 3.08.42c2.35-1.6 3.38-1.26 3.38-1.26.68 1.69.25 2.95.12 3.26.78.86 1.26 1.95 1.26 3.31 0 4.72-2.88 5.77-5.61 6.07.45.39.83 1.12.83 2.28 0 1.65-.02 2.97-.02 3.38 0 .32.23.71.85.58a12.32 12.32 0 0 0 8.38-11.67C24.61 5.5 19.1 0 12.3 0Z"/></svg></a>
-                </div>
-              </div>
-              <div class="project-card__content">
                 <h3 class="project-card__title">
                   <a href="https://jpndmatos.github.io/Crimes-Exemplares/" target="_blank" rel="noopener noreferrer">Crimes Exemplares</a>
                 </h3>
+                <div class="project-card__actions">
+                  <a class="project-card__action project-card__action--primary" href="https://jpndmatos.github.io/Crimes-Exemplares/" target="_blank" rel="noopener noreferrer" aria-label="Open Crimes Exemplares website" title="Open website"><span>Open app</span><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="6 6 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+                  <a class="project-card__action project-card__action--primary" href="https://github.com/jpndmatos/Crimes-Exemplares" target="_blank" rel="noopener noreferrer" aria-label="View Crimes Exemplares source on GitHub" title="View source on GitHub"><span>Source</span><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.61 24.61" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.3 0C5.5 0 0 5.5 0 12.3c0 5.44 3.52 10.04 8.41 11.67.62.11.85-.26.85-.58 0-.3-.02-1.26-.02-2.29-3.09.57-3.89-.75-4.14-1.45-.14-.35-.74-1.45-1.26-1.74-.43-.23-1.05-.8-.02-.81.97-.02 1.66.89 1.89 1.26 1.11 1.86 2.88 1.34 3.58 1.01.11-.8.43-1.34.78-1.65-2.74-.31-5.6-1.37-5.6-6.07 0-1.34.48-2.45 1.26-3.31-.12-.31-.55-1.57.12-3.26 0 0 1.03-.32 3.38 1.26.99-.28 2.03-.42 3.08-.42s2.09.14 3.08.42c2.35-1.6 3.38-1.26 3.38-1.26.68 1.69.25 2.95.12 3.26.78.86 1.26 1.95 1.26 3.31 0 4.72-2.88 5.77-5.61 6.07.45.39.83 1.12.83 2.28 0 1.65-.02 2.97-.02 3.38 0 .32.23.71.85.58a12.32 12.32 0 0 0 8.38-11.67C24.61 5.5 19.1 0 12.3 0Z"/></svg></a>
+                </div>
+              </div>
+              <div class="project-card__content">
+
                 <p class="project-card__desc">Explore an illustrated room, open objects and listen to clues inspired by Max Aub’s Crimes Exemplares.</p>
                 <figure class="project-card__media project-card__media--crimes">
                   <img src="assets/projects/crimes-cover.webp?v=20261108" alt="Crimes Exemplares illustrated room with interactive objects" width="1280" height="720" loading="lazy" decoding="async" />
@@ -671,7 +665,7 @@
             jpndmatos<span class="brand-dot">.</span><span class="brand-domain">dev</span>
           </a>
           <span class="footer__year"
-            ><span class="footer__at">@</span><span class="footer__year-number">2026</span></span>
+            ><span class="footer__at">©</span><span class="footer__year-number">2026</span></span>
         </div>
         <div class="footer__socials">
           <a
@@ -708,6 +702,6 @@
       </div>
     </footer>
 
-    <script src="script.js?v=20261105-projects"></script>
+    <script src="script.js?v=20261108-refine"></script>
   </body>
 </html>
