@@ -200,6 +200,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   transition: border-color 180ms ease, background-color 180ms ease;
 }
 .project-card:hover, .project-card:focus-within { border-color: #665173; background: #101010; }
+.project-card > .fluid-frame { display: none; }
 .project-card__topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; padding: 12px 20px 4px; margin: 0; }
 .project-card__topline .project-card__title { margin: 0; font-size: 1.0625rem; }
 .project-card__topline .project-card__actions { margin-left: auto; }
@@ -241,7 +242,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  border: 1px solid rgb(255 255 255 / 9%);
+  border: 0;
   border-radius: 8px;
 }
 .project-card--more {
