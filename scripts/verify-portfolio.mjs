@@ -3,6 +3,14 @@ import {
   expect,
 } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+const screenshotRoot = new URL('../assets/projects/screenshots/', import.meta.url);
+const screenshots = JSON.parse(await readFile(new URL('manifest.json', screenshotRoot), 'utf8'));
+for (const screenshot of Object.values(screenshots)) {
+  const original = await readFile(new URL(screenshot.original, screenshotRoot));
+  expect(createHash('sha256').update(original).digest('hex')).toBe(screenshot.sha256);
+}
 const base = (process.env.PORTFOLIO_URL ?? "http://127.0.0.1:5181").replace(
   /\/$/,
   "",
@@ -25,6 +33,15 @@ try {
     expect((await projects.allTextContents()).slice(0, 6).map(value => value.trim())).toEqual(['Extra Time', 'Split', 'Overlap', 'Image Desk', 'EatEasy', 'Relay']);
     expect(await page.locator('a[href^="demo/"]').count()).toBe(0);
     expect(await page.locator('a[href$="relay-source.zip"]').count()).toBe(0);
+    const more = page.getByRole('link', { name: 'More projects on GitHub', exact: true });
+    await expect(more).toHaveAttribute('href', 'https://github.com/jpndmatos?tab=repositories');
+    await expect(page.locator('.projects-grid > :last-child')).toHaveClass(/project-card--more/);
+    await expect(more).toHaveCSS('border-top-style', 'dashed');
+    await expect(more.locator('.fluid-frame')).toHaveCount(0);
+    await expect(page.locator('.project-preview')).toHaveCount(11);
+    for (const [name, screenshot] of Object.entries(screenshots)) {
+      await expect(page.locator(`[data-screenshot="${name}"]`)).toHaveAttribute('href', `assets/projects/screenshots/${screenshot.original}`);
+    }
     await expect(page.getByRole('link', {name:'View source: Relay',exact:true})).toHaveAttribute('href','https://github.com/jpndmatos/relay');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.evaluate(() => document.fonts.ready);
@@ -50,6 +67,28 @@ try {
     await expect(page.locator('.header__link[data-section="projects"]')).toHaveAttribute('aria-current','location');
     await page.goto(`${base}/#projects`);
     await expect(page.getByRole('heading',{name:'Extra Time',exact:true})).toBeInViewport();
+    const preview = page.getByRole('link', {name:'View Extra Time preview',exact:true});
+    await preview.click();
+    const viewer = page.getByRole('dialog', {name:'Extra Time',exact:true});
+    await expect(viewer).toBeVisible();
+    const scrollAtOpen = await page.evaluate(() => scrollY);
+    await expect.poll(() => viewer.locator('img').evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+    const modalAudit = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
+    expect(modalAudit.violations.map(v => ({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
+    await viewer.getByRole('button', {name:'Actual size',exact:true}).click();
+    await expect(viewer.getByRole('button', {name:'Fit image',exact:true})).toHaveAttribute('aria-pressed','true');
+    const actual = await viewer.locator('img').evaluate(img => ({width:img.clientWidth,native:img.naturalWidth}));
+    expect(Math.abs(actual.width-actual.native)).toBeLessThanOrEqual(1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await viewer.getByRole('button', {name:'Close preview',exact:true}).click();
+    await expect(viewer).not.toBeVisible();
+    await expect(preview).toBeFocused();
+    expect(await page.evaluate(() => scrollY)).toBe(scrollAtOpen);
+    await preview.press('Enter');
+    await expect(viewer).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(viewer).not.toBeVisible();
+    await expect(preview).toBeFocused();
     await context.close();
   }
   const context = await browser.newContext({

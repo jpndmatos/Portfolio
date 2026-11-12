@@ -1,0 +1,200 @@
+{
+  "extra-time": {
+    "original": "extra-time.png",
+    "width": 1440,
+    "height": 900,
+    "sha256": "832a6adf78b8f3a350020e6099e50c4ff38045661d87fa782a66da965a109950",
+    "variants": [
+      {
+        "file": "extra-time-640.webp",
+        "width": 640,
+        "bytes": 34286
+      },
+      {
+        "file": "extra-time-1100.webp",
+        "width": 1100,
+        "bytes": 72020
+      }
+    ]
+  },
+  "split": {
+    "original": "split.png",
+    "width": 1440,
+    "height": 900,
+    "sha256": "37a3d295ce5f03ef8a31d760b665250551704dfbd4cc8890f92853b3e3cbce4f",
+    "variants": [
+      {
+        "file": "split-640.webp",
+        "width": 640,
+        "bytes": 15548
+      },
+      {
+        "file": "split-1100.webp",
+        "width": 1100,
+        "bytes": 39668
+      }
+    ]
+  },
+  "overlap": {
+    "original": "overlap.png",
+    "width": 1440,
+    "height": 900,
+    "sha256": "5b3ae83a17413c2f91b8161d68b86445577c15cd345eb2cf42fe80a615c2e446",
+    "variants": [
+      {
+        "file": "overlap-640.webp",
+        "width": 640,
+        "bytes": 16180
+      },
+      {
+        "file": "overlap-1100.webp",
+        "width": 1100,
+        "bytes": 36186
+      }
+    ]
+  },
+  "image-desk": {
+    "original": "image-desk.png",
+    "width": 1440,
+    "height": 900,
+    "sha256": "75bec612168d8adb35a4482ae0b16c6638d4c5a97aa5a43a48ac2ac6bb87f675",
+    "variants": [
+      {
+        "file": "image-desk-640.webp",
+        "width": 640,
+        "bytes": 15456
+      },
+      {
+        "file": "image-desk-1100.webp",
+        "width": 1100,
+        "bytes": 34798
+      }
+    ]
+  },
+  "eateasy": {
+    "original": "eateasy.png",
+    "width": 1440,
+    "height": 900,
+    "sha256": "b7c815953aa9641ad08ffa04c1c91ae6202d1c92fa2b9e019886430c2233c939",
+    "variants": [
+      {
+        "file": "eateasy-640.webp",
+        "width": 640,
+        "bytes": 36018
+      },
+      {
+        "file": "eateasy-1100.webp",
+        "width": 1100,
+        "bytes": 84346
+      }
+    ]
+  },
+  "relay": {
+    "original": "relay.png",
+    "width": 1440,
+    "height": 900,
+    "sha256": "23ff1b265353949f7f87fe40925794394f6ec20ad6c6876c0ab5f0d114a5e9b8",
+    "variants": [
+      {
+        "file": "relay-640.webp",
+        "width": 640,
+        "bytes": 17876
+      },
+      {
+        "file": "relay-1100.webp",
+        "width": 1100,
+        "bytes": 45032
+      }
+    ]
+  },
+  "simsync": {
+    "original": "simsync.png",
+    "width": 1161,
+    "height": 552,
+    "sha256": "119b12333157f48c90de7c558783c78d526ab4b80b252c2757ea8b5115e41eeb",
+    "variants": [
+      {
+        "file": "simsync-640.webp",
+        "width": 640,
+        "bytes": 7396
+      },
+      {
+        "file": "simsync-1100.webp",
+        "width": 1100,
+        "bytes": 17778
+      }
+    ]
+  },
+  "hdf5-dashboard": {
+    "original": "hdf5-dashboard.jpg",
+    "width": 1440,
+    "height": 957,
+    "sha256": "9b2247243a6de47386c7458d0d36afd4a2bc8c76bc8600ababcd2b4147a6a358",
+    "variants": [
+      {
+        "file": "hdf5-dashboard-640.webp",
+        "width": 640,
+        "bytes": 12040
+      },
+      {
+        "file": "hdf5-dashboard-1100.webp",
+        "width": 1100,
+        "bytes": 25528
+      }
+    ]
+  },
+  "riftbound": {
+    "original": "riftbound.jpg",
+    "width": 1440,
+    "height": 900,
+    "sha256": "575a29bdb5913372c2c17005f8b574c05a913f25d76cf133ac6a359cee50e0d8",
+    "variants": [
+      {
+        "file": "riftbound-640.webp",
+        "width": 640,
+        "bytes": 54992
+      },
+      {
+        "file": "riftbound-1100.webp",
+        "width": 1100,
+        "bytes": 122208
+      }
+    ]
+  },
+  "company-website": {
+    "original": "company-website.png",
+    "width": 1440,
+    "height": 900,
+    "sha256": "3b1a15ceca104f8b8048ad0b85e3efea103d214f043f560dc8ff983b7fa8fa83",
+    "variants": [
+      {
+        "file": "company-website-640.webp",
+        "width": 640,
+        "bytes": 18392
+      },
+      {
+        "file": "company-website-1100.webp",
+        "width": 1100,
+        "bytes": 41952
+      }
+    ]
+  },
+  "crimes-exemplares": {
+    "original": "crimes-exemplares.jpg",
+    "width": 1440,
+    "height": 900,
+    "sha256": "82453304c6a1d74e8f45f9e8f9023e1741c218775fb299f6f9444d3aa8d3a70c",
+    "variants": [
+      {
+        "file": "crimes-exemplares-640.webp",
+        "width": 640,
+        "bytes": 19806
+      },
+      {
+        "file": "crimes-exemplares-1100.webp",
+        "width": 1100,
+        "bytes": 43636
+      }
+    ]
+  }
+}
