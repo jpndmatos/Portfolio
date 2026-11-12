@@ -265,10 +265,11 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   border-radius: 8px;
 }
 .project-card--more {
-  align-self: center;
-  align-items: stretch;
-  justify-content: space-between;
-  gap: 16px;
+  align-self: start;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 32px;
+  align-items: center;
+  gap: 8px 16px;
   min-height: 0;
   padding: 20px;
   border: 1px dashed #514858;
@@ -279,14 +280,15 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 }
 .project-card--more:hover, .project-card--more:focus-visible { border-color: var(--accent); }
 .project-card--more:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-.project-more__top { display: flex; align-items: center; justify-content: space-between; }
-.project-more__icon { width: 24px; height: 24px; color: #ded9e3; }
-.project-more__arrow { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #39303f; border-radius: 50%; color: var(--accent); }
+.project-more__top { display: contents; }
+.project-more__icon { grid-column: 1; grid-row: 1; width: 24px; height: 24px; color: #ded9e3; }
+.project-more__arrow { grid-column: 3; grid-row: 1 / 3; display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #39303f; border-radius: 50%; color: var(--accent); }
 .project-more__arrow svg { transition: transform 180ms ease; }
 .project-card--more:hover .project-more__arrow svg { transform: translate(2px, -2px); }
-.project-more__title { margin-bottom: 8px; font-size: 1.25rem; letter-spacing: -.025em; line-height: 1.2; }
-.project-card--more p { max-width: 32ch; margin: 0; font-size: .875rem; line-height: 1.7; }
-.project-more__handle { display: block; padding-top: 12px; border-top: 1px solid #2d2532; color: var(--accent); font-size: .75rem; }
+.project-more__copy { grid-column: 2; grid-row: 1; }
+.project-more__title { margin-bottom: 6px; font-size: 1rem; letter-spacing: -.025em; line-height: 1.3; }
+.project-card--more p { max-width: 32ch; margin: 0; font-size: .8125rem; line-height: 1.6; }
+.project-more__handle { grid-column: 2; grid-row: 2; display: block; color: var(--accent); font-size: .6875rem; overflow-wrap: anywhere; }
 .footer { margin-top: 48px; padding-block: 24px; }
 .footer__wrapper, .footer__credit, .footer__socials { display: flex; align-items: center; }
 .footer__wrapper { justify-content: space-between; gap: 20px; }
