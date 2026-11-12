@@ -214,15 +214,12 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   border: 1px solid #28252b;
   border-radius: 18px;
   background: #0d0d0d;
-  transition: border-color 180ms ease, background-color 180ms ease, transform 240ms ease;
+  transition: border-color 180ms ease, background-color 180ms ease;
 }
-.project-card:hover, .project-card:focus-within { border-color: #665173; background: #101010; }
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .project-card:hover { transform: translateY(-3px); }
-}
+.project-card:hover, .project-card:focus-within { border-color: var(--accent-border); background: var(--accent-soft); }
 .project-card.has-fluid-frame { border-color: transparent; background: none; }
 .project-card > .fluid-frame path { fill: #0d0d0d; stroke: #28252b; }
-.project-card:hover > .fluid-frame path, .project-card:focus-within > .fluid-frame path { fill: #101010; stroke: #665173; }
+.project-card:hover > .fluid-frame path, .project-card:focus-within > .fluid-frame path { fill: var(--accent-soft); stroke: var(--accent-border); }
 .project-card__topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; padding: 12px 20px 4px; margin: 0; }
 .project-card__topline .project-card__title { margin: 0; font-size: 1.0625rem; }
 .project-card__topline .project-card__actions { margin-left: auto; }
@@ -462,26 +459,6 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   height: 100%;
   min-width: 0;
 }
-.preview-hint {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 9px;
-  border: 1px solid rgb(255 255 255 / 15%);
-  border-radius: 5px;
-  background: rgb(15 15 15 / 92%);
-  color: #ededed;
-  font-size: 11px;
-  line-height: 1.4;
-  opacity: 0;
-  transition: opacity 160ms ease;
-  pointer-events: none;
-}
-.project-preview:hover .preview-hint,
-.project-preview:focus-visible .preview-hint { opacity: 1; }
 .preview-open { overflow: hidden; }
 .project-viewer {
   width: min(1320px, calc(100vw - 32px));
@@ -555,7 +532,6 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   max-width: none;
   max-height: none;
 }
-@media (hover: none) { .preview-hint { opacity: 1; } }
 @media (max-width: 600px) {
   .project-viewer { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); }
   .project-viewer__header { gap: 8px; padding-left: 12px; }
