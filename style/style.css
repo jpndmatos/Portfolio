@@ -150,7 +150,6 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .skills__bento--secondary .bento-card__title { font-size: 1rem; }
 @media (min-width: 1001px) {
   .skills-section > .wrapper {
-    min-height: calc(100svh - var(--header-height) - 92px);
     display: grid;
     grid-template-rows: auto auto auto;
     align-content: start;
@@ -203,7 +202,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .experience__tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .experience__tags span { color: var(--text2); background: color-mix(in srgb, var(--accent) 6%, var(--surface-card)); border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border)); border-radius: 5px; padding: 4px 9px; font-size: .75rem; line-height: 1.6; }
 .projects-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-.projects-section { padding-block: 48px 64px; scroll-margin-top: 80px; }
+.projects-section { padding-block: 64px; scroll-margin-top: 80px; }
 .projects-section .section__header { padding-top: 0; }
 .project-card {
   position: relative;
