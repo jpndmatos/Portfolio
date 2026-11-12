@@ -962,66 +962,6 @@
     });
   };
 
-  const initProjectPreviews = () => {
-    let dialog, title, image, zoom, opener;
-    const createViewer = () => {
-      dialog = document.createElement("dialog");
-      dialog.className = "project-viewer";
-      dialog.setAttribute("aria-labelledby", "project-preview-title");
-      dialog.innerHTML = `
-        <div class="project-viewer__header">
-          <h2 id="project-preview-title"></h2>
-          <button type="button" class="project-viewer__zoom" aria-pressed="false">Actual size</button>
-          <button type="button" class="project-viewer__close" aria-label="Close preview" autofocus>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg>
-          </button>
-        </div>
-        <div class="project-viewer__body" tabindex="0" role="region" aria-label="Project image"><img alt=""></div>`;
-      document.body.appendChild(dialog);
-      title = dialog.querySelector("h2");
-      image = dialog.querySelector("img");
-      zoom = dialog.querySelector(".project-viewer__zoom");
-      zoom.addEventListener("click", () => {
-        const actual = dialog.classList.toggle("actual-size");
-        zoom.setAttribute("aria-pressed", String(actual));
-        zoom.textContent = actual ? "Fit image" : "Actual size";
-        const body = dialog.querySelector(".project-viewer__body");
-        body.scrollTo(0, 0);
-      });
-      dialog.querySelector(".project-viewer__close").addEventListener("click", () => dialog.close());
-      dialog.addEventListener("click", (event) => {
-        if (event.target !== dialog) return;
-        const bounds = dialog.getBoundingClientRect();
-        if (event.clientX < bounds.left || event.clientX > bounds.right ||
-            event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
-      });
-      dialog.addEventListener("close", () => {
-        document.documentElement.classList.remove("preview-open");
-        dialog.classList.remove("actual-size");
-        image.removeAttribute("src");
-        opener?.focus({ preventScroll: true });
-      });
-    };
-    document.querySelectorAll(".project-preview").forEach((link) => {
-      link.addEventListener("click", (event) => {
-        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-        if (typeof HTMLDialogElement === "undefined" || !HTMLDialogElement.prototype.showModal) return;
-        event.preventDefault();
-        if (!dialog) createViewer();
-        opener = link;
-        const thumbnail = link.querySelector("img");
-        title.textContent = link.closest(".project-card").querySelector("h3").textContent.trim();
-        image.alt = thumbnail.alt;
-        image.src = link.href;
-        dialog.classList.remove("actual-size");
-        zoom.setAttribute("aria-pressed", "false");
-        zoom.textContent = "Actual size";
-        document.documentElement.classList.add("preview-open");
-        dialog.showModal();
-      });
-    });
-  };
-
   /* --------------------------------------------------------------------------
      5. INITIALIZATION
      -------------------------------------------------------------------------- */
@@ -1033,7 +973,6 @@
     initFluidNavigation();
     initHeaderScrollSpy();
     initCopyEmail();
-    initProjectPreviews();
   };
 
   if (document.readyState === "loading") {
