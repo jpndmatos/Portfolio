@@ -144,7 +144,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .section__header .header__title { font-size: clamp(1.75rem, 3vw, 2.25rem); line-height: 1.2; letter-spacing: -.045em; }
 .skills__bento { display: grid; gap: 16px; }
 .skills__bento--primary { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 16px; }
-.skills__bento--secondary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.skills__bento--secondary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .skills-section .bento-card { padding: 20px; }
 .skills-section .bento-card__title { margin-bottom: 12px; }
 .skills__bento--secondary .bento-card { padding: 16px 20px; }
