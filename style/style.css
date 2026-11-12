@@ -149,6 +149,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .skills-section .bento-card__title { margin-bottom: 24px; }
 .skills__bento--secondary .bento-card__title { font-size: 1rem; }
 @media (min-width: 1001px) {
+  .skills-section, #experience { padding-bottom: clamp(128px, calc(28svh - 64px), 256px); }
   .skills-section > .wrapper {
     display: grid;
     grid-template-rows: auto auto auto;
