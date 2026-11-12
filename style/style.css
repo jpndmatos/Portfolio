@@ -280,7 +280,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .project-more__handle { grid-column: 2; grid-row: 2; display: block; color: var(--accent); font-size: .6875rem; overflow-wrap: anywhere; }
 :is(.bento-card, .timeline-item__content, .project-card).has-fluid-frame { border-color: transparent; background: none; }
 :is(.bento-card, .timeline-item__content, .project-card) > .fluid-frame path { fill: var(--surface-card); stroke: #28252b; }
-:is(.bento-card, .timeline-item__content, .project-card):is(:hover, :focus-within) > .fluid-frame path { stroke: var(--accent-border); }
+.project-card:is(:hover, :focus-within) > .fluid-frame path { stroke: var(--accent-border); }
 .project-card--more > .fluid-frame path { stroke-dasharray: 3 3; }
 .footer { margin-top: 48px; padding-block: 24px; }
 .footer__wrapper, .footer__credit, .footer__socials { display: flex; align-items: center; }
