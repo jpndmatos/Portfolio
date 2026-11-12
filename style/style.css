@@ -55,7 +55,6 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-
 ::selection { background: var(--accent); color: var(--bg-page); }
 .wrapper { width: min(100%, var(--container)); margin-inline: auto; padding-inline: 32px; }
 main, .footer { position: relative; z-index: 1; }
-#fluid-bg { position: fixed; inset: 0; width: 100%; height: 100%; opacity: .13; pointer-events: none; }
 .skip-link { position: fixed; left: 20px; top: -80px; z-index: 200; padding: 12px 20px; color: var(--bg-page); background: var(--accent); border-radius: 8px; }
 .skip-link:focus { top: 16px; }
 .header { position: fixed; inset: 0 0 auto; z-index: 100; isolation: isolate; height: var(--header-height); background: transparent; border-bottom: 1px solid transparent; transition: background-color calc(950ms / var(--motion-speed)) ease-in-out, border-color calc(950ms / var(--motion-speed)) ease-in-out; }
