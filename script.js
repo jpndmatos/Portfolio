@@ -962,6 +962,23 @@
     });
   };
 
+  const initSectionSpacing = () => {
+    const sections = ['skills', 'experience'].map(id => document.getElementById(id));
+    const wrappers = sections.map(section => section.querySelector('.wrapper'));
+    const update = () => {
+      const headerHeight = document.querySelector('.header').getBoundingClientRect().height;
+      const shortest = Math.min(...wrappers.map(wrapper => wrapper.getBoundingClientRect().height));
+      const base = window.innerWidth > 900 ? Math.max(192, Math.min(320, innerHeight * .28)) : 72;
+      const gap = Math.ceil(Math.max(base, innerHeight - headerHeight - 28 - shortest + 24));
+      document.documentElement.style.setProperty('--section-gap', `${gap}px`);
+    };
+    const observer = new ResizeObserver(update);
+    wrappers.forEach(wrapper => observer.observe(wrapper));
+    window.addEventListener('resize', update, { passive: true });
+    document.fonts?.ready.then(update);
+    update();
+  };
+
   /* --------------------------------------------------------------------------
      5. INITIALIZATION
      -------------------------------------------------------------------------- */
@@ -970,6 +987,7 @@
     initBlobMask();
     initHeroOverlap();
     initFluidCards();
+    initSectionSpacing();
     initFluidNavigation();
     initHeaderScrollSpy();
     initCopyEmail();
