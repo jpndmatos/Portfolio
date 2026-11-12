@@ -192,7 +192,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .timeline-item__role { font-size: var(--size-card-title); line-height: 1.4; letter-spacing: -.025em; margin-bottom: 4px; }
 .timeline-item__company { color: var(--accent); font-size: var(--size-subtitle); font-weight: var(--weight-subtitle); margin-bottom: 18px; }
 .timeline-item__description, .project-card__desc { font-size: var(--size-body); font-weight: var(--weight-body); line-height: 1.8; margin-bottom: 22px; }
-.timeline-item__highlights { padding-left: 18px; }
+.timeline-item__highlights { list-style: none; padding-left: 0; }
 .timeline-item__highlights li + li { margin-top: 10px; }
 .experience__tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .experience__tags span { color: var(--text2); background: color-mix(in srgb, var(--accent) 6%, var(--surface-card)); border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border)); border-radius: 5px; padding: 4px 9px; font-size: .75rem; line-height: 1.6; }
