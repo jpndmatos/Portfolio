@@ -37,7 +37,8 @@ try {
     await expect(more).toHaveAttribute('href', 'https://github.com/jpndmatos?tab=repositories');
     await expect(page.locator('.projects-grid > :last-child')).toHaveClass(/project-card--more/);
     await expect(more).toHaveCSS('border-top-style', 'dashed');
-    await expect(more.locator('.fluid-frame')).toHaveCount(0);
+    await expect(more.locator('.fluid-frame')).toHaveCount(1);
+    await expect(more.locator('.fluid-frame path')).toHaveCSS('stroke-dasharray', '3px, 3px');
     await expect(page.locator('.project-image-link')).toHaveCount(11);
     for (const card of await page.locator('article.project-card').all()) {
       await expect(card.locator('.project-image-link')).toHaveAttribute('href', await card.locator('.project-card__title a').getAttribute('href'));

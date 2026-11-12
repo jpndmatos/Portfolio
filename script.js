@@ -792,7 +792,7 @@
       const { width: w, height: h, pointer, edges } = frame;
       if (w < 24 || h < 24) return;
       const left = 3, top = 3, right = w - 3, bottom = h - 3;
-      const r = Math.min(frame.isButton ? 12 : 22, (w - 6) / 2, (h - 6) / 2);
+      const r = Math.min(frame.isButton ? 12 : 18, (w - 6) / 2, (h - 6) / 2);
       const k = r * .55228475;
       const sides = [
         [left + r, top, w - 6 - 2*r, 0],
@@ -831,8 +831,8 @@
           }
         }
         const idle = prefersReducedMotion ? 0
-          : Math.sin(time * .4 * frame.tempo + frame.phase + index*(frame.isProject ? .25 : 1.7))
-            * (frame.isProject ? 2.2 : frame.isButton ? .2 : .7);
+          : Math.sin(time * .4 * frame.tempo + frame.phase + index*(frame.isButton ? 1.7 : .25))
+            * (frame.isButton ? .2 : 2.2);
         const spread = Math.max(1, length / (frame.isButton ? 35 : 110));
         const deformed = Math.abs(edge.position) > .02;
         const segments = deformed
@@ -924,7 +924,7 @@
       });
       scheduleAnimation();
     });
-    document.querySelectorAll(".project-card:not(.project-card--more), .timeline-item__content, .hero__text:not(.hero__text--overlap) .hero__chip, .footer__socials a")
+    document.querySelectorAll(".bento-card, .project-card, .timeline-item__content, .hero__text:not(.hero__text--overlap) .hero__chip, .footer__socials a")
       .forEach((card, index) => {
         const svg = document.createElementNS(ns, 'svg');
         svg.classList.add('fluid-frame');
@@ -935,10 +935,9 @@
         card.prepend(svg);
         card.classList.add('has-fluid-frame');
         const frame = {
-          card, svg, path, width: 0, height: 0, phase: index*1.7,
+          card, svg, path, width: 0, height: 0, phase: 0,
           isButton: card.matches('.footer__socials a, .hero__chip'),
-          isProject: card.matches('.project-card'),
-          tempo: .8 + ((index*.61803398875)%1)*.4,
+          tempo: 1,
           pointer: { x: 0, y: 0, active: false },
           edges: Array.from({ length: 4 }, () => ({ position: 0, velocity: 0, center: .5 })),
         };
