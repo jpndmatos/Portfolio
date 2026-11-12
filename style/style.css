@@ -265,11 +265,12 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   border-radius: 8px;
 }
 .project-card--more {
+  align-self: center;
   align-items: stretch;
   justify-content: space-between;
-  gap: 32px;
-  min-height: 320px;
-  padding: 32px;
+  gap: 16px;
+  min-height: 0;
+  padding: 20px;
   border: 1px dashed #514858;
   background: #0e0c10;
   color: var(--text2);
@@ -279,13 +280,13 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .project-card--more:hover, .project-card--more:focus-visible { border-color: var(--accent); }
 .project-card--more:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .project-more__top { display: flex; align-items: center; justify-content: space-between; }
-.project-more__icon { width: 30px; height: 30px; color: #ded9e3; }
-.project-more__arrow { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #39303f; border-radius: 50%; color: var(--accent); }
+.project-more__icon { width: 24px; height: 24px; color: #ded9e3; }
+.project-more__arrow { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #39303f; border-radius: 50%; color: var(--accent); }
 .project-more__arrow svg { transition: transform 180ms ease; }
 .project-card--more:hover .project-more__arrow svg { transform: translate(2px, -2px); }
-.project-more__title { max-width: 12ch; margin-bottom: 12px; font-size: clamp(1.75rem, 2.4vw, 2rem); letter-spacing: -.04em; line-height: 1.2; }
+.project-more__title { margin-bottom: 8px; font-size: 1.25rem; letter-spacing: -.025em; line-height: 1.2; }
 .project-card--more p { max-width: 32ch; margin: 0; font-size: .875rem; line-height: 1.7; }
-.project-more__handle { display: block; padding-top: 18px; border-top: 1px solid #2d2532; color: var(--accent); font-size: .75rem; }
+.project-more__handle { display: block; padding-top: 12px; border-top: 1px solid #2d2532; color: var(--accent); font-size: .75rem; }
 .footer { margin-top: 48px; padding-block: 24px; }
 .footer__wrapper, .footer__credit, .footer__socials { display: flex; align-items: center; }
 .footer__wrapper { justify-content: space-between; gap: 20px; }
@@ -444,7 +445,6 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 
 @media (max-width: 600px) {
   .project-card > .project-card__media { padding: 12px 12px 0; }
-  .project-card--more { min-height: 300px; padding: 24px; }
 }
 
 /* Project images use the same destination as their title. */
