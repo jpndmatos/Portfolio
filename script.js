@@ -923,7 +923,7 @@
       });
       scheduleAnimation();
     });
-    document.querySelectorAll(".timeline-item__content, .hero__text:not(.hero__text--overlap) .hero__chip, .footer__socials a")
+    document.querySelectorAll(".project-card:not(.project-card--more), .timeline-item__content, .hero__text:not(.hero__text--overlap) .hero__chip, .footer__socials a")
       .forEach((card, index) => {
         const svg = document.createElementNS(ns, 'svg');
         svg.classList.add('fluid-frame');

@@ -215,10 +215,15 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   border: 1px solid #28252b;
   border-radius: 18px;
   background: #0d0d0d;
-  transition: border-color 180ms ease, background-color 180ms ease;
+  transition: border-color 180ms ease, background-color 180ms ease, transform 240ms ease;
 }
 .project-card:hover, .project-card:focus-within { border-color: #665173; background: #101010; }
-.project-card > .fluid-frame { display: none; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .project-card:hover { transform: translateY(-3px); }
+}
+.project-card.has-fluid-frame { border-color: transparent; background: none; }
+.project-card > .fluid-frame path { fill: #0d0d0d; stroke: #28252b; }
+.project-card:hover > .fluid-frame path, .project-card:focus-within > .fluid-frame path { fill: #101010; stroke: #665173; }
 .project-card__topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; padding: 12px 20px 4px; margin: 0; }
 .project-card__topline .project-card__title { margin: 0; font-size: 1.0625rem; }
 .project-card__topline .project-card__actions { margin-left: auto; }
