@@ -146,9 +146,8 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .skills__bento--primary { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 16px; }
 .skills__bento--secondary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .skills-section .bento-card { padding: 20px; }
-.skills-section .bento-card__title { margin-bottom: 12px; }
-.skills__bento--secondary .bento-card { padding: 16px 20px; }
-.skills__bento--secondary .bento-card__title { margin-bottom: 10px; font-size: 1rem; }
+.skills-section .bento-card__title { margin-bottom: 24px; }
+.skills__bento--secondary .bento-card__title { font-size: 1rem; }
 @media (min-width: 1001px) {
   .skills-section > .wrapper {
     min-height: calc(100svh - var(--header-height) - 92px);
@@ -161,7 +160,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
   .skills-section .bento-card { padding: 24px; }
   .skills__bento--primary { min-height: clamp(300px, 38svh, 380px); }
   .skills__bento--primary .bento-card { display: flex; flex-direction: column; }
-  .skills__bento--primary .skill-list { flex: 1; grid-auto-rows: 1fr; align-items: center; gap: 6px; }
+  .skills__bento--primary .skill-list { flex: 1; grid-auto-rows: 1fr; align-items: start; gap: 6px; }
   .skills__bento--secondary .bento-card { min-height: 188px; }
   .skills-section .skills__bento--secondary .skill-list { gap: 14px; }
 }
@@ -192,7 +191,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .skills__bento--primary .skill-row { min-height: 26px; }
 .skill-meter { display: block; height: 5px; border-radius: 5px; background: var(--border); overflow: hidden; }
 .skill-meter > span { display: block; height: 100%; width: var(--level); border-radius: inherit; background: var(--accent); }
-.skills__bento--secondary .skill-row { display: block; }
+.skills__bento--secondary .skill-row { display: flex; align-items: center; min-height: 26px; }
 .skills__bento--secondary .skill-list { gap: 8px; }
 .bento-card--languages .skill-name small { display: inline; margin-left: 6px; font-size: .75rem; }
 .timeline { display: grid; gap: 20px; }
