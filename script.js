@@ -830,8 +830,9 @@
             edge.velocity = 0;
           }
         }
-        const idle = Math.sin(time * .4 * frame.tempo + frame.phase + index*1.7)
-          * (frame.isButton ? .2 : .7);
+        const idle = prefersReducedMotion ? 0
+          : Math.sin(time * .4 * frame.tempo + frame.phase + index*(frame.isProject ? .25 : 1.7))
+            * (frame.isProject ? 2.2 : frame.isButton ? .2 : .7);
         const spread = Math.max(1, length / (frame.isButton ? 35 : 110));
         const deformed = Math.abs(edge.position) > .02;
         const segments = deformed
@@ -936,6 +937,7 @@
         const frame = {
           card, svg, path, width: 0, height: 0, phase: index*1.7,
           isButton: card.matches('.footer__socials a, .hero__chip'),
+          isProject: card.matches('.project-card'),
           tempo: .8 + ((index*.61803398875)%1)*.4,
           pointer: { x: 0, y: 0, active: false },
           edges: Array.from({ length: 4 }, () => ({ position: 0, velocity: 0, center: .5 })),
