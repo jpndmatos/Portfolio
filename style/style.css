@@ -237,7 +237,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .project-card__title .icon { flex-shrink: 0; color: var(--accent); }
 .project-card__desc { color: var(--text2); min-height: 3.3em; line-height: 1.65; margin-bottom: 16px; }
 .project-card .experience__tags { margin-top: auto; padding-top: 6px; gap: 6px; }
-.project-card .experience__tags span { padding: 3px 8px; font-size: .6875rem; line-height: 1.6; color: #bdb9c2; background: #19171c; border-color: #2b2730; }
+.project-card .experience__tags span { padding: 3px 8px; font-size: .6875rem; line-height: 1.6; }
 .project-card > .project-card__media {
   position: relative;
   flex-shrink: 0;
