@@ -169,6 +169,9 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 .skill-row { display: grid; grid-template-columns: minmax(100px, .9fr) minmax(0, 1.2fr); align-items: center; gap: 16px; min-width: 0; }
 .skill-name { font-size: var(--size-body); color: var(--text2); }
 .skill-name small { display: block; font-size: var(--size-subtitle); font-weight: var(--weight-subtitle); color: var(--accent); }
+.skills__bento--primary .skill-row { min-height: 30px; }
+.skill-meter { display: block; height: 5px; border-radius: 5px; background: var(--border); overflow: hidden; }
+.skill-meter > span { display: block; height: 100%; width: var(--level); border-radius: inherit; background: var(--accent); }
 .skills__bento--secondary .skill-row { display: block; }
 .skills__bento--secondary .skill-list { gap: 16px; }
 .timeline { display: grid; gap: 20px; }
