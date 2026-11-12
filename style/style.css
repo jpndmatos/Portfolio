@@ -261,6 +261,7 @@ h1, h2, h3 { color: var(--text1); font-weight: var(--weight-title); }
 }
 .project-card--more {
   align-self: start;
+  margin: 3px;
   display: grid;
   grid-template-columns: 24px minmax(0, 1fr) 32px;
   align-items: center;
