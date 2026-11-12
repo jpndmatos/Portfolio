@@ -22,7 +22,6 @@ PROJECTS = [
     ('simsync', 'SIMsync/docs/workspace.png'),
     ('hdf5-dashboard', 'HDF5-Dashboard/docs/desktop.jpg'),
     ('riftbound', 'riftbound-deck-builder/docs/builder-dark.jpg'),
-    ('company-website', 'company-website-showcase/docs/workspace.png'),
     ('crimes-exemplares', 'P3/docs/scene.jpg'),
 ]
 

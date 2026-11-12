@@ -73,15 +73,6 @@ Cover('simsync', '#17171f', {}).graphic('''<g font-family="Poppins,sans-serif">
   <g font-size="26" fill="#e0dbe5"><text x="45" y="274">alex@example.com</text><text x="511" y="274">sam@example.com</text></g>
 </g>''').save('SIMsync: illustrative CSV preview results with clearly labelled sample data, using the app’s actual result categories and colours')
 
-# Exact crops of the screenshots supplied by the user. No recreated UI.
-# The company name is outside these crops; the portfolio title stays generic.
-Cover('company', '#f7f5fc', {
-    'hero': ('sources/company-actual-hero.png', 1918, 930),
-}) \
-    .panel('hero', (610, 302, 1253, 470), (0, 0, 960, 360), radius=0) \
-    .panel('hero', (850, 21, 312, 54), (510, 145, 400, 70), radius=30) \
-    .save('Company Website: a clean composition of the real 3D scan and original navigation from the supplied screenshot')
-
 Cover('hdf5', '#162734', {'ui': ('hdf5-dashboard.jpg', 1265, 957)}) \
     .panel('ui', (32, 183, 1200, 340), (24, 51, 912, 258)) \
     .save('HDF5 Dashboard: original temperature and humidity chart panel')

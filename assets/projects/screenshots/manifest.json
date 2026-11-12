@@ -161,24 +161,6 @@
       }
     ]
   },
-  "company-website": {
-    "original": "company-website.png",
-    "width": 1440,
-    "height": 900,
-    "sha256": "3b1a15ceca104f8b8048ad0b85e3efea103d214f043f560dc8ff983b7fa8fa83",
-    "variants": [
-      {
-        "file": "company-website-640.webp",
-        "width": 640,
-        "bytes": 18392
-      },
-      {
-        "file": "company-website-1100.webp",
-        "width": 1100,
-        "bytes": 41952
-      }
-    ]
-  },
   "crimes-exemplares": {
     "original": "crimes-exemplares.jpg",
     "width": 1440,
